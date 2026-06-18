@@ -35,6 +35,12 @@ export function ContactSection() {
         form.current,
         "D6k1lT8mhR4rjyNoD"
       )
+      await emailjs.sendForm(
+        "service_ckoiehh",
+        "template_hlabb18",
+        form.current,
+        "D6k1lT8mhR4rjyNoD"
+      )
       setSubmitted(true)
     } catch (err) {
       console.error("EmailJS error:", err)
