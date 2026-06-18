@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, type FormEvent } from "react"
+import { useState, type FormEvent, useRef } from "react"
+import emailjs from "@emailjs/browser"
 import { motion } from "framer-motion"
 import { Clock, Loader2, Mail, MapPin, MessageCircle, Phone, Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -12,6 +13,7 @@ const inputClass =
   "w-full rounded-[8px] border border-foreground/10 bg-background/70 px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/70 transition-colors"
 
 export function ContactSection() {
+  const form = useRef<HTMLFormElement>(null)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -24,10 +26,22 @@ export function ContactSection() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
+    if (!form.current) return
     setLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    setLoading(false)
-    setSubmitted(true)
+    try {
+      await emailjs.sendForm(
+        "service_ckoiehh",
+        "template_rvpnugu",
+        form.current,
+        "D6k1lT8mhR4rjyNoD"
+      )
+      setSubmitted(true)
+    } catch (err) {
+      console.error("EmailJS error:", err)
+      alert("Bir hata oluştu. Lütfen tekrar deneyin.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   const contactInfo = [
@@ -114,30 +128,30 @@ export function ContactSection() {
                   <p className="text-muted-foreground">En kısa sürede size dönüş yapacağız.</p>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form ref={form} onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-semibold mb-2">Adınız Soyadınız *</label>
-                      <input type="text" required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className={inputClass} placeholder="Adınız Soyadınız" />
+                      <input type="text" name="name" required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className={inputClass} placeholder="Adınız Soyadınız" />
                     </div>
                     <div>
                       <label className="block text-sm font-semibold mb-2">E-posta Adresiniz *</label>
-                      <input type="email" required value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className={inputClass} placeholder="ornek@email.com" />
+                      <input type="email" name="email" required value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className={inputClass} placeholder="ornek@email.com" />
                     </div>
                   </div>
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-semibold mb-2">Telefon</label>
-                      <input type="tel" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className={inputClass} placeholder="0555 555 55 55" />
+                      <input type="tel" name="phone" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className={inputClass} placeholder="0555 555 55 55" />
                     </div>
                     <div>
                       <label className="block text-sm font-semibold mb-2">Konu *</label>
-                      <input type="text" required value={formData.subject} onChange={(e) => setFormData({ ...formData, subject: e.target.value })} className={inputClass} placeholder="Proje başlığı" />
+                      <input type="text" name="subject" required value={formData.subject} onChange={(e) => setFormData({ ...formData, subject: e.target.value })} className={inputClass} placeholder="Proje başlığı" />
                     </div>
                   </div>
                   <div>
                     <label className="block text-sm font-semibold mb-2">Mesajınız *</label>
-                    <textarea required rows={5} value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} className={`${inputClass} resize-none`} placeholder="Projeniz hakkında kısa bilgi verin..." />
+                    <textarea required name="message" rows={5} value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} className={`${inputClass} resize-none`} placeholder="Projeniz hakkında kısa bilgi verin..." />
                   </div>
                   <Button type="submit" loading={loading} className="w-full">
                     {loading ? (
