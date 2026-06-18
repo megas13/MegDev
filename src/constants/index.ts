@@ -3,10 +3,10 @@ export const siteConfig = {
   tagline: "İşletmenizi geleceğe taşıyan yazılım çözümleri",
   description:
     "Web siteleri, mobil uygulamalar, yapay zeka çözümleri ve özel yazılım projelerini; tasarım, geliştirme ve lansman sürecini tek elde toplayarak geliştiriyoruz.",
-  phone: "+90 212 555 0123",
+  phone: "+90 537 983 04 14",
   email: "info@megdev.com.tr",
-  whatsapp: "+905551234567",
-  address: "Levent Mahallesi, Teknoloji Caddesi No:42, Şişli/İstanbul",
+  whatsapp: "+905379830414",
+  address: "Demokrasi Mah 2233. Sk Melikgazi/KAYSERİ",
   workingHours: "Pazartesi - Cuma: 09:00 - 18:00",
   facebook: "https://facebook.com/megdev",
   twitter: "https://twitter.com/megdev",

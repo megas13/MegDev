@@ -148,7 +148,7 @@ export function ContactSection() {
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-semibold mb-2">Telefon</label>
-                      <input type="tel" name="phone" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className={inputClass} placeholder="0555 555 55 55" />
+                      <input type="tel" name="phone" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className={inputClass} placeholder="0537 983 04 14" />
                     </div>
                     <div>
                       <label className="block text-sm font-semibold mb-2">Konu *</label>
