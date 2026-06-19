@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/footer"
 import { WhatsAppButton } from "@/components/layout/whatsapp-button"
 import { ThemeCustomizer } from "@/components/layout/theme-customizer"
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
   title: "Meg Dev | Yazılım Geliştirme ve Dijital Çözümler",
@@ -48,6 +49,7 @@ export default function RootLayout({
         <WhatsAppButton />
         <ThemeCustomizer />
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
