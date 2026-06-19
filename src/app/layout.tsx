@@ -3,6 +3,7 @@ import "./globals.css"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { WhatsAppButton } from "@/components/layout/whatsapp-button"
+import { ThemeCustomizer } from "@/components/layout/theme-customizer"
 
 export const metadata: Metadata = {
   title: "Meg Dev | Yazılım Geliştirme ve Dijital Çözümler",
@@ -44,6 +45,7 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <Footer />
         <WhatsAppButton />
+        <ThemeCustomizer />
       </body>
     </html>
   )

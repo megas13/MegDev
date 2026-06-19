@@ -3,6 +3,49 @@ import { siteConfig, navigation, services } from "@/constants"
 import { ArrowUpRight, Clock, Mail, MapPin, Phone } from "lucide-react"
 
 export function Footer() {
+  const socialLinks = [
+    {
+      url: siteConfig.linkedin,
+      name: "LinkedIn",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+          <rect x="2" y="9" width="4" height="12" />
+          <circle cx="4" cy="4" r="2" />
+        </svg>
+      )
+    },
+    {
+      url: siteConfig.twitter,
+      name: "X (Twitter)",
+      icon: (
+        <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+        </svg>
+      )
+    },
+    {
+      url: siteConfig.instagram,
+      name: "Instagram",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+        </svg>
+      )
+    },
+    {
+      url: siteConfig.facebook,
+      name: "Facebook",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+          <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+        </svg>
+      )
+    }
+  ]
+
   return (
     <footer className="relative border-t border-foreground/10 bg-card/80">
       <div className="absolute inset-0 grid-pattern opacity-20" />
@@ -17,16 +60,23 @@ export function Footer() {
             <p className="text-muted-foreground text-sm leading-relaxed mb-6">
               {siteConfig.description}
             </p>
-            <div className="flex gap-2">
-              {[siteConfig.linkedin, siteConfig.twitter, siteConfig.instagram, siteConfig.facebook].map((url, i) => (
+            <div className="flex gap-2.5">
+              {socialLinks.map((social) => (
                 <a
-                  key={url}
-                  href={url}
+                  key={social.name}
+                  href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex h-10 w-10 items-center justify-center border border-foreground/10 bg-foreground/[0.04] text-xs font-bold text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
+                  title={social.name}
+                  className="group relative flex h-10 w-10 items-center justify-center border border-foreground/10 bg-foreground/[0.02] text-muted-foreground transition-all duration-300 hover:border-primary hover:text-background hover:scale-105 overflow-hidden"
                 >
-                  {["in", "X", "IG", "FB"][i]}
+                  {/* Slide Up Background */}
+                  <span className="absolute inset-0 bg-primary translate-y-full transition-transform duration-300 group-hover:translate-y-0" />
+                  
+                  {/* Spinning Icon */}
+                  <span className="relative z-10 transition-transform duration-500 group-hover:rotate-[360deg]">
+                    {social.icon}
+                  </span>
                 </a>
               ))}
             </div>
