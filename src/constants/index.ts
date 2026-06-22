@@ -4,7 +4,7 @@ export const siteConfig = {
   description:
     "Web siteleri, mobil uygulamalar, yapay zeka çözümleri ve özel yazılım projelerini; tasarım, geliştirme ve lansman sürecini tek elde toplayarak geliştiriyoruz.",
   phone: "+90 537 983 04 14",
-  email: "info@megdev.com.tr",
+  email: "destek@megdev.info",
   whatsapp: "+905379830414",
   address: "Demokrasi Mah 2233. Sk Melikgazi/KAYSERİ",
   workingHours: "Pazartesi - Cuma: 09:00 - 18:00",

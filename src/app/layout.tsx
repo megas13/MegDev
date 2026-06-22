@@ -8,27 +8,73 @@ import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
-  title: "Meg Dev | Yazılım Geliştirme ve Dijital Çözümler",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://meg.dev"),
+  title: {
+    default: "Meg Dev | Yazılım Geliştirme ve Dijital Çözümler",
+    template: "%s | Meg Dev",
+  },
   description:
-    "Web siteleri, mobil uygulamalar, yapay zeka çözümleri ve özel yazılım projeleri geliştiriyoruz. İşletmenizi geleceğe taşıyan yazılım çözümleri.",
+    "Web siteleri, mobil uygulamalar, yapay zeka çözümleri ve özel yazılım projeleri geliştiriyoruz. İşletmenizi geleceğe taşıyan yenilikçi yazılım çözümleri.",
   keywords: [
     "yazılım şirketi",
+    "web geliştirme",
     "web sitesi",
     "mobil uygulama",
     "yapay zeka",
     "e-ticaret",
-    "crm",
+    "crm yazılımı",
     "özel yazılım",
+    "kurumsal yazılım",
+    "seo uyumlu web sitesi"
   ],
+  authors: [{ name: "Meg Dev" }],
+  creator: "Meg Dev",
+  publisher: "Meg Dev",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   icons: {
     icon: "/megdevicon.png",
+    apple: "/megdevicon.png",
   },
   openGraph: {
     title: "Meg Dev | Yazılım Geliştirme ve Dijital Çözümler",
     description:
-      "Web siteleri, mobil uygulamalar, yapay zeka çözümleri ve özel yazılım projeleri geliştiriyoruz.",
-    type: "website",
+      "Web siteleri, mobil uygulamalar, yapay zeka çözümleri ve özel yazılım projeleri geliştiriyoruz. İşletmenizi geleceğe taşıyan yenilikçi yazılım çözümleri.",
+    url: "https://meg.dev",
+    siteName: "Meg Dev",
+    images: [
+      {
+        url: "/megdevicon.png", // Daha iyi bir OG image eklenebilir (örn: 1200x630)
+        width: 800,
+        height: 600,
+      },
+    ],
     locale: "tr_TR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Meg Dev | Yazılım Geliştirme ve Dijital Çözümler",
+    description: "Web siteleri, mobil uygulamalar ve özel yazılım projeleri.",
+    images: ["/megdevicon.png"],
+    creator: "@megdev",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  alternates: {
+    canonical: "/",
   },
 }
 

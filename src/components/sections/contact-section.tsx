@@ -3,7 +3,7 @@
 import { useState, type FormEvent, useRef } from "react"
 import emailjs from "@emailjs/browser"
 import { motion } from "framer-motion"
-import { Clock, Loader2, Mail, MapPin, MessageCircle, Phone, Send } from "lucide-react"
+import { Check, Clock, Copy, Loader2, Mail, MapPin, MessageCircle, Phone, Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { SectionHeading } from "@/components/ui/section-heading"
@@ -23,27 +23,43 @@ export function ContactSection() {
   })
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [copied, setCopied] = useState(false)
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     if (!form.current) return
     setLoading(true)
     try {
-      await emailjs.sendForm(
-        "service_ckoiehh",
-        "template_rvpnugu",
-        form.current,
-        "D6k1lT8mhR4rjyNoD"
-      )
+      await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: "destek@megdev.info",
+          subject: `Yeni İletişim: ${formData.subject}`,
+          html: `<h2>Yeni İletişim Mesajı</h2>
+<table style="border-collapse:collapse;width:100%">
+<tr><td style="padding:8px 12px;background:#f5f5f5;font-weight:bold">Ad</td><td style="padding:8px 12px">${formData.name}</td></tr>
+<tr><td style="padding:8px 12px;background:#f5f5f5;font-weight:bold">E-posta</td><td style="padding:8px 12px">${formData.email}</td></tr>
+<tr><td style="padding:8px 12px;background:#f5f5f5;font-weight:bold">Telefon</td><td style="padding:8px 12px">${formData.phone || "-"}</td></tr>
+<tr><td style="padding:8px 12px;background:#f5f5f5;font-weight:bold">Konu</td><td style="padding:8px 12px">${formData.subject}</td></tr>
+<tr><td style="padding:8px 12px;background:#f5f5f5;font-weight:bold">Mesaj</td><td style="padding:8px 12px">${formData.message}</td></tr>
+</table>`,
+        }),
+      })
       await emailjs.sendForm(
         "service_ckoiehh",
         "template_hlabb18",
         form.current,
         "D6k1lT8mhR4rjyNoD"
       )
+      fetch("/api/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
       setSubmitted(true)
     } catch (err) {
-      console.error("EmailJS error:", err)
+      console.error("Gönderme hatası:", err)
       alert("Bir hata oluştu. Lütfen tekrar deneyin.")
     } finally {
       setLoading(false)
@@ -94,8 +110,28 @@ export function ContactSection() {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  {info.href ? (
-                    <a href={info.href} className="flex items-start gap-4 border border-foreground/10 bg-card/80 p-4 transition-colors hover:border-primary/50">
+                  {info.label === "E-posta" ? (
+                    <div className="relative group">
+                      <a href={info.href} target="_blank" rel="noopener noreferrer" className="flex items-start gap-4 border border-foreground/10 bg-card/80 p-4 transition-colors hover:border-primary/50 pr-24">
+                        {content}
+                      </a>
+                      <button
+                        onClick={async (e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          try {
+                            await navigator.clipboard.writeText(siteConfig.email)
+                            setCopied(true)
+                            setTimeout(() => setCopied(false), 2000)
+                          } catch {}
+                        }}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-primary bg-primary/10 hover:bg-primary/20 px-2.5 py-1.5 rounded transition-all cursor-pointer z-10"
+                      >
+                        {copied ? "Kopyalandı" : "Kopyala"}
+                      </button>
+                    </div>
+                  ) : info.href ? (
+                    <a href={info.href} target="_blank" rel="noopener noreferrer" className="flex items-start gap-4 border border-foreground/10 bg-card/80 p-4 transition-colors hover:border-primary/50">
                       {content}
                     </a>
                   ) : (
