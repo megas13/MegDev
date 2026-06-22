@@ -47,9 +47,9 @@ export const metadata: Metadata = {
     siteName: "Meg Dev",
     images: [
       {
-        url: "/megdevicon.png", // Daha iyi bir OG image eklenebilir (örn: 1200x630)
-        width: 800,
-        height: 600,
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
       },
     ],
     locale: "tr_TR",
@@ -87,6 +87,47 @@ export default function RootLayout({
     <html lang="tr" className="h-full antialiased dark">
       <head>
         <meta name="theme-color" content="#10100d" />
+        <meta name="google-site-verification" content="21Co6j1h-UaDjB7Jrj-Y2509q5285ToFPx7VkHAe8H4" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Meg Dev",
+              url: process.env.NEXT_PUBLIC_APP_URL || "https://meg.dev",
+              logo: "/megdevicon.png",
+              email: "destek@megdev.info",
+              telephone: "+905379830414",
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "Demokrasi Mah 2233. Sk",
+                addressLocality: "Melikgazi",
+                addressRegion: "Kayseri",
+                addressCountry: "TR",
+              },
+              sameAs: [
+                "https://facebook.com/megdev",
+                "https://twitter.com/megdev",
+                "https://linkedin.com/company/megdev",
+                "https://instagram.com/megdev",
+              ],
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "Meg Dev",
+              url: process.env.NEXT_PUBLIC_APP_URL || "https://meg.dev",
+              description: "Web siteleri, mobil uygulamalar, yapay zeka çözümleri ve özel yazılım projeleri geliştiriyoruz.",
+              inLanguage: "tr",
+            }),
+          }}
+        />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
         <Header />

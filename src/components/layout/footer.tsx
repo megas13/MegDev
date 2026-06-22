@@ -141,10 +141,10 @@ export function Footer() {
             © {new Date().getFullYear()} {siteConfig.name}. Tüm hakları saklıdır.
           </p>
           <div className="flex gap-6">
-            <Link href="#" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+            <Link href="/kvkk" className="text-sm text-muted-foreground transition-colors hover:text-primary">
               Gizlilik Politikası
             </Link>
-            <Link href="#" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+            <Link href="/kosullar" className="text-sm text-muted-foreground transition-colors hover:text-primary">
               Kullanım Koşulları
             </Link>
           </div>

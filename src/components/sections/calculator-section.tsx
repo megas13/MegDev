@@ -495,7 +495,7 @@ export function CalculatorSection() {
           </div>
 
           {/* Right Side: Sticky Estimation Panel */}
-          <div className="sharp-panel noise-panel p-6 rounded-[8px] bg-card border border-primary/20 sticky top-24 shadow-[0_12px_40px_rgba(215,255,67,0.04)]">
+          <div className="sharp-panel noise-panel p-6 rounded-[8px] bg-card border border-primary/20 lg:sticky lg:top-24 shadow-[0_12px_40px_rgba(215,255,67,0.04)]">
             <div className="border-b border-foreground/10 pb-4 mb-4">
               <span className="text-[10px] font-mono text-primary uppercase font-bold tracking-widest flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 animate-pulse" />
