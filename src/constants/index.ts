@@ -21,7 +21,6 @@ export const navigation = [
   { name: "Hakkımızda", href: "/about" },
   { name: "Süreçler", href: "/processes" },
   { name: "Blog", href: "/blog" },
-  { name: "KVKK", href: "/kvkk" },
   { name: "İletişim", href: "/contact" },
 ]
 
