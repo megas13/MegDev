@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     telephone: false,
   },
   icons: {
-    icon: "/megdevicon.png",
+    icon: "/favicon.png",
     apple: "/megdevicon.png",
   },
   openGraph: {

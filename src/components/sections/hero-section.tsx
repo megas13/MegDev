@@ -107,13 +107,13 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative"
           >
-            <div className="sharp-panel noise-panel relative overflow-hidden rounded-[8px] p-4 sm:p-5">
+            <div className="sharp-panel noise-panel relative overflow-hidden rounded-2xl p-4 sm:p-5">
               <div className="flex items-center justify-between border-b border-foreground/10 pb-4">
                 <div>
                   <p className="text-xs uppercase tracking-[0.22em] text-muted-foreground">launch board</p>
                   <p className="mt-1 text-lg font-bold">Meg Dev sprint görünümü</p>
                 </div>
-                <Image src="/megdevicon.png" alt="Meg Dev" width={40} height={40} className="h-10 w-10 object-contain" />
+                <Image src="/megdevicon.png" alt="Meg Dev" width={56} height={56} className="h-14 w-14 object-contain rounded-full" />
               </div>
 
               <div className="grid gap-4 py-5">

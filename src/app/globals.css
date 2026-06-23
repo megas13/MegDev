@@ -22,24 +22,26 @@
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #1e293b transparent;
-}
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #1e293b transparent;
+  }
 
-html {
-  scroll-behavior: smooth;
-}
+  html {
+    scroll-behavior: smooth;
+  }
 
-body {
-  background:
-    linear-gradient(90deg, rgba(247, 243, 234, 0.035) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(247, 243, 234, 0.035) 1px, transparent 1px),
-    radial-gradient(circle at 20% 10%, color-mix(in srgb, var(--primary) 12%, transparent), transparent 28rem),
-    radial-gradient(circle at 82% 18%, rgba(57, 208, 194, 0.1), transparent 24rem),
-    var(--color-background);
-  background-size: 48px 48px, 48px 48px, auto, auto, auto;
-  color: var(--color-foreground);
+  body {
+    background:
+      linear-gradient(90deg, rgba(247, 243, 234, 0.035) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(247, 243, 234, 0.035) 1px, transparent 1px),
+      radial-gradient(circle at 20% 10%, color-mix(in srgb, var(--primary) 12%, transparent), transparent 28rem),
+      radial-gradient(circle at 82% 18%, rgba(57, 208, 194, 0.1), transparent 24rem),
+      var(--color-background);
+    background-size: 48px 48px, 48px 48px, auto, auto, auto;
+    color: var(--color-foreground);
+  }
 }
 
 .text-gradient {
@@ -106,4 +108,49 @@ body {
   border: 1px solid rgba(247, 243, 234, 0.12);
   background: rgba(24, 23, 19, 0.82);
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+}
+
+/* New Premium Utilities */
+@layer utilities {
+  .glass-card {
+    @apply border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl;
+  }
+  
+  .glass-morphism {
+    background: rgba(24, 23, 19, 0.65);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(247, 243, 234, 0.1);
+  }
+
+  .cyan-glow {
+    box-shadow: 0 0 30px rgba(57, 208, 194, 0.25);
+  }
+  
+  .primary-glow {
+    box-shadow: 0 0 30px color-mix(in srgb, var(--primary) 25%, transparent);
+  }
+
+  .text-glow-accent {
+    text-shadow: 0 0 12px rgba(57, 208, 194, 0.4);
+  }
+
+  .text-glow-primary {
+    text-shadow: 0 0 12px color-mix(in srgb, var(--primary) 40%, transparent);
+  }
+
+  .mask-fade-bottom {
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  }
+}
+
+@keyframes mesh-gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-mesh {
+  background: linear-gradient(-45deg, #10100d, #1a1a14, #0d1a1a, #1a0d1a);
+  background-size: 400% 400%;
+  animation: mesh-gradient 15s ease infinite;
 }
