@@ -13,6 +13,7 @@ import { BlogSection } from "@/components/sections/blog-section"
 import { CTASection } from "@/components/sections/cta-section"
 import { CalculatorSection } from "@/components/sections/calculator-section"
 import { ContactSection } from "@/components/sections/contact-section"
+import { StickySlide } from "@/components/sticky-slide"
 
 export default function Home() {
   return (
@@ -20,7 +21,9 @@ export default function Home() {
       <HeroSection />
       <ServicesSection />
       <TechStackSection />
-      <StatsSection />
+      <StickySlide>
+        <StatsSection />
+      </StickySlide>
       <PortfolioSection />
       <AboutSection />
       <ProcessesSection />
