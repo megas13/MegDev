@@ -31,7 +31,7 @@ export default function DownloadsPage() {
         <div className="absolute inset-0 grid-pattern opacity-15" />
         <div className="relative max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <a
-            href="/downloads/app-release.apk"
+            href="/downloads/subtrack.apk"
             className="sharp-panel rounded-2xl p-8 flex flex-col items-center text-center hover:border-primary/30 transition-all duration-300 group"
           >
             <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
