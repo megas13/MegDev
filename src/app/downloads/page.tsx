@@ -40,7 +40,7 @@ export default function DownloadsPage() {
             </div>
             <h2 className="text-2xl font-bold mb-2">SubTrack</h2>
             <p className="text-muted-foreground mb-6">
-              Android APK — En son sürüm · 68,2 MB · 12 Temmuz 2026
+              Android APK — En son sürüm · 69,1 MB · 14 Temmuz 2026
             </p>
             <div className="flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-background font-semibold group-hover:bg-primary/90 transition-colors">
               <ExternalLink className="w-5 h-5" />
