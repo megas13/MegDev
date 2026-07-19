@@ -426,6 +426,10 @@ export default function TrackPage() {
                       </div>
                       <div className="mt-5 space-y-2.5 pt-4 border-t border-white/5 text-xs text-[#817b70]">
                         <div className="flex items-center gap-2">
+                          <Mail className="w-3.5 h-3.5 text-[#39d0c2] shrink-0" />
+                          <span>destek@megdev.info</span>
+                        </div>
+                        <div className="flex items-center gap-2">
                           <Phone className="w-3.5 h-3.5 text-[#39d0c2] shrink-0" />
                           <span>537 983 04 14</span>
                         </div>
