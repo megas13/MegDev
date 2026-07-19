@@ -230,13 +230,8 @@ export default function TrackPage() {
     return Math.round(total / roadmap.length)
   })()
 
-  // Commits from advanced config or fallback
-  const commits = (advancedConfig.commits && advancedConfig.commits.length > 0 ? advancedConfig.commits : [
-    { hash: "8d9fa3c", message: "refactor: optimize rendering and bundle size dynamically", time: "3 saat önce", author: "elif" },
-    { hash: "f3b90a1", message: "feat: final polish and security validation check", time: "6 saat önce", author: "zeynep" },
-    { hash: "5c80ef2", message: "fix: adjust flex positioning layout on mobile panels", time: "1 gün önce", author: "can" },
-    { hash: "a310e5d", message: "feat: integrate tracking socket messages API", time: "2 gün önce", author: "can" },
-  ])
+  // Commits from advanced config
+  const commits = advancedConfig.commits || []
 
   return (
     <div className="min-h-screen bg-[#10100d] relative py-8 px-4 sm:px-6 lg:px-8 selection:bg-[#d7ff43]/20 selection:text-[#d7ff43]">
@@ -613,26 +608,33 @@ export default function TrackPage() {
                   </div>
 
                   {/* Right Column: Code Commits */}
-                  <div className="sharp-panel noise-panel rounded-xl p-6 border border-white/5">
+                    <div className="sharp-panel noise-panel rounded-xl p-6 border border-white/5">
                     <div className="flex items-center gap-2 border-b border-white/5 pb-4 mb-4">
                       <Terminal className="w-4.5 h-4.5 text-[#d7ff43]" />
                       <span className="text-xs font-bold uppercase tracking-wider text-[#817b70]">Son Git Commitleri (Geliştirme Aktivitesi)</span>
                     </div>
 
                     <div className="space-y-4 font-mono text-xs">
-                      {commits.map((commit, idx) => (
-                        <div key={idx} className="flex items-start gap-3 border-b border-white/5 pb-3 last:border-0 last:pb-0">
-                          <span className="text-[#d7ff43] font-bold shrink-0">@{commit.hash}</span>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-[#f7f3ea] truncate text-[11px] font-medium" title={commit.message}>
-                              {commit.message}
-                            </p>
-                            <p className="text-[10px] text-[#817b70] mt-1">
-                              {commit.time} · Geliştirici: <span className="text-[#39d0c2]">@{commit.author}</span>
-                            </p>
-                          </div>
+                      {commits.length === 0 ? (
+                        <div className="text-center py-8">
+                          <GitBranch className="w-6 h-6 text-[#817b70] mx-auto mb-2 opacity-50" />
+                          <p className="text-[10px] text-[#817b70]">Henüz commit kaydı bulunmuyor.</p>
                         </div>
-                      ))}
+                      ) : (
+                        commits.map((commit, idx) => (
+                          <div key={idx} className="flex items-start gap-3 border-b border-white/5 pb-3 last:border-0 last:pb-0">
+                            <span className="text-[#d7ff43] font-bold shrink-0">@{commit.hash}</span>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[#f7f3ea] truncate text-[11px] font-medium" title={commit.message}>
+                                {commit.message}
+                              </p>
+                              <p className="text-[10px] text-[#817b70] mt-1">
+                                {commit.time} · Geliştirici: <span className="text-[#39d0c2]">@{commit.author}</span>
+                              </p>
+                            </div>
+                          </div>
+                        ))
+                      )}
                     </div>
                   </div>
                 </div>
