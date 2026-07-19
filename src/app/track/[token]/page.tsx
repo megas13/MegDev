@@ -54,6 +54,7 @@ interface AdvancedConfig {
   tech_stack?: string[]
   roadmap?: Array<{ name: string; progress: string; status: "done" | "active" | "pending" }>
   tasks?: Array<{ title: string; category: string; status: "todo" | "doing" | "done"; assignee?: string; priority?: string }>
+  commits?: Array<{ hash: string; message: string; time: string; author: string }>
 }
 
 const STATUS_CONFIG = {
@@ -229,13 +230,13 @@ export default function TrackPage() {
     return Math.round(total / roadmap.length)
   })()
 
-  // Generate simulated git commits based on roadmap
-  const simulatedCommits = [
-    { hash: "8d9fa3c", msg: `refactor: optimize rendering and bundle size dynamically`, time: "3 saat önce", author: "elif" },
-    { hash: "f3b90a1", msg: `feat: final polish and security validation check`, time: "6 saat önce", author: "zeynep" },
-    { hash: "5c80ef2", msg: `fix: adjust flex positioning layout on mobile panels`, time: "1 gün önce", author: "can" },
-    { hash: "a310e5d", msg: `feat: integrate tracking socket messages API`, time: "2 gün önce", author: "can" },
-  ]
+  // Commits from advanced config or fallback
+  const commits = (advancedConfig.commits && advancedConfig.commits.length > 0 ? advancedConfig.commits : [
+    { hash: "8d9fa3c", message: "refactor: optimize rendering and bundle size dynamically", time: "3 saat önce", author: "elif" },
+    { hash: "f3b90a1", message: "feat: final polish and security validation check", time: "6 saat önce", author: "zeynep" },
+    { hash: "5c80ef2", message: "fix: adjust flex positioning layout on mobile panels", time: "1 gün önce", author: "can" },
+    { hash: "a310e5d", message: "feat: integrate tracking socket messages API", time: "2 gün önce", author: "can" },
+  ])
 
   return (
     <div className="min-h-screen bg-[#10100d] relative py-8 px-4 sm:px-6 lg:px-8 selection:bg-[#d7ff43]/20 selection:text-[#d7ff43]">
@@ -619,12 +620,12 @@ export default function TrackPage() {
                     </div>
 
                     <div className="space-y-4 font-mono text-xs">
-                      {simulatedCommits.map((commit, idx) => (
+                      {commits.map((commit, idx) => (
                         <div key={idx} className="flex items-start gap-3 border-b border-white/5 pb-3 last:border-0 last:pb-0">
                           <span className="text-[#d7ff43] font-bold shrink-0">@{commit.hash}</span>
                           <div className="flex-1 min-w-0">
-                            <p className="text-[#f7f3ea] truncate text-[11px] font-medium" title={commit.msg}>
-                              {commit.msg}
+                            <p className="text-[#f7f3ea] truncate text-[11px] font-medium" title={commit.message}>
+                              {commit.message}
                             </p>
                             <p className="text-[10px] text-[#817b70] mt-1">
                               {commit.time} · Geliştirici: <span className="text-[#39d0c2]">@{commit.author}</span>

@@ -82,6 +82,7 @@ const parseDescription = (desc: string) => {
   let tech_stack: string[] = []
   let roadmap: any[] = []
   let tasks: any[] = []
+  let commits: Array<{ hash: string; message: string; time: string; author: string }> = []
 
   try {
     if (desc && desc.trim().startsWith("{")) {
@@ -93,12 +94,13 @@ const parseDescription = (desc: string) => {
       tech_stack = parsed.tech_stack || []
       roadmap = parsed.roadmap || []
       tasks = parsed.tasks || []
+      commits = parsed.commits || []
     }
   } catch (e) {
     // Treat as plain text description
   }
 
-  return { summary, target_date, health, preview_url, tech_stack, roadmap, tasks }
+  return { summary, target_date, health, preview_url, tech_stack, roadmap, tasks, commits }
 }
 
 const serializeDescription = (
@@ -108,7 +110,8 @@ const serializeDescription = (
   preview_url: string,
   tech_stack: string[],
   roadmap: any[],
-  tasks: any[]
+  tasks: any[],
+  commits: Array<{ hash: string; message: string; time: string; author: string }> = []
 ) => {
   return JSON.stringify({
     summary,
@@ -117,7 +120,8 @@ const serializeDescription = (
     preview_url,
     tech_stack,
     roadmap,
-    tasks
+    tasks,
+    commits
   })
 }
 
@@ -160,13 +164,15 @@ export default function AdminProjects() {
     tech_stack_str: string
     roadmap: Array<{ name: string; progress: string; status: "done" | "active" | "pending" }>
     tasks: Array<{ title: string; category: string; status: "todo" | "doing" | "done"; assignee: string; priority: string }>
+    commits: Array<{ hash: string; message: string; time: string; author: string }>
   }>({
     target_date: "",
     health: "good",
     preview_url: "",
     tech_stack_str: "",
     roadmap: [],
-    tasks: []
+    tasks: [],
+    commits: []
   })
 
   const [copiedId, setCopiedId] = useState<string | null>(null)
@@ -234,7 +240,8 @@ export default function AdminProjects() {
         preview_url: parsed.preview_url || "",
         tech_stack_str: parsed.tech_stack.join(", "),
         roadmap: defaultRoadmap,
-        tasks: defaultTasks
+        tasks: defaultTasks,
+        commits: parsed.commits || []
       })
     }
   }, [selectedId, projects])
@@ -302,7 +309,8 @@ export default function AdminProjects() {
       builderForm.preview_url,
       parsed.tech_stack,
       parsed.roadmap,
-      parsed.tasks
+      parsed.tasks,
+      parsed.commits
     )
 
     const res = await fetch(`/api/projects/${selected.id}`, {
@@ -340,7 +348,8 @@ export default function AdminProjects() {
       builderForm.preview_url,
       tech_stack,
       builderForm.roadmap,
-      builderForm.tasks
+      builderForm.tasks,
+      builderForm.commits
     )
 
     const res = await fetch(`/api/projects/${selected.id}`, {
@@ -692,6 +701,7 @@ export default function AdminProjects() {
                   { id: "chat", label: "İletişim & Chat", icon: MessageCircle },
                   { id: "edit", label: "Bilgileri Düzenle", icon: Settings },
                   { id: "builder", label: "Takip Paneli Oluşturucu", icon: Hammer },
+                  { id: "commits", label: "Git Commitleri", icon: GitBranch },
                   { id: "delete", label: "Sil", icon: Trash2, danger: true },
                 ].map((tab) => {
                   const Icon = tab.icon
@@ -1078,7 +1088,119 @@ export default function AdminProjects() {
                   </div>
                 )}
 
-                {/* SUB TAB 4: DELETE PROJECT SCREEN */}
+                {/* SUB TAB 4: GIT COMMITS EDITOR */}
+                {detailTab === "commits" && (
+                  <div className="space-y-4 flex-1">
+                    <div className="flex items-center gap-2 text-xs text-[#d7ff43] bg-[#d7ff43]/5 border border-[#d7ff43]/10 p-3 rounded-lg">
+                      <GitBranch className="w-4 h-4 shrink-0" />
+                      <span>Bu commitler `/track` portalında "Canlı Önizleme & Git" sekmesinde gösterilir. Manuel olarak ekleyip düzenleyebilirsiniz.</span>
+                    </div>
+
+                    <div className="space-y-2">
+                      {builderForm.commits.map((commit, idx) => (
+                        <div key={idx} className="bg-white/5 p-3 rounded-lg border border-white/5 space-y-2">
+                          <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
+                            <div>
+                              <label className="text-[8px] font-bold text-[#817b70] uppercase block mb-0.5">Commit Hash</label>
+                              <input
+                                value={commit.hash}
+                                placeholder="e.g. 8d9fa3c"
+                                onChange={(e) => {
+                                  const c = [...builderForm.commits]
+                                  c[idx] = { ...c[idx], hash: e.target.value }
+                                  setBuilderForm({ ...builderForm, commits: c })
+                                }}
+                                className="w-full rounded border border-white/10 bg-[#181713] px-2 py-1 text-xs text-[#f7f3ea] font-mono"
+                              />
+                            </div>
+                            <div className="sm:col-span-2">
+                              <label className="text-[8px] font-bold text-[#817b70] uppercase block mb-0.5">Commit Mesajı</label>
+                              <input
+                                value={commit.message}
+                                placeholder="feat: add new feature"
+                                onChange={(e) => {
+                                  const c = [...builderForm.commits]
+                                  c[idx] = { ...c[idx], message: e.target.value }
+                                  setBuilderForm({ ...builderForm, commits: c })
+                                }}
+                                className="w-full rounded border border-white/10 bg-[#181713] px-2 py-1 text-xs text-[#f7f3ea]"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[8px] font-bold text-[#817b70] uppercase block mb-0.5">Zaman</label>
+                              <input
+                                value={commit.time}
+                                placeholder="3 saat önce"
+                                onChange={(e) => {
+                                  const c = [...builderForm.commits]
+                                  c[idx] = { ...c[idx], time: e.target.value }
+                                  setBuilderForm({ ...builderForm, commits: c })
+                                }}
+                                className="w-full rounded border border-white/10 bg-[#181713] px-2 py-1 text-xs text-[#f7f3ea]"
+                              />
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <label className="text-[8px] font-bold text-[#817b70] uppercase">Geliştirici:</label>
+                              <input
+                                value={commit.author}
+                                placeholder="can"
+                                onChange={(e) => {
+                                  const c = [...builderForm.commits]
+                                  c[idx] = { ...c[idx], author: e.target.value }
+                                  setBuilderForm({ ...builderForm, commits: c })
+                                }}
+                                className="rounded border border-white/10 bg-[#181713] px-2 py-1 text-xs text-[#f7f3ea] w-28"
+                              />
+                            </div>
+                            <button
+                              onClick={() => {
+                                const c = builderForm.commits.filter((_, i) => i !== idx)
+                                setBuilderForm({ ...builderForm, commits: c })
+                              }}
+                              className="p-1.5 text-[#ff6b35] hover:bg-[#ff6b35]/10 rounded"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                      {builderForm.commits.length === 0 && (
+                        <div className="text-center py-8 border border-dashed border-white/10 rounded-xl bg-white/[0.01]">
+                          <GitBranch className="w-6 h-6 text-[#817b70] mx-auto mb-2 opacity-50" />
+                          <p className="text-[10px] text-[#817b70]">Henüz commit eklenmemiş. Portalda varsayılan örnek commitler gösterilecektir.</p>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => {
+                          setBuilderForm({
+                            ...builderForm,
+                            commits: [...builderForm.commits, { hash: "", message: "", time: "", author: "" }]
+                          })
+                        }}
+                        className="flex items-center gap-1.5 text-xs font-bold text-[#39d0c2] hover:bg-[#39d0c2]/10 border border-[#39d0c2]/30 px-3 py-2 rounded-lg transition-all"
+                      >
+                        <PlusCircle className="w-3.5 h-3.5" /> Yeni Commit Ekle
+                      </button>
+                    </div>
+
+                    <div className="pt-3 border-t border-white/5 flex justify-end">
+                      <button
+                        onClick={handleSaveBuilder}
+                        className="flex items-center gap-1.5 bg-[#39d0c2] text-[#10100d] px-5 py-2.5 rounded-lg text-xs font-bold hover:shadow-[0_0_15px_rgba(57,208,194,0.2)] transition-all"
+                      >
+                        <Save className="w-3.5 h-3.5" />
+                        <span>Commitleri Kaydet</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* SUB TAB 5: DELETE PROJECT SCREEN */}
                 {detailTab === "delete" && (
                   <div className="space-y-4 flex-1">
                     <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-5 flex gap-3 text-xs leading-relaxed text-red-200">
