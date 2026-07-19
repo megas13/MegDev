@@ -26,7 +26,8 @@ import {
   Link as LinkIcon,
   HeartPulse,
   Kanban as KanbanIcon,
-  Info
+  Info,
+  GitBranch
 } from "lucide-react"
 
 const STATUS_FLOW = [
