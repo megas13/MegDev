@@ -417,21 +417,17 @@ export default function TrackPage() {
                       <span className="text-[10px] uppercase tracking-wider text-[#817b70] font-bold block mb-4">Proje Temsilciniz</span>
                       <div className="flex items-center gap-3.5">
                         <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#d7ff43] to-[#39d0c2] flex items-center justify-center text-[#10100d] font-black text-sm shadow-[0_0_20px_rgba(215,255,67,0.15)]">
-                          ME
+                          ED
                         </div>
                         <div>
-                          <h4 className="text-sm font-bold text-[#f7f3ea]">Mehmet Emin</h4>
-                          <p className="text-xs text-[#817b70] mt-0.5">Müşteri İlişkileri Yöneticisi</p>
+                          <h4 className="text-sm font-bold text-[#f7f3ea]">Emre Dargaç</h4>
+                          <p className="text-xs text-[#817b70] mt-0.5">Kurucu & Geliştirici</p>
                         </div>
                       </div>
                       <div className="mt-5 space-y-2.5 pt-4 border-t border-white/5 text-xs text-[#817b70]">
                         <div className="flex items-center gap-2">
-                          <Mail className="w-3.5 h-3.5 text-[#39d0c2] shrink-0" />
-                          <span>destek@megdev.com.tr</span>
-                        </div>
-                        <div className="flex items-center gap-2">
                           <Phone className="w-3.5 h-3.5 text-[#39d0c2] shrink-0" />
-                          <span>+90 850 000 0000</span>
+                          <span>537 983 04 14</span>
                         </div>
                       </div>
                     </div>
