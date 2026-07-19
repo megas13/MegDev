@@ -202,7 +202,7 @@ export default function TrackPage() {
   const healthKey = (advancedConfig.health || (project.status === "iptal" ? "at_risk" : project.status === "tamamlandı" ? "excellent" : "good")) as keyof typeof HEALTH_CONFIG
   const health = HEALTH_CONFIG[healthKey] || HEALTH_CONFIG.good
 
-  const previewUrl = advancedConfig.preview_url || `https://preview.megdev.com.tr/${project.id.split("-")[0]}`
+  const previewUrl = advancedConfig.preview_url || ""
   const techStack = advancedConfig.tech_stack || ["Next.js", "TailwindCSS", "PostgreSQL", "Framer Motion"]
 
   const status = STATUS_CONFIG[project.status as keyof typeof STATUS_CONFIG] || STATUS_CONFIG.beklemede
@@ -583,27 +583,35 @@ export default function TrackPage() {
                     <div>
                       <div className="flex items-center justify-between mb-4">
                         <span className="text-xs font-bold font-mono text-[#39d0c2] uppercase tracking-wider">MÜŞTERİ ÖNİZLEME DURUMU</span>
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                          ONLINE
+                        <span className={cn("inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold border", previewUrl ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" : "bg-yellow-500/10 text-yellow-400 border-yellow-500/20")}>
+                          <span className={cn("w-1.5 h-1.5 rounded-full", previewUrl ? "bg-emerald-400 animate-ping" : "bg-yellow-400")} />
+                          {previewUrl ? "ONLINE" : "HAZIRLANIYOR"}
                         </span>
                       </div>
                       <h4 className="text-lg font-bold text-[#f7f3ea]">Canlı Geliştirme Sunucusu</h4>
                       <p className="text-xs text-[#817b70] mt-2 leading-relaxed">
-                        Kod tabanına eklenen her yeni özellik ve düzeltme otomatik olarak bu sunucuya yüklenir. Değişiklikleri anlık olarak test edebilirsiniz.
+                        {previewUrl
+                          ? "Kod tabanına eklenen her yeni özellik ve düzeltme otomatik olarak bu sunucuya yüklenir. Değişiklikleri anlık olarak test edebilirsiniz."
+                          : "Proje geliştirme aşamasındadır. Önizleme linki hazır olduğunda bu sayfada yayınlanacaktır."}
                       </p>
                     </div>
 
                     <div className="mt-8">
-                      <a
-                        href={previewUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex w-full items-center justify-center gap-2 bg-gradient-to-r from-[#d7ff43] to-[#39d0c2] text-[#10100d] font-bold text-sm px-4 py-3.5 rounded-xl hover:shadow-[0_0_25px_rgba(215,255,67,0.2)] active:scale-[0.98] transition-all"
-                      >
-                        Sunucuyu Yeni Sekmede Aç
-                        <ExternalLink className="w-4 h-4" />
-                      </a>
+                      {previewUrl ? (
+                        <a
+                          href={previewUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex w-full items-center justify-center gap-2 bg-gradient-to-r from-[#d7ff43] to-[#39d0c2] text-[#10100d] font-bold text-sm px-4 py-3.5 rounded-xl hover:shadow-[0_0_25px_rgba(215,255,67,0.2)] active:scale-[0.98] transition-all"
+                        >
+                          Sunucuyu Yeni Sekmede Aç
+                          <ExternalLink className="w-4 h-4" />
+                        </a>
+                      ) : (
+                        <div className="w-full text-center border border-dashed border-white/10 rounded-xl px-4 py-5">
+                          <p className="text-xs text-[#817b70]">Sunucu henüz hazır değil. Hazır olduğunda burada link yayınlanacaktır.</p>
+                        </div>
+                      )}
                     </div>
                   </div>
 
