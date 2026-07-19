@@ -146,7 +146,7 @@ export default function AdminProjects() {
   const [statusFilter, setStatusFilter] = useState("all")
 
   // Selected Detail Sub-tabs
-  const [detailTab, setDetailTab] = useState<"chat" | "edit" | "builder" | "delete">("chat")
+  const [detailTab, setDetailTab] = useState<"chat" | "edit" | "builder" | "commits" | "delete">("chat")
 
   // Edit fields forms
   const [editForm, setEditForm] = useState({
