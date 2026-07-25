@@ -1,21 +1,62 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { ArrowUpRight } from "lucide-react"
+import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
 import { SectionHeading } from "@/components/ui/section-heading"
-import { portfolioItems } from "@/constants"
-
-const categories = ["Tümü", ...Array.from(new Set(portfolioItems.map((item) => item.category)))]
+type PortfolioItem = {
+  id: string
+  title: string
+  description: string
+  category: string | null
+  technologies: string[]
+  project_url: string | null
+  image_url: string | null
+}
 
 export function PortfolioSection() {
   const [activeCategory, setActiveCategory] = useState("Tümü")
+  const [items, setItems] = useState<PortfolioItem[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    async function loadPortfolio() {
+      try {
+        const response = await fetch("/api/portfolio", {
+          cache: "no-store",
+          signal: controller.signal,
+        })
+        if (!response.ok) throw new Error("Portföy yüklenemedi")
+        const data = await response.json()
+        setItems(Array.isArray(data) ? data : [])
+      } catch (error) {
+        if (error instanceof Error && error.name !== "AbortError") {
+          console.error(error)
+        }
+      } finally {
+        if (!controller.signal.aborted) setLoading(false)
+      }
+    }
+
+    loadPortfolio()
+    return () => controller.abort()
+  }, [])
+
+  const categories = [
+    "Tümü",
+    ...Array.from(
+      new Set(items.map((item) => item.category).filter((category): category is string => Boolean(category)))
+    ),
+  ]
 
   const filtered =
     activeCategory === "Tümü"
-      ? portfolioItems
-      : portfolioItems.filter((item) => item.category === activeCategory)
+      ? items
+      : items.filter((item) => item.category === activeCategory)
 
   return (
     <section id="portfolio" className="relative py-24 lg:py-32">
@@ -41,6 +82,18 @@ export function PortfolioSection() {
           ))}
         </div>
 
+        {loading && (
+          <p className="py-12 text-center text-sm text-muted-foreground">
+            Portföy yükleniyor…
+          </p>
+        )}
+
+        {!loading && filtered.length === 0 && (
+          <p className="py-12 text-center text-sm text-muted-foreground">
+            Henüz portföy projesi eklenmemiş.
+          </p>
+        )}
+
         <motion.div layout className="grid gap-px border border-foreground/10 bg-foreground/10 md:grid-cols-2">
           <AnimatePresence mode="popLayout">
             {filtered.map((item, index) => (
@@ -53,23 +106,47 @@ export function PortfolioSection() {
                 transition={{ duration: 0.25, delay: index * 0.04 }}
                 className="group bg-card p-6 sm:p-8"
               >
+                {item.image_url && (
+                  <div className="relative mb-6 aspect-[16/9] overflow-hidden rounded-xl bg-foreground/[0.04]">
+                    <Image
+                      src={item.image_url}
+                      alt={item.title}
+                      fill
+                      sizes="(min-width: 768px) 50vw, 100vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      unoptimized
+                    />
+                  </div>
+                )}
                 <div className="mb-10 flex items-start justify-between gap-6">
                   <div>
-                    <Badge variant="primary">{item.category}</Badge>
+                    {item.category && <Badge variant="primary">{item.category}</Badge>}
                     <h3 className="mt-4 text-2xl font-black transition-colors group-hover:text-primary">
                       {item.title}
                     </h3>
                   </div>
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-foreground/10 transition-colors group-hover:border-primary group-hover:text-primary">
-                    <ArrowUpRight className="h-5 w-5" />
-                  </div>
+                  {item.project_url ? (
+                    <a
+                      href={item.project_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`${item.title} projesini aç`}
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-foreground/10 transition-colors hover:border-primary hover:text-primary"
+                    >
+                      <ArrowUpRight className="h-5 w-5" />
+                    </a>
+                  ) : (
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-foreground/10 transition-colors group-hover:border-primary group-hover:text-primary">
+                      <ArrowUpRight className="h-5 w-5" />
+                    </div>
+                  )}
                 </div>
 
                 <p className="mb-6 text-sm leading-relaxed text-muted-foreground">
                   {item.description}
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {item.technologies.map((tech) => (
+                  {(item.technologies || []).map((tech) => (
                     <Badge key={tech} variant="default">
                       {tech}
                     </Badge>

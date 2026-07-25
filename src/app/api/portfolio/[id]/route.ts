@@ -17,7 +17,17 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   const { id } = await params
   try {
     const body = await req.json()
-    const data = await adminRequest(UPDATE_PORTFOLIO, { id, ...body })
+    const data = await adminRequest(UPDATE_PORTFOLIO, {
+      id,
+      title: body.title,
+      slug: body.slug,
+      description: body.description,
+      imageUrl: body.image_url || null,
+      category: body.category || null,
+      technologies: body.technologies || [],
+      projectUrl: body.project_url || null,
+      featured: body.featured ?? false,
+    })
     return NextResponse.json(data?.update_portfolio_projects_by_pk)
   } catch (e) {
     return NextResponse.json({ error: String(e) }, { status: 500 })

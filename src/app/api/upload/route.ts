@@ -61,7 +61,7 @@ export async function POST(req: Request) {
       )
     }
 
-    const publicUrl = `${NHOST_STORAGE_URL}/files/${fileId}`
+    const publicUrl = `/api/upload/${fileId}`
     return NextResponse.json({ url: publicUrl, id: fileId })
   } catch (e) {
     return NextResponse.json({ error: String(e) }, { status: 500 })
