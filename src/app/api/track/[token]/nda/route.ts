@@ -121,11 +121,43 @@ export async function POST(request: Request, { params }: { params: Promise<{ tok
         contractUrl: `${appUrl}/gizlilik-sozlesmesi/${encodeURIComponent(token)}`,
         expiresInMinutes: CODE_TTL_MINUTES,
       })
-      await transporter.sendMail({
+      const mailOptions = {
         from: `"Meg Dev" <${process.env.SMTP_FROM}>`,
         to: project.customer_email,
         ...verificationEmail,
-      })
+      }
+      let deliveryError: unknown = null
+      for (let attempt = 1; attempt <= 2; attempt++) {
+        try {
+          await transporter.sendMail(mailOptions)
+          deliveryError = null
+          break
+        } catch (error) {
+          deliveryError = error
+          console.error("NDA verification email attempt failed", {
+            attempt,
+            projectId: project.id,
+            error: error instanceof Error ? error.message : String(error),
+          })
+          if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, 700))
+        }
+      }
+      if (deliveryError) {
+        if (existing) {
+          await adminRequest(UPSERT_NDA_VERIFICATION, {
+            projectId: project.id,
+            codeHash: existing.code_hash,
+            expiresAt: existing.expires_at,
+            lastSentAt: existing.last_sent_at,
+          })
+        } else {
+          await adminRequest(DELETE_NDA_VERIFICATION, { projectId: project.id })
+        }
+        return Response.json(
+          { error: "E-posta servisine şu anda ulaşılamıyor. Lütfen birkaç saniye sonra tekrar deneyin." },
+          { status: 502 },
+        )
+      }
       return Response.json({ success: true, email: maskEmail(project.customer_email) })
     }
 
