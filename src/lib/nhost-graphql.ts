@@ -164,3 +164,14 @@ export const ACCEPT_NDA = `mutation AcceptNda($object: nda_acceptances_insert_in
 export const DELETE_NDA_VERIFICATION = `mutation DeleteNdaVerification($projectId: uuid!) {
   delete_nda_verification_codes_by_pk(project_id: $projectId) { project_id }
 }`
+
+export const GET_ADMIN_NDA_OVERVIEW = `query GetAdminNdaOverview {
+  projects(order_by: {created_at: desc}) {
+    id title customer_name customer_email customer_phone token created_at
+  }
+  nda_acceptances(order_by: {accepted_at: desc}) {
+    id project_id customer_name customer_email customer_phone
+    contract_version contract_hash contract_text accepted_at
+    accepted_ip user_agent email_verified
+  }
+}`

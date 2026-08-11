@@ -12,6 +12,7 @@ import {
   UPSERT_NDA_VERIFICATION,
 } from "@/lib/nhost-graphql"
 import { buildNdaText, maskEmail, NDA_VERSION } from "@/lib/nda"
+import { buildNdaVerificationEmail } from "@/lib/nda-email"
 
 const CODE_TTL_MINUTES = 10
 const RESEND_WAIT_SECONDS = 60
@@ -112,11 +113,18 @@ export async function POST(request: Request, { params }: { params: Promise<{ tok
         expiresAt: expiresAt.toISOString(),
         lastSentAt: now.toISOString(),
       })
+      const appUrl = (process.env.NEXT_PUBLIC_APP_URL || new URL(request.url).origin).replace(/\/$/, "")
+      const verificationEmail = buildNdaVerificationEmail({
+        customerName: project.customer_name,
+        projectTitle: project.title,
+        code,
+        contractUrl: `${appUrl}/gizlilik-sozlesmesi/${encodeURIComponent(token)}`,
+        expiresInMinutes: CODE_TTL_MINUTES,
+      })
       await transporter.sendMail({
         from: `"Meg Dev" <${process.env.SMTP_FROM}>`,
         to: project.customer_email,
-        subject: "Gizlilik sözleşmesi doğrulama kodunuz",
-        text: `${project.title} projesine ait gizlilik sözleşmesi doğrulama kodunuz: ${code}\n\nKod ${CODE_TTL_MINUTES} dakika geçerlidir. Bu işlemi siz başlatmadıysanız mesajı dikkate almayın.`,
+        ...verificationEmail,
       })
       return Response.json({ success: true, email: maskEmail(project.customer_email) })
     }
