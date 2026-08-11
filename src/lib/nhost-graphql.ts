@@ -129,3 +129,38 @@ export const CREATE_PROJECT_MESSAGE = `mutation CreateProjectMessage($projectId:
     project_id: $projectId, sender: $sender, message: $message
   }) { id created_at }
 }`
+
+export const GET_NDA_ACCEPTANCE = `query GetNdaAcceptance($projectId: uuid!) {
+  nda_acceptances(where: {project_id: {_eq: $projectId}}, limit: 1) {
+    id accepted_at contract_version contract_hash customer_name customer_email
+  }
+}`
+
+export const GET_NDA_VERIFICATION = `query GetNdaVerification($projectId: uuid!) {
+  nda_verification_codes_by_pk(project_id: $projectId) {
+    project_id code_hash expires_at attempts last_sent_at
+  }
+}`
+
+export const UPSERT_NDA_VERIFICATION = `mutation UpsertNdaVerification($projectId: uuid!, $codeHash: String!, $expiresAt: timestamptz!, $lastSentAt: timestamptz!) {
+  insert_nda_verification_codes_one(
+    object: {project_id: $projectId, code_hash: $codeHash, expires_at: $expiresAt, attempts: 0, last_sent_at: $lastSentAt}
+    on_conflict: {constraint: nda_verification_codes_pkey, update_columns: [code_hash, expires_at, attempts, last_sent_at]}
+  ) { project_id }
+}`
+
+export const INCREMENT_NDA_ATTEMPTS = `mutation IncrementNdaAttempts($projectId: uuid!) {
+  update_nda_verification_codes_by_pk(pk_columns: {project_id: $projectId}, _inc: {attempts: 1}) {
+    attempts
+  }
+}`
+
+export const ACCEPT_NDA = `mutation AcceptNda($object: nda_acceptances_insert_input!) {
+  insert_nda_acceptances_one(object: $object) {
+    id accepted_at contract_version contract_hash
+  }
+}`
+
+export const DELETE_NDA_VERIFICATION = `mutation DeleteNdaVerification($projectId: uuid!) {
+  delete_nda_verification_codes_by_pk(project_id: $projectId) { project_id }
+}`

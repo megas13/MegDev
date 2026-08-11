@@ -1,8 +1,9 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
+import type { NdaStatus } from "@/components/nda/nda-acceptance"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   Send,
@@ -14,14 +15,11 @@ import {
   Kanban,
   GitBranch,
   MessageSquareCode,
-  ArrowUpRight,
   Shield,
-  BadgeAlert,
   Calendar,
   User,
   Mail,
   Phone,
-  ChevronRight,
   Activity,
   Terminal,
   ExternalLink,
@@ -57,6 +55,8 @@ interface AdvancedConfig {
   commits?: Array<{ hash: string; message: string; time: string; author: string }>
 }
 
+type PortalTab = "overview" | "tasks" | "preview" | "chat"
+
 const STATUS_CONFIG = {
   beklemede: { label: "Beklemede", color: "text-yellow-400", bg: "bg-yellow-500/10", border: "border-yellow-500/30", icon: Clock },
   inceleniyor: { label: "İnceleniyor", color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500/30", icon: Loader },
@@ -74,13 +74,16 @@ const HEALTH_CONFIG = {
 
 export default function TrackPage() {
   const { token } = useParams<{ token: string }>()
+  const router = useRouter()
   const [project, setProject] = useState<ProjectData | null>(null)
   const [messages, setMessages] = useState<MessageData[]>([])
   const [msgInput, setMsgInput] = useState("")
   const [sending, setSending] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [ndaLoading, setNdaLoading] = useState(true)
+  const [ndaStatus, setNdaStatus] = useState<NdaStatus | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState<"overview" | "tasks" | "preview" | "chat">("overview")
+  const [activeTab, setActiveTab] = useState<PortalTab>("overview")
   const chatContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -100,6 +103,26 @@ export default function TrackPage() {
         setError("Bağlantı hatası")
         setLoading(false)
       })
+  }, [token])
+
+  useEffect(() => {
+    if (ndaStatus && !ndaStatus.accepted) {
+      router.replace(`/gizlilik-sozlesmesi/${token}`)
+    }
+  }, [ndaStatus, router, token])
+
+  useEffect(() => {
+    if (!token) return
+    fetch(`/api/track/${token}/nda`)
+      .then((response) => response.json().then((data) => ({ response, data })))
+      .then(({ response, data }) => {
+        if (!response.ok) throw new Error(data.error || "Gizlilik sözleşmesi yüklenemedi")
+        setNdaStatus(data)
+      })
+      .catch((ndaError) => {
+        setError(ndaError instanceof Error ? ndaError.message : "Gizlilik sözleşmesi yüklenemedi")
+      })
+      .finally(() => setNdaLoading(false))
   }, [token])
 
   useEffect(() => {
@@ -140,7 +163,7 @@ export default function TrackPage() {
     }
   }
 
-  if (loading) {
+  if (loading || ndaLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#10100d]">
         <div className="text-center">
@@ -175,6 +198,14 @@ export default function TrackPage() {
     )
   }
 
+  if (ndaStatus && !ndaStatus.accepted) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#10100d] text-sm text-[#817b70]">
+        Gizlilik sözleşmesine yönlendiriliyorsunuz...
+      </div>
+    )
+  }
+
   // Parse advanced config from description or generate fallback
   let plainDescription = project.description || ""
   let advancedConfig: AdvancedConfig = {}
@@ -184,7 +215,7 @@ export default function TrackPage() {
       advancedConfig = parsed
       plainDescription = parsed.summary || ""
     }
-  } catch (e) {
+  } catch {
     // Treat description as plain text fallback
   }
 
@@ -315,7 +346,7 @@ export default function TrackPage() {
             return (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id as PortalTab)}
                 className={cn(
                   "flex items-center gap-2.5 px-5 py-3.5 text-sm font-bold transition-all duration-200 select-none whitespace-nowrap border-b-2 -mb-0.5",
                   isActive
