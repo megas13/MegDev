@@ -412,7 +412,7 @@ export function CalculatorSection() {
                   {step === 1 && (
                     <div className="space-y-4">
                       <p className="text-sm text-muted-foreground mb-4 font-medium">Geliştirmek istediğiniz ana proje yapısını seçin:</p>
-                      <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                         {projectTypes.map((type) => {
                           const isSelected = projectType === type.id
                           const IconComponent = type.icon
@@ -420,7 +420,7 @@ export function CalculatorSection() {
                             <button
                               key={type.id}
                               onClick={() => setProjectType(type.id)}
-                              className={`p-5 border text-left cursor-pointer transition-all duration-300 rounded-2xl flex flex-col justify-between h-full relative overflow-hidden group hover:-translate-y-1 ${
+                              className={`p-4 border text-left cursor-pointer transition-all duration-300 rounded-2xl flex flex-col justify-between h-full min-h-[160px] relative overflow-hidden group hover:-translate-y-1 ${
                                 isSelected
                                   ? "border-primary/60 bg-primary/[.07] shadow-[0_16px_45px_rgba(215,255,67,0.08)]"
                                   : "border-white/10 bg-white/[.025] hover:border-white/25 hover:bg-white/[.045]"
@@ -441,25 +441,11 @@ export function CalculatorSection() {
                                 <span className="font-bold text-sm sm:text-base text-foreground group-hover:text-primary transition-colors block">{type.name}</span>
                                 <p className="text-xs text-muted-foreground mt-2 leading-relaxed">{type.description}</p>
                                 
-                                {/* Bullet features */}
-                                <div className="mt-4 space-y-1.5 border-t border-foreground/5 pt-3">
-                                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold mb-1">Pakete Dahil Temel Özellikler:</p>
-                                  {type.features.map((feat, fidx) => (
-                                    <div key={fidx} className="flex items-center gap-1.5 text-xs text-foreground/80">
-                                      <Check className="w-3 h-3 text-primary shrink-0" />
-                                      <span className="text-[11px] leading-tight">{feat}</span>
-                                    </div>
-                                  ))}
-                                </div>
                               </div>
 
-                              {/* Tech Stack suggested */}
-                              <div className="mt-4 pt-3 border-t border-foreground/5 flex flex-wrap gap-1">
-                                {type.techStack.map((tech, tidx) => (
-                                  <span key={tidx} className="text-[9px] font-mono px-1.5 py-0.5 border border-foreground/10 bg-background/40 text-muted-foreground rounded-sm">
-                                    {tech}
-                                  </span>
-                                ))}
+                              <div className="mt-3 flex items-center justify-between border-t border-foreground/5 pt-3 font-mono text-[10px]">
+                                <span className="text-muted-foreground">Başlangıç</span>
+                                <span className="font-bold text-primary">{type.baseCost.toLocaleString("tr-TR")} TL · {type.baseWeeks} hf.</span>
                               </div>
                             </button>
                           )
@@ -757,7 +743,7 @@ export function CalculatorSection() {
             </div>
 
             {/* Back & Next navigation controls */}
-            <div className="mt-8 flex items-center justify-between gap-4 border-t border-white/10 pt-6 lg:ml-[190px] lg:pl-8">
+            <div className="sticky bottom-3 z-30 mt-6 flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-background/90 p-3 shadow-[0_12px_40px_rgba(0,0,0,.45)] backdrop-blur-xl lg:ml-[190px] lg:px-4">
               <button
                 disabled={step === 1 || loading || submitted}
                 onClick={() => setStep((s) => s - 1)}
