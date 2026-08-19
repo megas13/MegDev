@@ -27,57 +27,81 @@ export const navigation = [
 export const services = [
   {
     id: 1,
+    slug: "kurumsal-web-sitesi",
     title: "Kurumsal Web Sitesi",
     description:
       "Markanızı hızlı, erişilebilir ve yönetilebilir bir web deneyimine dönüştürüyoruz.",
     icon: "Globe",
     features: ["Responsive yapı", "SEO altyapısı", "Performans optimizasyonu", "CMS entegrasyonu"],
     gradient: "from-lime-300 to-teal-300",
+    outcome: "Daha güçlü marka algısı, hızlı açılış ve ölçülebilir ziyaretçi dönüşümü.",
+    process: ["Marka ve hedef analizi", "Bilgi mimarisi ve prototip", "Geliştirme ve içerik girişi", "Performans testi ve yayın"],
+    technologies: ["Next.js", "React", "Tailwind CSS", "Headless CMS"],
   },
   {
     id: 2,
+    slug: "e-ticaret-sistemleri",
     title: "E-Ticaret Sistemleri",
     description:
       "Ürün, ödeme, kampanya ve stok akışlarını birlikte çalışan güçlü satış altyapılarına bağlıyoruz.",
     icon: "ShoppingCart",
     features: ["Ödeme entegrasyonu", "Stok yönetimi", "Mobil alışveriş", "Analitik panel"],
     gradient: "from-orange-500 to-rose-500",
+    outcome: "Satın alma adımlarını kısaltan, yönetilebilir ve büyümeye hazır satış altyapısı.",
+    process: ["Ürün ve operasyon analizi", "Dönüşüm odaklı UX", "Ödeme ve lojistik entegrasyonu", "Satış analitiği ve optimizasyon"],
+    technologies: ["Next.js", "Node.js", "PostgreSQL", "Ödeme API'leri"],
   },
   {
     id: 3,
+    slug: "crm-sistemleri",
     title: "CRM Sistemleri",
     description:
       "Satış, müşteri takibi ve operasyon ekiplerini tek panelde buluşturan özel CRM çözümleri kuruyoruz.",
     icon: "Users",
     features: ["Müşteri takibi", "Satış otomasyonu", "Raporlama", "API entegrasyonları"],
     gradient: "from-cyan-400 to-sky-500",
+    outcome: "Dağınık müşteri verisini tek merkeze taşıyan, takip edilebilir satış operasyonu.",
+    process: ["Süreç haritalama", "Rol ve yetki tasarımı", "Modül geliştirme", "Veri aktarımı ve ekip eğitimi"],
+    technologies: ["React", "Node.js", "PostgreSQL", "REST API"],
   },
   {
     id: 4,
+    slug: "mobil-uygulama",
     title: "Mobil Uygulama",
     description:
       "iOS ve Android için hızlı, sade ve kullanıcı alışkanlıklarına uyumlu mobil ürünler geliştiriyoruz.",
     icon: "Smartphone",
     features: ["Native deneyim", "Cross-platform", "UI/UX tasarımı", "Mağaza yayını"],
     gradient: "from-emerald-400 to-lime-500",
+    outcome: "Kullanıcının cebinde hızlı, sezgisel ve mağaza standartlarına uygun dijital ürün.",
+    process: ["Ürün stratejisi", "Mobil UX ve tasarım sistemi", "iOS/Android geliştirme", "Mağaza yayını ve izleme"],
+    technologies: ["Flutter", "React Native", "Firebase", "REST API"],
   },
   {
     id: 5,
+    slug: "yapay-zeka-cozumleri",
     title: "Yapay Zeka Çözümleri",
     description:
       "Veri, otomasyon ve akıllı öneri sistemleriyle iş süreçlerinizi ölçülebilir şekilde hızlandırıyoruz.",
     icon: "Brain",
     features: ["Makine öğrenmesi", "Doğal dil işleme", "Görüntü işleme", "Tahmin modelleri"],
     gradient: "from-fuchsia-500 to-orange-400",
+    outcome: "Tekrarlayan işleri azaltan, veriden anlam çıkaran ve kararları hızlandıran sistemler.",
+    process: ["Kullanım senaryosu seçimi", "Veri hazırlığı ve prototip", "Model/ajan geliştirme", "Ölçüm, güvenlik ve iyileştirme"],
+    technologies: ["OpenAI", "Python", "Vector DB", "Otomasyon API'leri"],
   },
   {
     id: 6,
+    slug: "ozel-yazilim",
     title: "Özel Yazılım",
     description:
       "Hazır araçların yetmediği yerde, işletmenizin akışına göre ölçeklenebilen yazılımlar tasarlıyoruz.",
     icon: "Code",
     features: ["İhtiyaç analizi", "Mimari tasarım", "API geliştirme", "Sürekli destek"],
     gradient: "from-zinc-200 to-lime-300",
+    outcome: "İşletmenizin gerçek akışına uyan, gereksiz lisans ve manuel iş yükünü azaltan ürün.",
+    process: ["İhtiyaç ve risk analizi", "Teknik mimari", "Kademeli ürün geliştirme", "Devreye alma ve sürekli destek"],
+    technologies: ["Next.js", "Node.js", "PostgreSQL", "Cloud"],
   },
 ]
 

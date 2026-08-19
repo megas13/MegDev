@@ -4,26 +4,17 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import {
-  ArrowRight, ArrowUpRight, Brain, Code2, Globe2,
-  Layers3, Play, ShieldCheck, ShoppingBag, Smartphone,
-  Sparkles, Star, ChevronDown, Check, Terminal, Cpu, Heart, Search
+  ArrowRight, ArrowUpRight, Code2,
+  Play, ShieldCheck,
+  Sparkles, Star, ChevronDown, Terminal, Cpu, Heart, Search
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
 import { CalculatorSection } from "@/components/sections/calculator-section"
-import { services, portfolioItems, processes, testimonials, faqs } from "@/constants"
-
-// Icons mapping for services and processes
-const serviceIconMap: Record<string, React.ReactNode> = {
-  Globe: <Globe2 className="w-6 h-6" />,
-  ShoppingCart: <ShoppingBag className="w-6 h-6" />,
-  Users: <Layers3 className="w-6 h-6" />,
-  Smartphone: <Smartphone className="w-6 h-6" />,
-  Brain: <Brain className="w-6 h-6" />,
-  Code: <Code2 className="w-6 h-6" />,
-}
+import { ServicesShowcase } from "@/components/sections/services-showcase"
+import { portfolioItems, processes, testimonials, faqs } from "@/constants"
 
 const processIconMap: Record<string, React.ReactNode> = {
   Search: <Search className="w-5 h-5" />,
@@ -296,54 +287,7 @@ export default function Project() {
         </div>
       </section>
 
-      {/* Services Section */}
-      <section id="services" className="relative py-28 lg:py-36 border-t border-foreground/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
-            <span className="text-primary font-mono text-xs uppercase tracking-[0.25em] font-bold">YETENEKLERİMİZ</span>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight">Hangi Alanlarda Çözüm Üretiyoruz?</h2>
-            <p className="text-lg text-muted-foreground">Gelişmiş teknolojilerle donatılmış, işlevsel ve kullanıcı dostu yazılım altyapıları.</p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px border border-white/10 bg-white/10 rounded-xl overflow-hidden shadow-2xl">
-            {services.map((service, index) => (
-              <motion.div
-                key={service.id}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: index * 0.08 }}
-              >
-                <div className="group relative h-full bg-[#181713]/70 backdrop-blur-sm p-8 hover:bg-[#1f1e19]/90 transition-all duration-300 flex flex-col justify-between">
-                  <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${service.gradient}`} />
-                  <div>
-                    <div className="flex items-center justify-between mb-8">
-                      <span className="font-mono text-xs text-muted-foreground/60 font-bold">
-                        {String(index + 1).padStart(2, "0")} / HİZMET
-                      </span>
-                      <div className={`flex h-12 w-12 items-center justify-center bg-gradient-to-br ${service.gradient} text-background rounded-lg shadow-lg`}>
-                        {serviceIconMap[service.icon]}
-                      </div>
-                    </div>
-                    <h3 className="text-2xl font-black mb-3 group-hover:text-primary transition-colors">{service.title}</h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed mb-6">
-                      {service.description}
-                    </p>
-                  </div>
-                  <ul className="space-y-2.5 pt-6 border-t border-white/5">
-                    {service.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-2 text-xs text-muted-foreground/90">
-                        <Check className="w-3.5 h-3.5 text-primary shrink-0" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ServicesShowcase />
 
       {/* Featured Portfolio Section */}
       <section id="portfolio" className="relative py-28 lg:py-36 border-t border-foreground/10 bg-[#12120f]/40">

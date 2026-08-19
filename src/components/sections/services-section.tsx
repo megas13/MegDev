@@ -1,6 +1,8 @@
 "use client"
 
 import { motion } from "framer-motion"
+import Link from "next/link"
+import { ArrowUpRight } from "lucide-react"
 import { Brain, Code, Globe, ShoppingCart, Smartphone, Users } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { SectionHeading } from "@/components/ui/section-heading"
@@ -56,6 +58,9 @@ export function ServicesSection() {
                     </li>
                   ))}
                 </ul>
+                <Link href={`/services/${service.slug}`} className="mt-7 inline-flex items-center gap-2 text-sm font-black text-primary">
+                  Hizmeti detaylandır <ArrowUpRight className="h-4 w-4" />
+                </Link>
               </Card>
             </motion.div>
           ))}
