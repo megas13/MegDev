@@ -234,22 +234,17 @@ export function CalculatorSection() {
     selectedSpeedObj 
   } = getCalculation()
 
-  // Dynamic project roadmap roadmap phases calculation
   const getRoadmapPhases = (totalWeeks: number) => {
     const design = Math.max(1, Math.round(totalWeeks * 0.25 * 2) / 2)
     const frontend = Math.max(1.5, Math.round(totalWeeks * 0.35 * 2) / 2)
-    const backend = Math.max(1, Math.round(totalWeeks * 0.30 * 2) / 2)
-    let qa = Math.max(0.5, totalWeeks - (design + frontend + backend))
-    
-    if (design + frontend + backend + qa !== totalWeeks) {
-      qa = Math.max(0.5, Number((totalWeeks - (design + frontend + backend)).toFixed(1)))
-    }
+    const backend = Math.max(1, Math.round(totalWeeks * 0.3 * 2) / 2)
+    const qa = Math.max(0.5, Number((totalWeeks - design - frontend - backend).toFixed(1)))
 
     return [
-      { name: "Planlama & UI/UX Tasarım", weeks: design, desc: "Figma ekran çizimleri, akış haritaları ve stil rehberinin onaylanması." },
-      { name: "Frontend Geliştirme", weeks: frontend, desc: "Modern arayüz kodlaması, responsive uyumluluk ve animasyonlar." },
-      { name: "Backend & Entegrasyonlar", weeks: backend, desc: "Seçili eklentiler (ödeme, üyelik, AI vb.) ve veritabanı kurulumu." },
-      { name: "Test, Optimizasyon & Canlıya Geçiş", weeks: qa, desc: "Hız optimizasyonu, SEO kontrolleri, testler ve canlı yayına geçiş." },
+      { name: "Planlama & UI/UX Tasarım", weeks: design, desc: "Figma ekranları, akışlar ve stil rehberi." },
+      { name: "Frontend Geliştirme", weeks: frontend, desc: "Arayüz, responsive yapı ve animasyonlar." },
+      { name: "Backend & Entegrasyonlar", weeks: backend, desc: "Seçili servisler ve veritabanı kurulumu." },
+      { name: "Test & Canlıya Geçiş", weeks: qa, desc: "Test, optimizasyon ve yayın süreci." },
     ]
   }
 
@@ -370,32 +365,17 @@ export function CalculatorSection() {
           </motion.div>
         </div>
 
-        <div className="mb-5 grid gap-3 md:grid-cols-[1.5fr_.75fr_.75fr]">
-          <motion.div layout className="relative overflow-hidden rounded-3xl border border-primary/25 bg-primary/[.08] p-6 sm:p-8"><div className="absolute -right-12 -top-16 h-44 w-44 rounded-full bg-primary/15 blur-3xl"/><span className="font-mono text-[10px] font-bold uppercase tracking-[.2em] text-primary">Tahmini yatırım aralığı</span><motion.p key={`${minCost}-${maxCost}`} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="relative mt-3 text-3xl font-black sm:text-5xl">{minCost.toLocaleString("tr-TR")}<span className="mx-2 text-white/20">—</span>{maxCost.toLocaleString("tr-TR")} <small className="text-base text-primary">TL</small></motion.p></motion.div>
-          <motion.div layout className="rounded-3xl border border-white/10 bg-card/60 p-6"><span className="font-mono text-[10px] font-bold uppercase tracking-[.2em] text-primary">Üretim takvimi</span><motion.p key={finalWeeks} initial={{ scale: .85, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="mt-3 text-4xl font-black">{finalWeeks}<small className="ml-2 text-sm font-medium text-muted-foreground">hafta</small></motion.p><div className="mt-4 h-1 overflow-hidden rounded-full bg-white/5"><motion.div animate={{ width: `${Math.min(100, finalWeeks * 5)}%` }} className="h-full bg-primary" /></div></motion.div>
-          <motion.div layout className="rounded-3xl border border-white/10 bg-card/60 p-6"><span className="font-mono text-[10px] font-bold uppercase tracking-[.2em] text-primary">Aktif modül</span><motion.p key={selectedModules.length} initial={{ scale: .85, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="mt-3 text-4xl font-black">{selectedModules.length}<small className="ml-2 text-sm font-medium text-muted-foreground">seçim</small></motion.p><div className="mt-4 flex gap-1">{[0,1,2,3,4,5].map(item => <span key={item} className={`h-1 flex-1 rounded-full ${item < selectedModules.length ? "bg-primary" : "bg-white/5"}`} />)}</div></motion.div>
-        </div>
-
-        <div className="space-y-5">
+        <div>
           {/* Left Side: Wizard Steps */}
-          <div className="relative flex min-h-[590px] flex-col justify-between overflow-hidden rounded-[2rem] border border-white/10 bg-card/45 p-5 shadow-[0_30px_90px_rgba(0,0,0,.35)] backdrop-blur-xl sm:p-8">
+          <div className="relative flex h-[min(680px,calc(100vh-80px))] min-h-[560px] flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-card/45 shadow-[0_30px_90px_rgba(0,0,0,.35)] backdrop-blur-xl">
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/80 to-transparent" />
-            <div className="grid lg:grid-cols-[190px_1fr]">
+            <div className="flex min-h-0 flex-1 flex-col">
               {/* Step indicator */}
-              <div className="mb-8 border-b border-white/10 pb-7 lg:mb-0 lg:border-b-0 lg:border-r lg:pb-0 lg:pr-6">
-                <div className="mb-5 flex items-center justify-between"><span className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[.2em] text-primary"><Calculator className="h-4 w-4" /> Proje yapılandırılıyor</span><span className="font-mono text-xs text-muted-foreground">0{step} / 05</span></div>
-                <div className="relative flex items-center justify-between lg:flex-col lg:items-stretch lg:gap-2">
-                  <div className="absolute left-3 right-3 top-1/2 h-px -translate-y-1/2 bg-white/10 lg:hidden" />
-                  <motion.div className="absolute left-3 top-1/2 h-px -translate-y-1/2 bg-primary shadow-[0_0_12px_rgba(215,255,67,.8)] lg:hidden" animate={{ width: `${((step - 1) / 4) * 92}%` }} transition={{ type: "spring", stiffness: 180, damping: 24 }} />
-                  {["Proje türü", "Modüller", "Tasarım", "Teslimat", "İletişim"].map((label, index) => { const item = index + 1; return <button key={label} onClick={() => item <= step && setStep(item)} className={`relative z-10 flex items-center gap-3 rounded-xl transition-all lg:p-2.5 ${item === step ? "lg:bg-primary/10" : ""}`}><span className={`grid h-8 w-8 shrink-0 place-items-center rounded-full border font-mono text-[10px] transition-all ${item === step ? "scale-110 border-primary bg-primary text-background shadow-[0_0_20px_rgba(215,255,67,.25)]" : item < step ? "border-primary bg-primary/10 text-primary" : "border-white/15 bg-background text-muted-foreground"}`}>{item < step ? <Check className="h-3 w-3" /> : item}</span><span className={`hidden text-left text-xs font-bold lg:block ${item === step ? "text-primary" : "text-muted-foreground"}`}>{label}</span></button> })}
+              <div className="shrink-0 border-b border-white/10 bg-background/35 px-4 py-4 sm:px-6">
+                <div className="mb-3 flex items-center justify-between"><span className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[.2em] text-primary"><Calculator className="h-4 w-4" /> Proje konsolu</span><span className="font-mono text-xs text-muted-foreground">0{step} / 05</span></div>
+                <div className="grid grid-cols-5 gap-1.5">
+                  {["Proje", "Modüller", "Tasarım", "Teslimat", "İletişim"].map((label, index) => { const item = index + 1; return <button key={label} onClick={() => item <= step && setStep(item)} className={`relative flex min-w-0 items-center justify-center gap-2 rounded-xl border px-2 py-2.5 transition-all ${item === step ? "border-primary/40 bg-primary/10 text-primary" : item < step ? "border-primary/20 bg-primary/[.04] text-primary" : "border-white/5 bg-white/[.02] text-muted-foreground"}`}><span className={`grid h-6 w-6 shrink-0 place-items-center rounded-full font-mono text-[9px] ${item === step ? "bg-primary text-background" : "border border-current/25"}`}>{item < step ? <Check className="h-3 w-3" /> : item}</span><span className="hidden truncate text-[11px] font-bold sm:block">{label}</span></button> })}
                 </div>
-                <span className="mt-5 block text-sm font-black lg:hidden">
-                  {step === 1 && "Proje Türü Seçimi"}
-                  {step === 2 && "Eklenti & Özellik Seçimi"}
-                  {step === 3 && "Tasarım Seviyesi Seçimi"}
-                  {step === 4 && "Teslimat Hızı Seçimi"}
-                  {step === 5 && "Teklif Talebini Gönder"}
-                </span>
               </div>
               
               {/* Step Content */}
@@ -406,7 +386,7 @@ export function CalculatorSection() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -12 }}
                   transition={{ duration: 0.32, ease: "easeOut" }}
-                  className="lg:pl-8"
+                  className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-5 [scrollbar-color:rgba(215,255,67,.45)_transparent] sm:px-7"
                 >
                   {/* STEP 1: PROJECT TYPES */}
                   {step === 1 && (
@@ -743,15 +723,21 @@ export function CalculatorSection() {
             </div>
 
             {/* Back & Next navigation controls */}
-            <div className="sticky bottom-3 z-30 mt-6 flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-background/90 p-3 shadow-[0_12px_40px_rgba(0,0,0,.45)] backdrop-blur-xl lg:ml-[190px] lg:px-4">
+            <div className="z-30 flex shrink-0 items-center justify-between gap-3 border-t border-white/10 bg-background/95 px-4 py-3 shadow-[0_-12px_40px_rgba(0,0,0,.28)] backdrop-blur-xl sm:px-6">
               <button
                 disabled={step === 1 || loading || submitted}
                 onClick={() => setStep((s) => s - 1)}
                 className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2.5 text-xs font-bold text-muted-foreground transition hover:border-white/25 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30"
               >
                 <ArrowLeft className="w-4 h-4" />
-                Geri Git
+                Geri
               </button>
+
+              <div className="hidden min-w-0 items-center gap-5 sm:flex">
+                <div className="min-w-0"><span className="block font-mono text-[9px] uppercase tracking-widest text-muted-foreground">Bütçe</span><motion.strong key={`${minCost}-${maxCost}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="whitespace-nowrap text-sm text-primary">{minCost.toLocaleString("tr-TR")}—{maxCost.toLocaleString("tr-TR")} TL</motion.strong></div>
+                <div><span className="block font-mono text-[9px] uppercase tracking-widest text-muted-foreground">Takvim</span><strong className="whitespace-nowrap text-sm">{finalWeeks} hafta</strong></div>
+                <div><span className="block font-mono text-[9px] uppercase tracking-widest text-muted-foreground">Modül</span><strong className="text-sm">{selectedModules.length}</strong></div>
+              </div>
 
               {step < 5 ? (
                 <button
@@ -770,7 +756,7 @@ export function CalculatorSection() {
           </div>
 
           {/* Full-width analysis board */}
-          <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#181814] p-6 shadow-[0_30px_90px_rgba(0,0,0,.35)] sm:p-8">
+          <div className="hidden">
             <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full border-[45px] border-white/[.02]" />
             <div className="relative flex flex-col justify-between gap-4 border-b border-white/10 pb-6 sm:flex-row sm:items-end">
               <div><span className="flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-widest text-primary"><Sparkles className="h-3.5 w-3.5 animate-pulse" /> Canlı proje analizi</span><h4 className="mt-2 text-2xl font-black">Seçimlerinin teknik özeti</h4></div>
