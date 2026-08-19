@@ -6,7 +6,7 @@ interface AuthContextType {
   isAuthenticated: boolean
   isLoading: boolean
   signIn: (password: string) => Promise<string | null>
-  signOut: () => void
+  signOut: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -21,8 +21,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    setIsAuthenticated(localStorage.getItem("admin_token") === "authenticated")
-    setIsLoading(false)
+    fetch("/api/admin-session", { cache: "no-store" })
+      .then((response) => response.json())
+      .then((data) => setIsAuthenticated(data.authenticated === true))
+      .catch(() => setIsAuthenticated(false))
+      .finally(() => setIsLoading(false))
   }, [])
 
   const signIn = async (password: string) => {
@@ -37,7 +40,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return null
   }
 
-  const signOut = () => {
+  const signOut = async () => {
+    await fetch("/api/admin-logout", { method: "POST" }).catch(() => null)
     localStorage.removeItem("admin_token")
     setIsAuthenticated(false)
   }

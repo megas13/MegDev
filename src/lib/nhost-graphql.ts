@@ -175,3 +175,59 @@ export const GET_ADMIN_NDA_OVERVIEW = `query GetAdminNdaOverview {
     accepted_ip user_agent email_verified
   }
 }`
+
+export const GET_REFERRAL_CONTRACTS = `query GetReferralContracts {
+  referral_contracts(order_by: {created_at: desc}) {
+    id token status provider_name provider_address provider_tax_no
+    representative_name representative_email representative_phone
+    scope commission_type commission_value currency start_date end_date
+    payment_terms special_terms contract_version contract_hash contract_text
+    accepted_at accepted_ip accepted_user_agent email_verified
+    termination_effective_date termination_reason termination_settlement
+    termination_version termination_hash termination_text termination_requested_at
+    termination_accepted_at termination_ip termination_user_agent created_at updated_at
+  }
+}`
+
+export const GET_REFERRAL_CONTRACT_BY_TOKEN = `query GetReferralContractByToken($token: String!) {
+  referral_contracts(where: {token: {_eq: $token}}, limit: 1) {
+    id token status provider_name provider_address provider_tax_no
+    representative_name representative_email representative_phone
+    scope commission_type commission_value currency start_date end_date
+    payment_terms special_terms contract_version contract_hash contract_text
+    accepted_at email_verified termination_effective_date termination_reason
+    termination_settlement termination_version termination_hash termination_text
+    termination_requested_at termination_accepted_at created_at
+  }
+}`
+
+export const CREATE_REFERRAL_CONTRACT = `mutation CreateReferralContract($object: referral_contracts_insert_input!) {
+  insert_referral_contracts_one(object: $object) { id token status created_at }
+}`
+
+export const GET_REFERRAL_VERIFICATION = `query GetReferralVerification($contractId: uuid!) {
+  referral_verification_codes_by_pk(contract_id: $contractId) {
+    contract_id purpose code_hash expires_at attempts last_sent_at
+  }
+}`
+
+export const UPSERT_REFERRAL_VERIFICATION = `mutation UpsertReferralVerification($object: referral_verification_codes_insert_input!) {
+  insert_referral_verification_codes_one(
+    object: $object
+    on_conflict: {constraint: referral_verification_codes_pkey, update_columns: [purpose, code_hash, expires_at, attempts, last_sent_at]}
+  ) { contract_id }
+}`
+
+export const INCREMENT_REFERRAL_ATTEMPTS = `mutation IncrementReferralAttempts($contractId: uuid!) {
+  update_referral_verification_codes_by_pk(pk_columns: {contract_id: $contractId}, _inc: {attempts: 1}) { attempts }
+}`
+
+export const DELETE_REFERRAL_VERIFICATION = `mutation DeleteReferralVerification($contractId: uuid!) {
+  delete_referral_verification_codes_by_pk(contract_id: $contractId) { contract_id }
+}`
+
+export const UPDATE_REFERRAL_CONTRACT = `mutation UpdateReferralContract($id: uuid!, $changes: referral_contracts_set_input!) {
+  update_referral_contracts_by_pk(pk_columns: {id: $id}, _set: $changes) {
+    id token status accepted_at termination_requested_at termination_accepted_at updated_at
+  }
+}`
