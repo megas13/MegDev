@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
+import type { LucideIcon } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
-import { SectionHeading } from "@/components/ui/section-heading"
 import { siteConfig } from "@/constants"
 import emailjs from "@emailjs/browser"
 import { 
@@ -27,7 +27,7 @@ interface ProjectType {
   baseCost: number
   baseWeeks: number
   description: string
-  icon: any
+  icon: LucideIcon
   features: string[]
   techStack: string[]
 }
@@ -236,9 +236,9 @@ export function CalculatorSection() {
 
   // Dynamic project roadmap roadmap phases calculation
   const getRoadmapPhases = (totalWeeks: number) => {
-    let design = Math.max(1, Math.round(totalWeeks * 0.25 * 2) / 2)
-    let frontend = Math.max(1.5, Math.round(totalWeeks * 0.35 * 2) / 2)
-    let backend = Math.max(1, Math.round(totalWeeks * 0.30 * 2) / 2)
+    const design = Math.max(1, Math.round(totalWeeks * 0.25 * 2) / 2)
+    const frontend = Math.max(1.5, Math.round(totalWeeks * 0.35 * 2) / 2)
+    const backend = Math.max(1, Math.round(totalWeeks * 0.30 * 2) / 2)
     let qa = Math.max(0.5, totalWeeks - (design + frontend + backend))
     
     if (design + frontend + backend + qa !== totalWeeks) {
@@ -354,27 +354,37 @@ export function CalculatorSection() {
   }
 
   return (
-    <section id="calculator" className="relative py-24 lg:py-32 overflow-hidden border-t border-foreground/5 bg-card/25">
-      <div className="absolute inset-0 grid-pattern opacity-10" />
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[140px] pointer-events-none" />
+    <section id="calculator" className="relative overflow-hidden border-t border-white/10 bg-[#0d0d0a] py-28 lg:py-36">
+      <div className="absolute inset-0 opacity-[.07] [background-image:linear-gradient(rgba(255,255,255,.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.18)_1px,transparent_1px)] [background-size:70px_70px]" />
+      <motion.div animate={{ x: [0, -120, 0], y: [0, 100, 0], scale: [1, 1.18, 1] }} transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }} className="pointer-events-none absolute -right-40 top-10 h-[38rem] w-[38rem] rounded-full bg-primary/10 blur-[130px]" />
+      <motion.div animate={{ x: [0, 100, 0], y: [0, -80, 0] }} transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }} className="pointer-events-none absolute -bottom-40 -left-32 h-[32rem] w-[32rem] rounded-full bg-[#39d0c2]/10 blur-[130px]" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          title="Bütçe & Süreç Hesaplayıcı"
-          subtitle="Proje gereksinimlerinizi seçerek tahmini geliştirme bütçesini ve süresini anında hesaplayın, detaylı teklif talebini tek tıkla iletin."
-        />
+        <div className="mb-14 grid gap-8 lg:grid-cols-[1fr_.72fr] lg:items-end">
+          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-[.24em] text-primary"><Sparkles className="h-3.5 w-3.5 animate-pulse" /> Canlı proje simülatörü</span>
+            <h2 className="mt-6 text-4xl font-black uppercase leading-[.92] tracking-tight sm:text-6xl lg:text-7xl">Fikrinin rotasını<br/><span className="text-primary">şimdi hesapla.</span></h2>
+          </motion.div>
+          <motion.div initial={{ opacity: 0, x: 22 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="lg:justify-self-end">
+            <p className="max-w-xl text-base leading-7 text-muted-foreground">Gereksinimlerini beş kısa adımda seç. Bütçe, teslim süresi ve proje yol haritası her seçimde anında yeniden oluşsun.</p>
+            <div className="mt-6 flex flex-wrap gap-2"><span className="rounded-full border border-white/10 px-3 py-1.5 text-xs text-[#b8afa1]">Anlık bütçe</span><span className="rounded-full border border-white/10 px-3 py-1.5 text-xs text-[#b8afa1]">Dinamik takvim</span><span className="rounded-full border border-white/10 px-3 py-1.5 text-xs text-[#b8afa1]">Tek tıkla teklif</span></div>
+          </motion.div>
+        </div>
 
-        <div className="grid lg:grid-cols-[1fr_400px] gap-10 mt-12 items-start">
+        <div className="grid items-start gap-6 lg:grid-cols-[1fr_410px]">
           {/* Left Side: Wizard Steps */}
-          <div className="sharp-panel noise-panel p-6 sm:p-8 rounded-[8px] bg-background/55 min-h-[460px] flex flex-col justify-between">
+          <div className="relative flex min-h-[590px] flex-col justify-between overflow-hidden rounded-[2rem] border border-white/10 bg-[#171712]/80 p-5 shadow-[0_30px_90px_rgba(0,0,0,.4)] backdrop-blur-xl sm:p-8">
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/80 to-transparent" />
             <div>
               {/* Step indicator */}
-              <div className="flex justify-between items-center border-b border-foreground/10 pb-4 mb-6">
-                <span className="text-xs font-mono font-bold text-primary uppercase tracking-widest flex items-center gap-1.5">
-                  <Calculator className="w-4 h-4 animate-pulse" />
-                  Aşama {step} / 5
-                </span>
-                <span className="text-xs text-muted-foreground font-semibold">
+              <div className="mb-8 border-b border-white/10 pb-7">
+                <div className="mb-5 flex items-center justify-between"><span className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[.2em] text-primary"><Calculator className="h-4 w-4" /> Proje yapılandırılıyor</span><span className="font-mono text-xs text-muted-foreground">0{step} / 05</span></div>
+                <div className="relative flex items-center justify-between">
+                  <div className="absolute left-3 right-3 top-1/2 h-px -translate-y-1/2 bg-white/10" />
+                  <motion.div className="absolute left-3 top-1/2 h-px -translate-y-1/2 bg-primary shadow-[0_0_12px_rgba(215,255,67,.8)]" animate={{ width: `${((step - 1) / 4) * 92}%` }} transition={{ type: "spring", stiffness: 180, damping: 24 }} />
+                  {[1,2,3,4,5].map((item) => <button key={item} onClick={() => item <= step && setStep(item)} className={`relative z-10 grid h-7 w-7 place-items-center rounded-full border font-mono text-[10px] transition-all ${item === step ? "scale-125 border-primary bg-primary text-[#10100d] shadow-[0_0_20px_rgba(215,255,67,.35)]" : item < step ? "border-primary bg-[#202019] text-primary" : "border-white/15 bg-[#171712] text-[#817b70]"}`}>{item < step ? <Check className="h-3 w-3" /> : item}</button>)}
+                </div>
+                <span className="mt-5 block text-sm font-black text-foreground">
                   {step === 1 && "Proje Türü Seçimi"}
                   {step === 2 && "Eklenti & Özellik Seçimi"}
                   {step === 3 && "Tasarım Seviyesi Seçimi"}
@@ -390,7 +400,7 @@ export function CalculatorSection() {
                   initial={{ opacity: 0, x: 12 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -12 }}
-                  transition={{ duration: 0.2 }}
+                  transition={{ duration: 0.32, ease: "easeOut" }}
                 >
                   {/* STEP 1: PROJECT TYPES */}
                   {step === 1 && (
@@ -404,12 +414,13 @@ export function CalculatorSection() {
                             <button
                               key={type.id}
                               onClick={() => setProjectType(type.id)}
-                              className={`p-5 border text-left cursor-pointer transition-all rounded-[6px] flex flex-col justify-between h-full relative overflow-hidden group ${
+                              className={`p-5 border text-left cursor-pointer transition-all duration-300 rounded-2xl flex flex-col justify-between h-full relative overflow-hidden group hover:-translate-y-1 ${
                                 isSelected
-                                  ? "border-primary bg-primary/5 shadow-[0_0_20px_rgba(215,255,67,0.06)]"
-                                  : "border-foreground/10 bg-card/45 hover:border-foreground/20"
+                                  ? "border-primary/60 bg-primary/[.07] shadow-[0_16px_45px_rgba(215,255,67,0.08)]"
+                                  : "border-white/10 bg-white/[.025] hover:border-white/25 hover:bg-white/[.045]"
                               }`}
                             >
+                              {isSelected && <motion.div layoutId="calculator-project-glow" className="absolute inset-x-6 top-0 h-px bg-primary shadow-[0_0_18px_rgba(215,255,67,.9)]" />}
                               <div>
                                 <div className="flex justify-between items-start mb-3">
                                   <div className={`p-2.5 rounded-[4px] border ${isSelected ? "border-primary/30 bg-primary/10 text-primary" : "border-foreground/10 bg-background/50 text-muted-foreground"}`}>
@@ -740,11 +751,11 @@ export function CalculatorSection() {
             </div>
 
             {/* Back & Next navigation controls */}
-            <div className="flex gap-4 mt-8 pt-6 border-t border-foreground/10 justify-between items-center">
+            <div className="mt-8 flex items-center justify-between gap-4 border-t border-white/10 pt-6">
               <button
                 disabled={step === 1 || loading || submitted}
                 onClick={() => setStep((s) => s - 1)}
-                className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed select-none cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2.5 text-xs font-bold text-muted-foreground transition hover:border-white/25 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Geri Git
@@ -753,10 +764,10 @@ export function CalculatorSection() {
               {step < 5 ? (
                 <button
                   onClick={() => setStep((s) => s + 1)}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary hover:text-primary-dark select-none cursor-pointer"
+                  className="group inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-xs font-black text-[#10100d] shadow-[0_10px_30px_rgba(215,255,67,.16)] transition hover:-translate-y-0.5"
                 >
                   Sonraki Adım
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </button>
               ) : (
                 <span className="text-xs text-muted-foreground font-mono">
@@ -767,22 +778,24 @@ export function CalculatorSection() {
           </div>
 
           {/* Right Side: Sticky Estimation Panel */}
-          <div className="sharp-panel noise-panel p-6 rounded-[8px] bg-card border border-primary/20 lg:sticky lg:top-24 shadow-[0_12px_40px_rgba(215,255,67,0.04)] space-y-6">
-            <div className="border-b border-foreground/10 pb-4">
+          <div className="relative space-y-6 overflow-hidden rounded-[2rem] border border-primary/25 bg-[#d7ff43] p-6 text-[#10100d] shadow-[0_30px_90px_rgba(0,0,0,.4)] lg:sticky lg:top-24">
+            <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full border-[45px] border-black/[.035]" />
+            <motion.div animate={{ rotate: 360 }} transition={{ duration: 24, repeat: Infinity, ease: "linear" }} className="pointer-events-none absolute -bottom-20 -right-12 h-48 w-48 rounded-full border border-dashed border-black/15" />
+            <div className="relative border-b border-black/15 pb-4">
               <span className="text-[10px] font-mono text-primary uppercase font-bold tracking-widest flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 animate-pulse" />
+                <Sparkles className="h-3.5 w-3.5 animate-pulse text-[#10100d]" />
                 CANLI TAHMİN PANELİ
               </span>
-              <h4 className="text-lg font-black text-foreground mt-1">Teklif İnceleme Özeti</h4>
+              <h4 className="mt-1 text-lg font-black text-[#10100d]">Teklif İnceleme Özeti</h4>
             </div>
 
-            <div className="space-y-6">
+            <div className="relative space-y-6 [&_.text-muted-foreground]:!text-black/55 [&_.text-foreground]:!text-black [&_.border-foreground\/10]:!border-black/15 [&_.border-primary\/20]:!border-black/15 [&_.bg-primary]:!bg-black [&_.ring-card]:!ring-[#d7ff43]">
               <div>
-                <p className="text-xs uppercase tracking-wider text-muted-foreground font-bold">TAHMİNİ BÜTÇE ARALIĞI</p>
-                <p className="text-3xl font-black text-primary mt-2">
+                <p className="text-xs font-bold uppercase tracking-wider text-black/55">TAHMİNİ BÜTÇE ARALIĞI</p>
+                <motion.p key={`${minCost}-${maxCost}`} initial={{ opacity: 0, y: 15, filter: "blur(5px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} className="mt-2 text-3xl font-black text-[#10100d]">
                   {minCost.toLocaleString("tr-TR")} <span className="text-xl">-</span> {maxCost.toLocaleString("tr-TR")} <span className="text-lg font-normal">TL</span>
-                </p>
-                <p className="text-[10px] text-muted-foreground mt-1 leading-snug">Vergiler hariç, tahmini geliştirici bütçesidir.</p>
+                </motion.p>
+                <p className="mt-1 text-[10px] leading-snug text-black/55">Vergiler hariç, tahmini geliştirici bütçesidir.</p>
               </div>
 
               <div className="grid grid-cols-2 gap-4 border-t border-foreground/10 pt-4">
