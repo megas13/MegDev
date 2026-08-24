@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 const downloads = [
   {
     name: "SubTrack",
-    description: "Android APK — En son sürüm · 68,7 MB · 30 Temmuz 2026",
+    description: "Android APK — En son sürüm · 252 MB · 24 Ağustos 2026",
     href: "/downloads/subtrack.apk",
     fileName: "SubTrack.apk",
   },
