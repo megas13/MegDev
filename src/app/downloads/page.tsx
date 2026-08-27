@@ -7,8 +7,8 @@ const downloads = [
   {
     name: "SubTrack",
     description: "Android APK (ARM64) — En son sürüm · 26,3 MB · 27 Ağustos 2026",
-    href: "/downloads/SubTrack2-arm64.apk",
-    fileName: "SubTrack2-arm64.apk",
+    href: "https://github.com/megas13/MegDev/raw/refs/heads/main/public/downloads/SubTrack3-arm64.apk",
+    fileName: "SubTrack3-arm64.apk",
   },
   {
     name: "NexCounter",
