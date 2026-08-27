@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button"
 const downloads = [
   {
     name: "SubTrack",
-    description: "Android APK — En son sürüm · 252 MB · 24 Ağustos 2026",
-    href: "/downloads/subtrack.apk",
-    fileName: "SubTrack.apk",
+    description: "Android APK — En son sürüm · 252 MB · 27 Ağustos 2026",
+    href: "/downloads/SubTrack2.apk",
+    fileName: "SubTrack2.apk",
   },
   {
     name: "NexCounter",
