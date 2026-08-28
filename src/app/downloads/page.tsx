@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button"
 const downloads = [
   {
     name: "SubTrack",
-    description: "Android APK (ARM64) — En son sürüm · 26,3 MB · 27 Ağustos 2026",
-    href: "https://github.com/megas13/MegDev/raw/refs/heads/main/public/downloads/SubTrack3-arm64.apk",
-    fileName: "SubTrack3-arm64.apk",
+    description: "Android APK — En son sürüm · 68 MB · 29 Ağustos 2026",
+    href: "https://github.com/megas13/MegDev/raw/refs/heads/main/public/downloads/SubTrack-release.apk",
+    fileName: "SubTrack-release.apk",
   },
   {
     name: "NexCounter",
