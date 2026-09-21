@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 
 const NHOST_STORAGE_URL =
-  "https://qoiiuebjfveqekkrpcrm.storage.eu-central-1.nhost.run/v1"
+  "https://vkzrwkdgjqrsfhxwlxdy.storage.eu-central-1.nhost.run/v1"
 
 export async function GET(
   _req: Request,

@@ -13,8 +13,8 @@ const env = Object.fromEntries(
 const adminSecret = process.env.NHOST_ADMIN_SECRET || env.NHOST_ADMIN_SECRET
 if (!adminSecret) throw new Error("NHOST_ADMIN_SECRET bulunamadı")
 
-const metadataUrl = "https://qoiiuebjfveqekkrpcrm.hasura.eu-central-1.nhost.run/v1/metadata"
-const queryUrl = "https://qoiiuebjfveqekkrpcrm.hasura.eu-central-1.nhost.run/v2/query"
+const metadataUrl = "https://vkzrwkdgjqrsfhxwlxdy.hasura.eu-central-1.nhost.run/v1/metadata"
+const queryUrl = "https://vkzrwkdgjqrsfhxwlxdy.hasura.eu-central-1.nhost.run/v2/query"
 const headers = { "Content-Type": "application/json", "x-hasura-admin-secret": adminSecret }
 
 async function metadata(body) {

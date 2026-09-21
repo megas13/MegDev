@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 
 export async function GET() {
   const secret = process.env.NHOST_ADMIN_SECRET
-  const url = "https://qoiiuebjfveqekkrpcrm.graphql.eu-central-1.nhost.run/v1"
+  const url = "https://vkzrwkdgjqrsfhxwlxdy.graphql.eu-central-1.nhost.run/v1"
   const query = `{ blog_posts(order_by: {created_at: desc}) { id title } }`
 
   try {

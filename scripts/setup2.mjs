@@ -1,6 +1,6 @@
 const ADMIN_SECRET = process.env.NHOST_ADMIN_SECRET
-const HASURA_URL = "https://qoiiuebjfveqekkrpcrm.hasura.eu-central-1.nhost.run/v1/graphql"
-const GRAPHQL_URL = "https://qoiiuebjfveqekkrpcrm.graphql.eu-central-1.nhost.run/v1"
+const HASURA_URL = "https://vkzrwkdgjqrsfhxwlxdy.hasura.eu-central-1.nhost.run/v1/graphql"
+const GRAPHQL_URL = "https://vkzrwkdgjqrsfhxwlxdy.graphql.eu-central-1.nhost.run/v1"
 
 async function gql(query, variables) {
   const res = await fetch(HASURA_URL, {
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS contact_messages (
 
 // Try /v1/metadata with run_sql
 async function tryMetadata() {
-  const url = "https://qoiiuebjfveqekkrpcrm.hasura.eu-central-1.nhost.run/v1/metadata"
+  const url = "https://vkzrwkdgjqrsfhxwlxdy.hasura.eu-central-1.nhost.run/v1/metadata"
   const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json", "x-hasura-admin-secret": ADMIN_SECRET },

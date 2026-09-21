@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { adminRequest } from "@/lib/nhost"
 import { GET_PORTFOLIOS, CREATE_PORTFOLIO } from "@/lib/nhost-graphql"
 
-const STORAGE_FILE_URL = /https:\/\/qoiiuebjfveqekkrpcrm\.storage\.eu-central-1\.nhost\.run\/v1\/files\/([^/?#]+)/
+const STORAGE_FILE_URL = /https:\/\/vkzrwkdgjqrsfhxwlxdy\.storage\.eu-central-1\.nhost\.run\/v1\/files\/([^/?#]+)/
 
 function withPublicImageUrl<T extends { image_url?: string | null }>(item: T): T {
   const fileId = item.image_url?.match(STORAGE_FILE_URL)?.[1]

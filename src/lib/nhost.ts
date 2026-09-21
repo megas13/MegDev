@@ -1,14 +1,14 @@
 import { createNhostClient } from "@nhost/nhost-js"
 
 export const nhost = createNhostClient({
-  subdomain: "qoiiuebjfveqekkrpcrm",
+  subdomain: "vkzrwkdgjqrsfhxwlxdy",
   region: "eu-central-1",
 })
 
 const NHOST_ADMIN_SECRET = process.env.NHOST_ADMIN_SECRET
 
 const NHOST_GRAPHQL_URL =
-  "https://qoiiuebjfveqekkrpcrm.graphql.eu-central-1.nhost.run/v1"
+  "https://vkzrwkdgjqrsfhxwlxdy.graphql.eu-central-1.nhost.run/v1"
 
 export async function adminRequest(query: string, variables?: Record<string, unknown>) {
   const controller = new AbortController()

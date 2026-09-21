@@ -1,4 +1,4 @@
-const HASURA_URL = "https://qoiiuebjfveqekkrpcrm.graphql.eu-central-1.nhost.run/v2/query"
+const HASURA_URL = "https://vkzrwkdgjqrsfhxwlxdy.graphql.eu-central-1.nhost.run/v2/query"
 const ADMIN_SECRET = process.env.NHOST_ADMIN_SECRET
 
 async function runSQL(sql) {

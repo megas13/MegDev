@@ -9,7 +9,7 @@ const env = existsSync(".env.local") ? Object.fromEntries(
 const adminSecret = process.env.NHOST_ADMIN_SECRET || env.NHOST_ADMIN_SECRET
 if (!adminSecret) throw new Error("NHOST_ADMIN_SECRET bulunamadı")
 
-const base = "qoiiuebjfveqekkrpcrm.hasura.eu-central-1.nhost.run"
+const base = "vkzrwkdgjqrsfhxwlxdy.hasura.eu-central-1.nhost.run"
 const headers = { "Content-Type": "application/json", "x-hasura-admin-secret": adminSecret }
 async function call(path, body) {
   const response = await fetch(`https://${base}${path}`, { method: "POST", headers, body: JSON.stringify(body) })

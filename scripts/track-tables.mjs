@@ -1,5 +1,5 @@
 const ADMIN_SECRET = process.env.NHOST_ADMIN_SECRET
-const METADATA_URL = "https://qoiiuebjfveqekkrpcrm.hasura.eu-central-1.nhost.run/v1/metadata"
+const METADATA_URL = "https://vkzrwkdgjqrsfhxwlxdy.hasura.eu-central-1.nhost.run/v1/metadata"
 
 async function trackTable(name) {
   const res = await fetch(METADATA_URL, {
