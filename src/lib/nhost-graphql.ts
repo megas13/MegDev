@@ -259,3 +259,12 @@ export const UPDATE_DEMO_PAGE = `mutation UpdateDemoPage($id: uuid!, $changes: d
 export const DELETE_DEMO_PAGE = `mutation DeleteDemoPage($id: uuid!) {
   delete_demo_pages_by_pk(id: $id) { id }
 }`
+
+const QUOTE_FIELDS = `id token quote_number customer_name customer_email customer_company customer_phone status currency items subtotal discount_type discount_value discount_total tax_rate tax_total total notes valid_until sent_at viewed_at accepted_at rejected_at rejection_reason project_id created_at updated_at`
+
+export const GET_QUOTES = `query GetQuotes { quotes(order_by: {created_at: desc}) { ${QUOTE_FIELDS} } }`
+export const GET_QUOTE = `query GetQuote($id: uuid!) { quotes_by_pk(id: $id) { ${QUOTE_FIELDS} } }`
+export const GET_QUOTE_BY_TOKEN = `query GetQuoteByToken($token: String!) { quotes(where: {token: {_eq: $token}}, limit: 1) { ${QUOTE_FIELDS} } }`
+export const CREATE_QUOTE = `mutation CreateQuote($object: quotes_insert_input!) { insert_quotes_one(object: $object) { ${QUOTE_FIELDS} } }`
+export const UPDATE_QUOTE = `mutation UpdateQuote($id: uuid!, $changes: quotes_set_input!) { update_quotes_by_pk(pk_columns: {id: $id}, _set: $changes) { ${QUOTE_FIELDS} } }`
+export const DELETE_QUOTE = `mutation DeleteQuote($id: uuid!) { delete_quotes_by_pk(id: $id) { id } }`

@@ -5,11 +5,12 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { AuthProvider, useAuth } from "@/components/admin/auth-provider"
 import { cn } from "@/lib/utils"
-import { FileCode2, FileText, FolderKanban, Inbox, LogOut, LayoutDashboard, Menu, X, Kanban, ScrollText, Handshake } from "lucide-react"
+import { ReceiptText, FileCode2, FileText, FolderKanban, Inbox, LogOut, LayoutDashboard, Menu, X, Kanban, ScrollText, Handshake } from "lucide-react"
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/projects", label: "Projeler", icon: Kanban },
+  { href: "/admin/quotes", label: "Teklifler", icon: ReceiptText },
   { href: "/admin/contracts", label: "Sözleşmeler", icon: ScrollText },
   { href: "/admin/referral-contracts", label: "Müşteri Bulma", icon: Handshake },
   { href: "/admin/blogs", label: "Bloglar", icon: FileText },
