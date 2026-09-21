@@ -231,3 +231,31 @@ export const UPDATE_REFERRAL_CONTRACT = `mutation UpdateReferralContract($id: uu
     id token status accepted_at termination_requested_at termination_accepted_at updated_at
   }
 }`
+
+export const GET_DEMO_PAGES = `query GetDemoPages {
+  demo_pages(order_by: {created_at: desc}) {
+    id name subdomain original_filename html_size published created_at updated_at
+  }
+}`
+
+export const GET_DEMO_PAGE_BY_SUBDOMAIN = `query GetDemoPageBySubdomain($subdomain: String!) {
+  demo_pages(where: {subdomain: {_eq: $subdomain}}, limit: 1) {
+    id name subdomain html_content original_filename html_size published updated_at
+  }
+}`
+
+export const CREATE_DEMO_PAGE = `mutation CreateDemoPage($object: demo_pages_insert_input!) {
+  insert_demo_pages_one(object: $object) {
+    id name subdomain original_filename html_size published created_at updated_at
+  }
+}`
+
+export const UPDATE_DEMO_PAGE = `mutation UpdateDemoPage($id: uuid!, $changes: demo_pages_set_input!) {
+  update_demo_pages_by_pk(pk_columns: {id: $id}, _set: $changes) {
+    id name subdomain original_filename html_size published created_at updated_at
+  }
+}`
+
+export const DELETE_DEMO_PAGE = `mutation DeleteDemoPage($id: uuid!) {
+  delete_demo_pages_by_pk(id: $id) { id }
+}`
