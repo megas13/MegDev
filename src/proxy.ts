@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server"
 
 export async function proxy(req: NextRequest) {
   const host = (req.headers.get("host") ?? "").split(":")[0].toLowerCase()
-  const rootDomain = (process.env.DEMO_ROOT_DOMAIN || "megdev.tr").toLowerCase()
+  const rootDomain = (process.env.DEMO_ROOT_DOMAIN || "megdev.com.tr").toLowerCase()
   const suffix = `.${rootDomain}`
 
   if (host.endsWith(suffix) && !req.nextUrl.pathname.startsWith("/api/demo-pages/render/")) {

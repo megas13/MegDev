@@ -25,7 +25,7 @@ type DemoPage = {
   updated_at: string
 }
 
-const ROOT_DOMAIN = process.env.NEXT_PUBLIC_DEMO_ROOT_DOMAIN || "megdev.tr"
+const ROOT_DOMAIN = process.env.NEXT_PUBLIC_DEMO_ROOT_DOMAIN || "megdev.com.tr"
 
 function formatBytes(bytes: number) {
   if (bytes < 1024) return `${bytes} B`

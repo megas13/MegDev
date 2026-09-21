@@ -24,7 +24,7 @@ export async function GET(request: Request, { params }: Context) {
       headers: {
         "Content-Type": "text/html; charset=utf-8",
         "Cache-Control": preview ? "no-store" : "public, s-maxage=60, stale-while-revalidate=300",
-        "Content-Security-Policy": "frame-ancestors 'self' https://megdev.tr https://www.megdev.tr; object-src 'none'; base-uri 'self'",
+        "Content-Security-Policy": "frame-ancestors 'self' https://megdev.com.tr https://www.megdev.com.tr; object-src 'none'; base-uri 'self'",
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "X-Content-Type-Options": "nosniff",
         "X-Robots-Tag": "noindex, nofollow",
