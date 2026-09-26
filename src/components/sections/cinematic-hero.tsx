@@ -18,24 +18,34 @@ export function CinematicHero() {
     const scenes = Array.from(section.querySelectorAll<HTMLElement>("[data-scene]"))
     let frame = 0
     let target = 0
+    let displayed = 0
+    let lastTick = 0
+    let start = 0
+    let distance = 1
+    let still = false
     let failed = false
     let disposed = false
     let previousScene = -1
 
     const seek = () => {
       if (disposed || media.seeking || !Number.isFinite(media.duration) || media.readyState < 2) return
-      const time = target * Math.max(0, media.duration - 0.06)
-      if (Math.abs(media.currentTime - time) > 0.035) media.currentTime = time
+      // Every encoded frame is independently decodable. Quantize to actual
+      // source frames and never queue overlapping decoder requests.
+      const time = Math.min(Math.round(displayed * (media.duration - 0.06) * 24) / 24, media.duration - 0.06)
+      if (Math.abs(media.currentTime - time) > 0.02) media.currentTime = time
     }
-    const update = () => {
+    const update = (now: number) => {
       frame = 0
-      const still = paused || preference.matches || !!connection?.saveData || failed
-      section.dataset.still = String(still)
-      const rect = section.getBoundingClientRect()
-      const distance = Math.max(1, section.offsetHeight - window.innerHeight)
-      target = still ? 0 : Math.min(1, Math.max(0, -rect.top / distance))
-      section.style.setProperty("--journey", String(target))
-      const active = target < 0.32 ? 0 : target < 0.7 ? 1 : 2
+      if (disposed || document.hidden) return
+      target = still ? 0 : Math.min(1, Math.max(0, (window.scrollY - start) / distance))
+      const dt = lastTick ? Math.min(64, now - lastTick) : 16
+      lastTick = now
+      // Frame-rate independent easing absorbs wheel steps, without hijacking
+      // native scrolling. Stop the loop as soon as the picture catches up.
+      displayed += (target - displayed) * (1 - Math.exp(-dt / 130))
+      if (Math.abs(target - displayed) < 0.001) displayed = target
+      section.style.setProperty("--journey", String(displayed))
+      const active = displayed < 0.32 ? 0 : displayed < 0.7 ? 1 : 2
       if (active !== previousScene) {
         scenes.forEach((scene, index) => {
           scene.dataset.active = String(index === active)
@@ -45,34 +55,42 @@ export function CinematicHero() {
         previousScene = active
       }
       if (!still) seek()
+      if (displayed !== target) frame = requestAnimationFrame(update)
     }
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(update)
     }
     const configure = () => {
-      const still = paused || preference.matches || !!connection?.saveData
+      still = paused || preference.matches || !!connection?.saveData || failed
+      section.dataset.still = String(still)
+      start = section.getBoundingClientRect().top + window.scrollY
+      distance = Math.max(1, section.offsetHeight - window.innerHeight)
+      if (still) displayed = 0
       if (!still && !media.getAttribute("src")) {
-        media.src = "/media/digital-core.mp4"
+        media.preload = "auto"
+        media.src = "/media/digital-core-scrub.mp4"
         media.load()
       }
       schedule()
     }
-    const onError = () => { failed = true; schedule() }
+    const onError = () => { failed = true; configure() }
     media.addEventListener("loadeddata", schedule)
-    media.addEventListener("seeked", seek)
+    media.addEventListener("seeked", schedule)
     media.addEventListener("error", onError)
     window.addEventListener("scroll", schedule, { passive: true })
-    window.addEventListener("resize", schedule)
+    window.addEventListener("resize", configure)
+    document.addEventListener("visibilitychange", schedule)
     preference.addEventListener("change", configure)
     configure()
     return () => {
       disposed = true
       cancelAnimationFrame(frame)
       media.removeEventListener("loadeddata", schedule)
-      media.removeEventListener("seeked", seek)
+      media.removeEventListener("seeked", schedule)
       media.removeEventListener("error", onError)
       window.removeEventListener("scroll", schedule)
-      window.removeEventListener("resize", schedule)
+      window.removeEventListener("resize", configure)
+      document.removeEventListener("visibilitychange", schedule)
       preference.removeEventListener("change", configure)
     }
   }, [paused])
