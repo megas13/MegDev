@@ -1,7 +1,10 @@
 "use client"
 
+
+import { useLanguage } from "@/components/i18n/provider"
+import { T } from "@/components/i18n/text"
 import { useMemo, useRef, useState } from "react"
-import Link from "next/link"
+import Link from "@/components/i18n/link"
 import { motion, useScroll, useSpring } from "framer-motion"
 import { Brain, Check, Code2, Gauge, Globe2, Layers3, ShoppingBag, Smartphone, Sparkles } from "lucide-react"
 import styles from "./test-home.module.css"
@@ -31,6 +34,8 @@ const designs = [
 ]
 
 export function TestCalculator() {
+  const { intlLocale } = useLanguage()
+
   const sectionRef = useRef<HTMLElement>(null)
   const [type, setType] = useState("web")
   const [selectedModules, setSelectedModules] = useState<string[]>([])
@@ -58,53 +63,53 @@ export function TestCalculator() {
       <motion.div className={styles.calculatorScrollLine} style={{ scaleX: scrollScale }} />
       <div className={styles.calculatorGridDecor} aria-hidden="true" />
       <motion.div className={styles.calculatorIntro} initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: .8, ease: [0.22, 1, 0.36, 1] }}>
-        <span>07 / PROJE KONFİGÜRATÖRÜ</span>
-        <h2>Fikrinin<br /><em>ölçeğini gör.</em></h2>
-        <p>İhtiyaçlarını seç; yaklaşık bütçe ve teslim süresi anında önünde oluşsun.</p>
-        <div className={styles.calculatorNote}><Sparkles /><span>Bu çalışma ilk planlama içindir. Net teklif, kısa keşif görüşmesinden sonra hazırlanır.</span></div>
+        <span><T>{"07 / PROJE KONFİGÜRATÖRÜ"}</T></span>
+        <h2><T>{"Fikrinin"}</T><br /><em><T>{"ölçeğini gör."}</T></em></h2>
+        <p><T>{"İhtiyaçlarını seç; yaklaşık bütçe ve teslim süresi anında önünde oluşsun."}</T></p>
+        <div className={styles.calculatorNote}><Sparkles /><span><T>{"Bu çalışma ilk planlama içindir. Net teklif, kısa keşif görüşmesinden sonra hazırlanır."}</T></span></div>
       </motion.div>
 
       <div className={styles.configurator}>
         <div className={styles.configOptions}>
           <motion.div className={styles.configBlock} initial={{ opacity: 0, x: -35 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: .6 }}>
-            <header><span>01</span><h3>Ne üretiyoruz?</h3></header>
-            <div className={styles.typeGrid}>{types.map(item => { const Icon = item.icon; const active = type === item.id; return <button key={item.id} className={active ? styles.optionActive : ""} onClick={() => setType(item.id)}><Icon /><span>{item.name}</span>{active && <Check />}</button> })}</div>
+            <header><span><T>{"01"}</T></span><h3><T>{"Ne üretiyoruz?"}</T></h3></header>
+            <div className={styles.typeGrid}>{types.map(item => { const Icon = item.icon; const active = type === item.id; return <button key={item.id} className={active ? styles.optionActive : ""} onClick={() => setType(item.id)}><Icon /><span><T>{item.name}</T></span>{active && <Check />}</button> })}</div>
           </motion.div>
 
           <motion.div className={styles.configBlock} initial={{ opacity: 0, x: -35 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: .6 }}>
-            <header><span>02</span><h3>Hangi modüller gerekli?</h3><small>Birden fazla seçebilirsin</small></header>
-            <div className={styles.moduleGrid}>{modules.map(item => { const active = selectedModules.includes(item.id); return <button key={item.id} className={active ? styles.moduleActive : ""} onClick={() => toggleModule(item.id)}><i>{active && <Check />}</i><span>{item.name}</span><small>+{item.price.toLocaleString("tr-TR")} ₺</small></button> })}</div>
+            <header><span><T>{"02"}</T></span><h3><T>{"Hangi modüller gerekli?"}</T></h3><small><T>{"Birden fazla seçebilirsin"}</T></small></header>
+            <div className={styles.moduleGrid}>{modules.map(item => { const active = selectedModules.includes(item.id); return <button key={item.id} className={active ? styles.moduleActive : ""} onClick={() => toggleModule(item.id)}><i>{active && <Check />}</i><span><T>{item.name}</T></span><small><T>{"+"}</T><T>{item.price.toLocaleString(intlLocale)}</T> <T>{" ₺"}</T></small></button> })}</div>
           </motion.div>
 
           <motion.div className={styles.configBlock} initial={{ opacity: 0, x: -35 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: .6 }}>
-            <header><span>03</span><h3>Tasarım seviyesi</h3></header>
-            <div className={styles.designGrid}>{designs.map(item => <button key={item.id} className={design === item.id ? styles.designActive : ""} onClick={() => setDesign(item.id)}><strong>{item.name}</strong><span>{item.detail}</span><small>{item.price ? `+${item.price.toLocaleString("tr-TR")} ₺` : "Dahil"}</small></button>)}</div>
+            <header><span><T>{"03"}</T></span><h3><T>{"Tasarım seviyesi"}</T></h3></header>
+            <div className={styles.designGrid}>{designs.map(item => <button key={item.id} className={design === item.id ? styles.designActive : ""} onClick={() => setDesign(item.id)}><strong><T>{item.name}</T></strong><span><T>{item.detail}</T></span><small><T>{item.price ? `+${item.price.toLocaleString(intlLocale)} ₺` : "Dahil"}</T></small></button>)}</div>
           </motion.div>
 
           <motion.div className={styles.configBlock} initial={{ opacity: 0, x: -35 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: .6 }}>
-            <header><span>04</span><h3>Teslimat temposu</h3></header>
-            <div className={styles.speedSwitch}>{[["flex", "Esnek", "−%15 bütçe"], ["normal", "Standart", "Önerilen"], ["fast", "Ekspres", "−%28 süre"]].map(([id, label, note]) => <button key={id} className={speed === id ? styles.speedActive : ""} onClick={() => setSpeed(id as typeof speed)}><strong>{label}</strong><small>{note}</small></button>)}</div>
+            <header><span><T>{"04"}</T></span><h3><T>{"Teslimat temposu"}</T></h3></header>
+            <div className={styles.speedSwitch}>{[["flex", "Esnek", "−%15 bütçe"], ["normal", "Standart", "Önerilen"], ["fast", "Ekspres", "−%28 süre"]].map(([id, label, note]) => <button key={id} className={speed === id ? styles.speedActive : ""} onClick={() => setSpeed(id as typeof speed)}><strong><T>{label}</T></strong><small><T>{note}</T></small></button>)}</div>
           </motion.div>
         </div>
 
         <motion.aside className={styles.liveEstimate} initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: .7 }}>
-          <div className={styles.estimateStatus}><i /> CANLI TAHMİN</div>
+          <div className={styles.estimateStatus}><i /> <T>{" CANLI TAHMİN"}</T></div>
           <div className={styles.estimateGauge}>
             <motion.div animate={{ rotate: 360 }} transition={{ duration: 18, repeat: Infinity, ease: "linear" }}><i /><i /><i /><i /></motion.div>
-            <span><Gauge /><small>PROJE<br />ÖLÇEĞİ</small></span>
+            <span><Gauge /><small><T>{"PROJE"}</T><br /><T>{"ÖLÇEĞİ"}</T></small></span>
           </div>
-          <span>Yaklaşık bütçe aralığı</span>
-          <strong>{result.min.toLocaleString("tr-TR")}<i>—</i>{result.max.toLocaleString("tr-TR")} <small>₺</small></strong>
-          <p>KDV hariç tahmini proje bütçesidir.</p>
-          <div className={styles.estimateMetrics}><div><span>Teslimat</span><b>{result.weeks}<small> hafta</small></b></div><div><span>Ek modül</span><b>{selectedModules.length}<small> adet</small></b></div></div>
-          <div className={styles.estimateBreakdown}><span>Seçilen yapı</span><div><b>{result.project.name}</b><small>{result.project.price.toLocaleString("tr-TR")} ₺ taban</small></div><div><b>{designs.find(item => item.id === design)?.name}</b><small>Tasarım seviyesi</small></div><div><b>{speed === "flex" ? "Esnek" : speed === "fast" ? "Ekspres" : "Standart"}</b><small>Proje temposu</small></div></div>
+          <span><T>{"Yaklaşık bütçe aralığı"}</T></span>
+          <strong><T>{result.min.toLocaleString(intlLocale)}</T><i><T>{"—"}</T></i><T>{result.max.toLocaleString(intlLocale)}</T> <small><T>{"₺"}</T></small></strong>
+          <p><T>{"KDV hariç tahmini proje bütçesidir."}</T></p>
+          <div className={styles.estimateMetrics}><div><span><T>{"Teslimat"}</T></span><b><T>{result.weeks}</T><small> <T>{" hafta"}</T></small></b></div><div><span><T>{"Ek modül"}</T></span><b><T>{selectedModules.length}</T><small> <T>{" adet"}</T></small></b></div></div>
+          <div className={styles.estimateBreakdown}><span><T>{"Seçilen yapı"}</T></span><div><b><T>{result.project.name}</T></b><small><T>{result.project.price.toLocaleString(intlLocale)}</T> <T>{" ₺ taban"}</T></small></div><div><b><T>{designs.find(item => item.id === design)?.name}</T></b><small><T>{"Tasarım seviyesi"}</T></small></div><div><b><T>{speed === "flex" ? "Esnek" : speed === "fast" ? "Ekspres" : "Standart"}</T></b><small><T>{"Proje temposu"}</T></small></div></div>
           <div className={styles.scopeMeter}>
-            <header><span>Kapsam yoğunluğu</span><small>{Math.min(100, 28 + selectedModules.length * 10 + (design === "premium" ? 18 : design === "custom" ? 10 : 0))}%</small></header>
+            <header><span><T>{"Kapsam yoğunluğu"}</T></span><small><T>{Math.min(100, 28 + selectedModules.length * 10 + (design === "premium" ? 18 : design === "custom" ? 10 : 0))}</T><T>{"%"}</T></small></header>
             <div><motion.i animate={{ width: `${Math.min(100, 28 + selectedModules.length * 10 + (design === "premium" ? 18 : design === "custom" ? 10 : 0))}%` }} transition={{ type: "spring", stiffness: 120, damping: 20 }} /></div>
           </div>
-          <div className={styles.miniRoadmap}><span>Öngörülen akış</span><div>{["Keşif", "Tasarım", "Üretim", "Lansman"].map((item, index) => <i key={item}><b>{index + 1}</b><small>{item}</small></i>)}</div></div>
-          <Link href={`/contact?project=${type}&budget=${result.total}`}>Detaylı teklif iste <span>↗</span></Link>
-          <small className={styles.estimateFoot}>Seçimlerin iletişim sayfasına aktarılır.</small>
+          <div className={styles.miniRoadmap}><span><T>{"Öngörülen akış"}</T></span><div>{["Keşif", "Tasarım", "Üretim", "Lansman"].map((item, index) => <i key={item}><b><T>{index + 1}</T></b><small><T>{item}</T></small></i>)}</div></div>
+          <Link href={`/contact?project=${type}&budget=${result.total}`}><T>{"Detaylı teklif iste "}</T><span><T>{"↗"}</T></span></Link>
+          <small className={styles.estimateFoot}><T>{"Seçimlerin iletişim sayfasına aktarılır."}</T></small>
         </motion.aside>
       </div>
     </section>

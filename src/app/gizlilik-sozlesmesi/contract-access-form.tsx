@@ -1,7 +1,10 @@
 "use client"
 
+import { T, LocalizedElement } from "@/components/i18n/text"
+import { useLanguage } from "@/components/i18n/provider"
+import { localizedHref } from "@/lib/i18n/config"
 import { FormEvent, useState } from "react"
-import Link from "next/link"
+import Link from "@/components/i18n/link"
 import { useRouter } from "next/navigation"
 import { ArrowRight, KeyRound, ShieldCheck } from "lucide-react"
 
@@ -19,6 +22,7 @@ function extractToken(value: string) {
 }
 
 export function ContractAccessForm() {
+  const { locale } = useLanguage()
   const router = useRouter()
   const [value, setValue] = useState("")
   const [error, setError] = useState<string | null>(null)
@@ -30,32 +34,30 @@ export function ContractAccessForm() {
       setError("Geçerli müşteri kodunu veya size gönderilen bağlantıyı girin.")
       return
     }
-    router.push(`/gizlilik-sozlesmesi/${encodeURIComponent(token)}`)
+    router.push(localizedHref(`/gizlilik-sozlesmesi/${encodeURIComponent(token)}`, locale))
   }
 
   return (
-    <main className="flex min-h-[calc(100vh-5rem)] items-center justify-center bg-[#10100d] px-4 py-16 text-[#f7f3ea]">
+    <main className="flex min-h-[calc(100vh-5rem)] items-center justify-center bg-background px-4 pt-36 pb-24 text-foreground">
       <section className="w-full max-w-xl rounded-2xl border border-white/10 bg-white/[0.03] p-6 shadow-2xl sm:p-9">
         <div className="mb-7 flex items-start gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-[#d7ff43]/30 bg-[#d7ff43]/10">
-            <ShieldCheck className="h-6 w-6 text-[#d7ff43]" />
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-primary/30 bg-primary/10">
+            <ShieldCheck className="h-6 w-6 text-primary" />
           </div>
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#39d0c2]">Meg Dev · Güvenli sözleşme</p>
-            <h1 className="mt-1 text-2xl font-black sm:text-3xl">Gizlilik Sözleşmesi</h1>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent"><T>{"Meg Dev · Güvenli sözleşme"}</T></p>
+            <h1 className="mt-1 text-3xl font-medium tracking-tight sm:text-4xl"><T>{"Gizlilik Sözleşmesi"}</T></h1>
           </div>
         </div>
 
-        <p className="text-sm leading-7 text-[#b8afa1]">
-          Her sözleşme müşteri ve proje bilgilerine özel hazırlanır. Devam etmek için size iletilen müşteri kodunu veya sözleşme bağlantısının tamamını aşağıya girin.
-        </p>
+        <p className="text-sm leading-7 text-muted-foreground">
+          <T>{"Her sözleşme müşteri ve proje bilgilerine özel hazırlanır. Devam etmek için size iletilen müşteri kodunu veya sözleşme bağlantısının tamamını aşağıya girin."}</T></p>
 
         <form onSubmit={handleSubmit} className="mt-7 space-y-4">
           <label className="block">
-            <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#817b70]">
-              <KeyRound className="h-4 w-4" /> Müşteri kodu veya bağlantı
-            </span>
-            <input
+            <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              <KeyRound className="h-4 w-4" /> <T>{"Müşteri kodu veya bağlantı"}</T></span>
+            <LocalizedElement as="input"
               value={value}
               onChange={(event) => {
                 setValue(event.target.value)
@@ -63,26 +65,24 @@ export function ContractAccessForm() {
               }}
               placeholder="Müşteri kodunuzu veya bağlantıyı yapıştırın"
               autoComplete="off"
-              className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3.5 text-sm outline-none transition-colors placeholder:text-[#817b70] focus:border-[#39d0c2]"
+              className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3.5 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-accent"
             />
           </label>
 
-          {error && <p role="alert" className="text-sm text-[#ff6b35]">{error}</p>}
+          {error && <p role="alert" className="text-sm text-[#ff6b35]"><T>{error}</T></p>}
 
           <button
             type="submit"
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#d7ff43] to-[#39d0c2] px-5 py-3.5 font-bold text-[#10100d] transition-transform active:scale-[0.98]"
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-primary px-5 py-3.5 font-bold text-background transition-transform active:scale-[0.98]"
           >
-            Sözleşmeye Devam Et
-            <ArrowRight className="h-5 w-5" />
+            <T>{"Sözleşmeye Devam Et"}</T><ArrowRight className="h-5 w-5" />
           </button>
         </form>
 
-        <div className="mt-7 border-t border-white/10 pt-5 text-center text-xs leading-5 text-[#817b70]">
-          <p>Bağlantınız yoksa Meg Dev yetkilisinden size özel sözleşme bağlantısını isteyin.</p>
-          <Link href="/contact" className="mt-2 inline-block font-semibold text-[#39d0c2] hover:underline">
-            Bizimle iletişime geçin
-          </Link>
+        <div className="mt-7 border-t border-white/10 pt-5 text-center text-xs leading-5 text-muted-foreground">
+          <p><T>{"Bağlantınız yoksa Meg Dev yetkilisinden size özel sözleşme bağlantısını isteyin."}</T></p>
+          <Link href="/contact" className="mt-2 inline-block font-semibold text-accent hover:underline">
+            <T>{"Bizimle iletişime geçin"}</T></Link>
         </div>
       </section>
     </main>

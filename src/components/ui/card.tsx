@@ -1,3 +1,4 @@
+import { T } from "@/components/i18n/text"
 import { type HTMLAttributes, forwardRef } from "react"
 import { cn } from "@/lib/utils"
 
@@ -16,7 +17,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(({ className, glow, children,
       )}
       {...props}
     >
-      {children}
+      <T>{children}</T>
     </div>
   )
 })

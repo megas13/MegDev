@@ -1,5 +1,7 @@
+import { localizeMetadata } from "@/lib/i18n/server"
+import { T, LocalizedElement } from "@/components/i18n/text"
 import type { Metadata } from "next"
-import Link from "next/link"
+import Link from "@/components/i18n/link"
 import {
   ArrowRight,
   BellRing,
@@ -17,7 +19,7 @@ import {
 } from "lucide-react"
 import styles from "./subtrack.module.css"
 
-export const metadata: Metadata = {
+const sourceMetadata: Metadata = {
   title: "SubTrack | Aboneliklerini Tek Yerde Yönet",
   description:
     "Aboneliklerini takip et, yaklaşan ödemeleri önceden gör ve harcamalarını SubTrack ile kontrol altında tut.",
@@ -85,18 +87,15 @@ export default function SubTrackPage() {
               <span className={styles.brandMark}>
                 <TrendingUp size={17} />
               </span>
-              <span>SUBTRACK</span>
+              <span><T>{"SUBTRACK"}</T></span>
               <span className={styles.liveDot} />
             </div>
 
             <h1>
-              Aboneliklerin
-              <span> kontrol altında.</span>
+              <T>{"Aboneliklerin"}</T><span> <T>{" kontrol altında."}</T></span>
             </h1>
             <p className={styles.lead}>
-              Yenileme tarihlerini unutma, harcamalarını anında gör ve tüm
-              aboneliklerini tek bir akıllı uygulamada yönet.
-            </p>
+              <T>{"Yenileme tarihlerini unutma, harcamalarını anında gör ve tüm aboneliklerini tek bir akıllı uygulamada yönet."}</T></p>
 
             <div className={styles.actions}>
               <a
@@ -105,12 +104,10 @@ export default function SubTrackPage() {
                 download="SubTrack-release.apk"
               >
                 <Download size={20} />
-                Android için indir
-                <ArrowRight size={18} />
+                <T>{"Android için indir"}</T><ArrowRight size={18} />
               </a>
               <a href="#ozellikler" className={styles.secondaryButton}>
-                Özellikleri keşfet
-              </a>
+                <T>{"Özellikleri keşfet"}</T></a>
             </div>
 
             <div className={styles.trustRow}>
@@ -118,36 +115,36 @@ export default function SubTrackPage() {
                 (item) => (
                   <span key={item}>
                     <Check size={15} />
-                    {item}
+                    <T>{item}</T>
                   </span>
                 ),
               )}
             </div>
           </div>
 
-          <div className={styles.visual} aria-label="SubTrack uygulama önizlemesi">
+          <LocalizedElement as="div" className={styles.visual} aria-label="SubTrack uygulama önizlemesi">
             <div className={styles.phoneGlow} />
             <div className={styles.phone}>
               <div className={styles.phoneTop}>
-                <span>09:41</span>
+                <span><T>{"09:41"}</T></span>
                 <span className={styles.camera} />
-                <span>● ◒</span>
+                <span><T>{"● ◒"}</T></span>
               </div>
               <div className={styles.phoneBody}>
                 <div className={styles.appHeader}>
                   <div>
-                    <small>Merhaba 👋</small>
-                    <strong>Aboneliklerim</strong>
+                    <small><T>{"Merhaba 👋"}</T></small>
+                    <strong><T>{"Aboneliklerim"}</T></strong>
                   </div>
-                  <span className={styles.avatar}>M</span>
+                  <span className={styles.avatar}><T>{"M"}</T></span>
                 </div>
 
                 <div className={styles.totalCard}>
                   <div className={styles.totalCardTop}>
-                    <span>Aylık toplam</span>
+                    <span><T>{"Aylık toplam"}</T></span>
                     <WalletCards size={20} />
                   </div>
-                  <strong>1.284,90 ₺</strong>
+                  <strong><T>{"1.284,90 ₺"}</T></strong>
                   <div className={styles.miniChart}>
                     {[34, 48, 42, 65, 55, 78, 92].map((height, index) => (
                       <i key={height + index} style={{ height: `${height}%` }} />
@@ -156,8 +153,8 @@ export default function SubTrackPage() {
                 </div>
 
                 <div className={styles.listHeader}>
-                  <strong>Yaklaşan ödemeler</strong>
-                  <span>Tümünü gör</span>
+                  <strong><T>{"Yaklaşan ödemeler"}</T></strong>
+                  <span><T>{"Tümünü gör"}</T></span>
                 </div>
 
                 <div className={styles.subscriptionList}>
@@ -167,13 +164,13 @@ export default function SubTrackPage() {
                         className={styles.serviceIcon}
                         style={{ backgroundColor: subscription.color }}
                       >
-                        {subscription.name.charAt(0)}
+                        <T>{subscription.name.charAt(0)}</T>
                       </span>
                       <span className={styles.serviceName}>
-                        <strong>{subscription.name}</strong>
-                        <small>{subscription.date}</small>
+                        <strong><T>{subscription.name}</T></strong>
+                        <small><T>{subscription.date}</T></small>
                       </span>
-                      <strong>{subscription.price}</strong>
+                      <strong><T>{subscription.price}</T></strong>
                     </div>
                   ))}
                 </div>
@@ -189,48 +186,46 @@ export default function SubTrackPage() {
             <div className={`${styles.floatingCard} ${styles.reminderCard}`}>
               <span><BellRing size={18} /></span>
               <div>
-                <strong>Ödeme yaklaşıyor</strong>
-                <small>Netflix · 2 gün kaldı</small>
+                <strong><T>{"Ödeme yaklaşıyor"}</T></strong>
+                <small><T>{"Netflix · 2 gün kaldı"}</T></small>
               </div>
             </div>
             <div className={`${styles.floatingCard} ${styles.savingCard}`}>
               <span><Sparkles size={18} /></span>
               <div>
-                <strong>Bu ay %12 daha az</strong>
-                <small>Harcamaların iyi görünüyor</small>
+                <strong><T>{"Bu ay %12 daha az"}</T></strong>
+                <small><T>{"Harcamaların iyi görünüyor"}</T></small>
               </div>
             </div>
-          </div>
+          </LocalizedElement>
         </div>
       </section>
 
-      <section className={styles.metrics} aria-label="SubTrack avantajları">
+      <LocalizedElement as="section" className={styles.metrics} aria-label="SubTrack avantajları">
         <div>
-          <strong>Tek ekran</strong>
-          <span>Tüm aboneliklerin</span>
+          <strong><T>{"Tek ekran"}</T></strong>
+          <span><T>{"Tüm aboneliklerin"}</T></span>
         </div>
         <div>
-          <strong>Akıllı</strong>
-          <span>Ödeme hatırlatmaları</span>
+          <strong><T>{"Akıllı"}</T></strong>
+          <span><T>{"Ödeme hatırlatmaları"}</T></span>
         </div>
         <div>
-          <strong>Çoklu para</strong>
-          <span>Güncel kur desteği</span>
+          <strong><T>{"Çoklu para"}</T></strong>
+          <span><T>{"Güncel kur desteği"}</T></span>
         </div>
         <div>
-          <strong>Güvenli</strong>
-          <span>Hesap senkronizasyonu</span>
+          <strong><T>{"Güvenli"}</T></strong>
+          <span><T>{"Hesap senkronizasyonu"}</T></span>
         </div>
-      </section>
+      </LocalizedElement>
 
       <section className={styles.features} id="ozellikler">
         <div className={styles.sectionHeading}>
-          <span>DAHA AZ KARMAŞA, DAHA FAZLA KONTROL</span>
-          <h2>Abonelik yönetiminin akıllı yolu</h2>
+          <span><T>{"DAHA AZ KARMAŞA, DAHA FAZLA KONTROL"}</T></span>
+          <h2><T>{"Abonelik yönetiminin akıllı yolu"}</T></h2>
           <p>
-            Günlük takibi kolaylaştıran güçlü araçlar, sade ve hızlı bir
-            deneyimde bir araya geliyor.
-          </p>
+            <T>{"Günlük takibi kolaylaştıran güçlü araçlar, sade ve hızlı bir deneyimde bir araya geliyor."}</T></p>
         </div>
 
         <div className={styles.featureGrid}>
@@ -243,8 +238,8 @@ export default function SubTrackPage() {
                 key={feature.title}
               >
                 <span className={styles.featureIcon}><Icon size={24} /></span>
-                <h3>{feature.title}</h3>
-                <p>{feature.description}</p>
+                <h3><T>{feature.title}</T></h3>
+                <p><T>{feature.description}</T></p>
               </article>
             )
           })}
@@ -254,24 +249,25 @@ export default function SubTrackPage() {
       <section className={styles.ctaSection}>
         <div className={styles.ctaGlow} aria-hidden="true" />
         <div className={styles.ctaIcon}><Sparkles size={28} /></div>
-        <h2>Aboneliklerini bugün sadeleştir.</h2>
-        <p>SubTrack’i indir, yenileme tarihlerini ve harcamalarını tek yerde gör.</p>
+        <h2><T>{"Aboneliklerini bugün sadeleştir."}</T></h2>
+        <p><T>{"SubTrack’i indir, yenileme tarihlerini ve harcamalarını tek yerde gör."}</T></p>
         <a
           href="https://github.com/megas13/MegDev/raw/refs/heads/main/public/downloads/SubTrack-release.apk"
           className={styles.primaryButton}
           download="SubTrack-release.apk"
         >
           <Download size={20} />
-          SubTrack’i indir
-        </a>
+          <T>{"SubTrack’i indir"}</T></a>
         <div className={styles.legalLinks}>
-          <Link href="/subtrack-gizlilik-sozlesmesi">Gizlilik Politikası</Link>
-          <span>•</span>
-          <Link href="/subtrack-hesap-silme">Hesap ve veri silme</Link>
-          <span>•</span>
-          <a href="mailto:destek@megdev.info">Destek</a>
+          <Link href="/subtrack-gizlilik-sozlesmesi"><T>{"Gizlilik Politikası"}</T></Link>
+          <span><T>{"•"}</T></span>
+          <Link href="/subtrack-hesap-silme"><T>{"Hesap ve veri silme"}</T></Link>
+          <span><T>{"•"}</T></span>
+          <a href="mailto:destek@megdev.info"><T>{"Destek"}</T></a>
         </div>
       </section>
     </div>
   )
 }
+
+export async function generateMetadata() { return localizeMetadata(sourceMetadata) }

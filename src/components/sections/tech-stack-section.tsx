@@ -1,7 +1,9 @@
 "use client"
 
+import { T } from "@/components/i18n/text"
 import { motion } from "framer-motion"
 import { SectionHeading } from "@/components/ui/section-heading"
+import styles from "./marketing-sections.module.css"
 
 interface TechItem {
   name: string
@@ -179,52 +181,16 @@ export function TechStackSection() {
   ]
 
   return (
-    <section id="tech-stack" className="relative py-24 lg:py-32 overflow-hidden border-t border-foreground/5 bg-background">
-      <div className="absolute inset-0 grid-pattern opacity-10" />
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          title="Teknoloji Yığınımız"
-          subtitle="Projelerimizi bugünün gereksinimlerine göre optimize edilmiş, yarının ölçeğine göre hazırlanan dünya standartlarındaki teknolojilerle kodluyoruz."
-        />
-
-        <div className="mt-16 space-y-16">
-          {categories.map((category, catIdx) => (
-            <div key={catIdx} className="space-y-6">
-              <h3 className="text-xs font-black uppercase tracking-[0.25em] text-primary border-l-4 border-primary pl-4">
-                {category.title}
-              </h3>
-              
-              <div className="grid gap-px border border-foreground/10 bg-foreground/10 sm:grid-cols-2 lg:grid-cols-4">
-                {category.items.map((tech, itemIdx) => (
-                  <motion.div
-                    key={itemIdx}
-                    initial={{ opacity: 0, y: 16 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.35, delay: itemIdx * 0.05 }}
-                    className="group bg-card p-6 flex flex-col justify-between min-h-[170px] hover:bg-card-hover border border-transparent transition-all duration-300 hover:border-primary hover:shadow-[0_0_24px_rgba(215,255,67,0.06)] hover:shadow-primary/5 hover:-translate-y-0.5"
-                  >
-                    <div className="flex justify-between items-start mb-6">
-                      <span className="text-muted-foreground group-hover:text-primary transition-colors duration-300">
-                        {tech.logo}
-                      </span>
-                      <span className="text-[10px] font-mono text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        // SECURE
-                      </span>
-                    </div>
-                    <div>
-                      <h4 className="text-base font-bold group-hover:text-primary transition-colors duration-300">
-                        {tech.name}
-                      </h4>
-                      <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
-                        {tech.description}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          ))}
+    <section id="tech-stack" className={styles.section}>
+      <div className={styles.shell}>
+        <SectionHeading align="left" title="Güçlü fikirlerin altyapısı." subtitle="Projelerimizi bugünün gereksinimlerine göre optimize edilmiş, yarının ölçeğine göre hazırlanan teknolojilerle kodluyoruz." />
+        <div className={styles.techCategories}>
+          {categories.map(category => <div key={category.title} className={styles.techCategory}>
+            <h3 className={styles.label}><T>{category.title}</T></h3>
+            <div className={styles.techGrid}>{category.items.map((tech, index) => <motion.article key={tech.name} className={styles.tech} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: .4, delay: index * .05 }}>
+              <span className={styles.techLogo}><T>{tech.logo}</T></span><div><h4><T>{tech.name}</T></h4><p><T>{tech.description}</T></p></div>
+            </motion.article>)}</div>
+          </div>)}
         </div>
       </div>
     </section>

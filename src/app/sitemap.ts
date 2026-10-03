@@ -1,8 +1,9 @@
 import { MetadataRoute } from 'next'
 import { services } from '@/constants'
+import { locales, localizedHref } from '@/lib/i18n/config'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://meg.dev'
+  const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://megdev.com.tr').replace(/\/$/, '')
 
   const routes: MetadataRoute.Sitemap = [
     { url: `${baseUrl}`, lastModified: new Date(), changeFrequency: 'yearly', priority: 1 },
@@ -17,7 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/kosullar`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
   ]
 
-  return [
+  const pages = [
     ...routes,
     ...services.map((service) => ({
       url: `${baseUrl}/services/${service.slug}`,
@@ -26,4 +27,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.75,
     })),
   ]
+  return pages.flatMap(page => {
+    const pathname = new URL(page.url).pathname
+    const languages = Object.fromEntries(locales.map(locale => [locale, `${baseUrl}${localizedHref(pathname,locale)}`]))
+    return locales.map(locale => ({...page, url: `${baseUrl}${localizedHref(pathname,locale)}`, alternates: { languages }}))
+  })
 }

@@ -1,5 +1,6 @@
 "use client"
 
+import { T } from "@/components/i18n/text"
 import { useEffect, useRef, useState, type ReactNode } from "react"
 
 export function StickySlide({ children }: { children: ReactNode }) {
@@ -29,7 +30,7 @@ export function StickySlide({ children }: { children: ReactNode }) {
         show ? "translate-y-0 opacity-100" : "translate-y-[50vh] opacity-0"
       }`}
     >
-      {children}
+      <T>{children}</T>
     </div>
   )
 }

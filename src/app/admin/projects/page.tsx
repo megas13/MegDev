@@ -1,5 +1,8 @@
 "use client"
 
+
+import { useLanguage } from "@/components/i18n/provider"
+import { T, LocalizedElement } from "@/components/i18n/text"
 import { useEffect, useState, useCallback, useRef } from "react"
 import { cn } from "@/lib/utils"
 import {
@@ -127,6 +130,8 @@ const serializeDescription = (
 }
 
 export default function AdminProjects() {
+  const { intlLocale, t } = useLanguage()
+
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
@@ -249,7 +254,7 @@ export default function AdminProjects() {
 
   const create = async () => {
     if (!newProjectForm.title || !newProjectForm.customer_name || !newProjectForm.customer_email) {
-      alert("Lütfen başlık, müşteri adı ve e-posta alanlarını doldurun.")
+      alert(t("Lütfen başlık, müşteri adı ve e-posta alanlarını doldurun."))
       return
     }
     const res = await fetch("/api/projects", {
@@ -263,7 +268,7 @@ export default function AdminProjects() {
       load()
     } else {
       const err = await res.json()
-      alert("Hata: " + (err.error || "Bilinmeyen hata"))
+      alert(t("Hata: " + (err.error || "Bilinmeyen hata")))
     }
   }
 
@@ -327,10 +332,10 @@ export default function AdminProjects() {
     })
 
     if (res.ok) {
-      alert("Müşteri ve proje bilgileri güncellendi!")
+      alert(t("Müşteri ve proje bilgileri güncellendi!"))
       load()
     } else {
-      alert("Ayarlar kaydedilemedi.")
+      alert(t("Ayarlar kaydedilemedi."))
     }
   }
 
@@ -362,16 +367,16 @@ export default function AdminProjects() {
     })
 
     if (res.ok) {
-      alert("Müşteri takip paneli verileri başarıyla senkronize edildi!")
+      alert(t("Müşteri takip paneli verileri başarıyla senkronize edildi!"))
       load()
     } else {
-      alert("Veriler senkronize edilemedi.")
+      alert(t("Veriler senkronize edilemedi."))
     }
   }
 
   const handleDeleteProject = async () => {
     if (!selected) return
-    if (!confirm(`"${selected.title}" projesini tamamen silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.`)) return
+    if (!confirm(t(`"${selected.title}" projesini tamamen silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.`))) return
     
     const res = await fetch(`/api/projects/${selected.id}`, {
       method: "DELETE"
@@ -381,7 +386,7 @@ export default function AdminProjects() {
       setSelectedId(null)
       load()
     } else {
-      alert("Silme işlemi sırasında bir hata oluştu.")
+      alert(t("Silme işlemi sırasında bir hata oluştu."))
     }
   }
 
@@ -446,15 +451,15 @@ export default function AdminProjects() {
       {/* Upper header action bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black text-[#f7f3ea] tracking-tight">Projeler</h1>
-          <p className="text-sm text-[#817b70] mt-1">Sistemde kayıtlı toplam {projects.length} proje bulunuyor</p>
+          <h1 className="text-3xl font-black text-[#f7f3ea] tracking-tight"><T>{"Projeler"}</T></h1>
+          <p className="text-sm text-[#817b70] mt-1"><T>{"Sistemde kayıtlı toplam "}</T><T>{projects.length}</T> <T>{" proje bulunuyor"}</T></p>
         </div>
         <button
           onClick={() => setShowForm(true)}
           className="flex items-center justify-center gap-2 bg-gradient-to-r from-[#d7ff43] to-[#39d0c2] text-[#10100d] px-5 py-3 rounded-xl text-sm font-bold transition-all hover:shadow-[0_0_30px_rgba(215,255,67,0.2)] hover:scale-[1.02] active:scale-[0.98] shrink-0"
         >
           <Plus className="w-4 h-4 shrink-0" />
-          <span>Yeni Proje Oluştur</span>
+          <span><T>{"Yeni Proje Oluştur"}</T></span>
         </button>
       </div>
 
@@ -469,7 +474,7 @@ export default function AdminProjects() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-3">
-              <h2 className="text-lg font-bold text-[#f7f3ea]">Yeni Proje Başlat</h2>
+              <h2 className="text-lg font-bold text-[#f7f3ea]"><T>{"Yeni Proje Başlat"}</T></h2>
               <button
                 onClick={() => setShowForm(false)}
                 className="p-2 rounded-lg hover:bg-white/5 transition-colors"
@@ -479,8 +484,8 @@ export default function AdminProjects() {
             </div>
             <div className="space-y-4">
               <div>
-                <label className="text-xs font-bold text-[#817b70] uppercase block mb-1.5">Proje Başlığı *</label>
-                <input
+                <label className="text-xs font-bold text-[#817b70] uppercase block mb-1.5"><T>{"Proje Başlığı *"}</T></label>
+                <LocalizedElement as="input"
                   placeholder="e.g. Meg-SaaS E-Ticaret Arayüzü"
                   value={newProjectForm.title}
                   onChange={(e) => setNewProjectForm({ ...newProjectForm, title: e.target.value })}
@@ -489,8 +494,8 @@ export default function AdminProjects() {
               </div>
 
               <div>
-                <label className="text-xs font-bold text-[#817b70] uppercase block mb-1.5">Genel Açıklama</label>
-                <textarea
+                <label className="text-xs font-bold text-[#817b70] uppercase block mb-1.5"><T>{"Genel Açıklama"}</T></label>
+                <LocalizedElement as="textarea"
                   placeholder="Proje hedefleri ve genel kapsam..."
                   value={newProjectForm.description}
                   onChange={(e) => setNewProjectForm({ ...newProjectForm, description: e.target.value })}
@@ -501,8 +506,8 @@ export default function AdminProjects() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-bold text-[#817b70] uppercase block mb-1.5">Müşteri Ad Soyad *</label>
-                  <input
+                  <label className="text-xs font-bold text-[#817b70] uppercase block mb-1.5"><T>{"Müşteri Ad Soyad *"}</T></label>
+                  <LocalizedElement as="input"
                     placeholder="e.g. Ahmet Yılmaz"
                     value={newProjectForm.customer_name}
                     onChange={(e) => setNewProjectForm({ ...newProjectForm, customer_name: e.target.value })}
@@ -510,8 +515,8 @@ export default function AdminProjects() {
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-bold text-[#817b70] uppercase block mb-1.5">Müşteri E-posta *</label>
-                  <input
+                  <label className="text-xs font-bold text-[#817b70] uppercase block mb-1.5"><T>{"Müşteri E-posta *"}</T></label>
+                  <LocalizedElement as="input"
                     placeholder="e.g. ahmet@mail.com"
                     type="email"
                     value={newProjectForm.customer_email}
@@ -522,8 +527,8 @@ export default function AdminProjects() {
               </div>
 
               <div>
-                <label className="text-xs font-bold text-[#817b70] uppercase block mb-1.5">Müşteri Telefon</label>
-                <input
+                <label className="text-xs font-bold text-[#817b70] uppercase block mb-1.5"><T>{"Müşteri Telefon"}</T></label>
+                <LocalizedElement as="input"
                   placeholder="e.g. +90 555 123 45 67"
                   value={newProjectForm.customer_phone}
                   onChange={(e) => setNewProjectForm({ ...newProjectForm, customer_phone: e.target.value })}
@@ -536,8 +541,7 @@ export default function AdminProjects() {
                   onClick={create}
                   className="w-full rounded-xl bg-gradient-to-r from-[#d7ff43] to-[#39d0c2] text-[#10100d] font-bold py-3.5 transition-all hover:shadow-[0_0_30px_rgba(215,255,67,0.3)] active:scale-[0.98]"
                 >
-                  Projeyi Oluştur
-                </button>
+                  <T>{"Projeyi Oluştur"}</T></button>
               </div>
             </div>
           </div>
@@ -552,7 +556,7 @@ export default function AdminProjects() {
             {/* Search Bar */}
             <div className="relative">
               <Search className="absolute left-3 top-3 w-4 h-4 text-[#817b70]" />
-              <input
+              <LocalizedElement as="input"
                 type="text"
                 placeholder="Proje veya müşteri ara..."
                 value={searchQuery}
@@ -569,12 +573,12 @@ export default function AdminProjects() {
                 onChange={(e) => setStatusFilter(e.target.value)}
                 className="w-full bg-[#181713] border border-white/5 rounded-lg px-2 py-1.5 text-xs text-[#b8afa1] focus:outline-none focus:border-[#d7ff43]"
               >
-                <option value="all">Tüm Durumlar</option>
-                <option value="beklemede">Beklemede</option>
-                <option value="inceleniyor">İnceleniyor</option>
-                <option value="çalışılıyor">Çalışılıyor</option>
-                <option value="tamamlandı">Tamamlandı</option>
-                <option value="iptal">İptal</option>
+                <option value="all"><T>{"Tüm Durumlar"}</T></option>
+                <option value="beklemede"><T>{"Beklemede"}</T></option>
+                <option value="inceleniyor"><T>{"İnceleniyor"}</T></option>
+                <option value="çalışılıyor"><T>{"Çalışılıyor"}</T></option>
+                <option value="tamamlandı"><T>{"Tamamlandı"}</T></option>
+                <option value="iptal"><T>{"İptal"}</T></option>
               </select>
             </div>
           </div>
@@ -587,7 +591,7 @@ export default function AdminProjects() {
               </div>
             ) : filteredProjects.length === 0 ? (
               <div className="text-center py-12 border border-dashed border-white/10 rounded-xl bg-white/[0.01]">
-                <p className="text-xs text-[#817b70]">Kriterlere uygun proje bulunamadı</p>
+                <p className="text-xs text-[#817b70]"><T>{"Kriterlere uygun proje bulunamadı"}</T></p>
               </div>
             ) : (
               filteredProjects.map((proj) => {
@@ -607,23 +611,23 @@ export default function AdminProjects() {
                     )}
                   >
                     <div className="flex items-start justify-between gap-3 mb-1">
-                      <p className="text-xs font-bold text-[#f7f3ea] truncate">{proj.title}</p>
+                      <p className="text-xs font-bold text-[#f7f3ea] truncate"><T>{proj.title}</T></p>
                       <span
                         className={cn(
                           "text-[9px] uppercase font-bold px-2 py-0.5 rounded border shrink-0",
                           STATUS_COLORS[proj.status]
                         )}
                       >
-                        {STATUS_FLOW.find((s) => s.key === proj.status)?.label || proj.status}
+                        <T>{STATUS_FLOW.find((s) => s.key === proj.status)?.label || proj.status}</T>
                       </span>
                     </div>
 
                     <div className="flex items-center justify-between text-[10px] text-[#817b70] mt-2">
                       <span className="truncate flex items-center gap-1">
-                        <User className="w-3 h-3 text-[#39d0c2]" /> {proj.customer_name}
+                        <User className="w-3 h-3 text-[#39d0c2]" /> <T>{proj.customer_name}</T>
                       </span>
                       <span className="shrink-0 flex items-center gap-1">
-                        <Calendar className="w-3 h-3" /> {new Date(proj.created_at).toLocaleDateString("tr-TR")}
+                        <Calendar className="w-3 h-3" /> <T>{new Date(proj.created_at).toLocaleDateString(intlLocale)}</T>
                       </span>
                     </div>
                   </button>
@@ -642,10 +646,9 @@ export default function AdminProjects() {
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                   <div>
                     <span className="text-[10px] uppercase font-mono tracking-widest text-[#39d0c2] bg-[#39d0c2]/10 border border-[#39d0c2]/20 px-2.5 py-0.5 rounded">
-                      Seçili Proje
-                    </span>
-                    <h2 className="text-xl font-bold text-[#f7f3ea] tracking-tight mt-2.5">{selected.title}</h2>
-                    <p className="text-xs text-[#817b70] mt-1">Müşteri: {selected.customer_name}</p>
+                      <T>{"Seçili Proje"}</T></span>
+                    <h2 className="text-xl font-bold text-[#f7f3ea] tracking-tight mt-2.5"><T>{selected.title}</T></h2>
+                    <p className="text-xs text-[#817b70] mt-1"><T>{"Müşteri: "}</T><T>{selected.customer_name}</T></p>
                   </div>
 
                   <div className="flex flex-wrap gap-2 shrink-0">
@@ -654,7 +657,7 @@ export default function AdminProjects() {
                       className="flex items-center gap-1.5 text-xs text-[#39d0c2] hover:bg-[#39d0c2]/20 transition-all bg-[#39d0c2]/10 border border-[#39d0c2]/30 px-3 py-1.5 rounded-lg"
                     >
                       {copiedId === selected.token ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                      <span>Takip Linki</span>
+                      <span><T>{"Takip Linki"}</T></span>
                     </button>
                     <a
                       href={`/track/${selected.token}`}
@@ -663,7 +666,7 @@ export default function AdminProjects() {
                       className="flex items-center gap-1.5 text-xs text-[#d7ff43] hover:bg-[#d7ff43]/20 transition-all bg-[#d7ff43]/10 border border-[#d7ff43]/30 px-3 py-1.5 rounded-lg font-bold"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
-                      <span>Portalı Aç</span>
+                      <span><T>{"Portalı Aç"}</T></span>
                     </a>
                   </div>
                 </div>
@@ -688,8 +691,8 @@ export default function AdminProjects() {
                             : "text-[#817b70] hover:text-[#f7f3ea] hover:bg-white/5 border border-white/5"
                         )}
                       >
-                        <span>{s.icon}</span>
-                        <span>{s.label}</span>
+                        <span><T>{s.icon}</T></span>
+                        <span><T>{s.label}</T></span>
                       </button>
                     )
                   })}
@@ -721,7 +724,7 @@ export default function AdminProjects() {
                       )}
                     >
                       <Icon className={cn("w-3.5 h-3.5", isActive && !tab.danger && "text-[#d7ff43]", tab.danger && isActive && "text-red-400")} />
-                      <span>{tab.label}</span>
+                      <span><T>{tab.label}</T></span>
                     </button>
                   )
                 })}
@@ -734,10 +737,10 @@ export default function AdminProjects() {
                   <div className="flex flex-col flex-1 h-[420px]">
                     {/* Customer detail ribbon */}
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-[#817b70] mb-4 bg-white/5 p-3 rounded-lg border border-white/5">
-                      <span className="flex items-center gap-1"><User className="w-3.5 h-3.5 text-[#39d0c2]" /> {selected.customer_name}</span>
-                      <a href={`mailto:${selected.customer_email}`} className="flex items-center gap-1 text-[#39d0c2] hover:underline"><Mail className="w-3.5 h-3.5" /> {selected.customer_email}</a>
+                      <span className="flex items-center gap-1"><User className="w-3.5 h-3.5 text-[#39d0c2]" /> <T>{selected.customer_name}</T></span>
+                      <a href={`mailto:${selected.customer_email}`} className="flex items-center gap-1 text-[#39d0c2] hover:underline"><Mail className="w-3.5 h-3.5" /> <T>{selected.customer_email}</T></a>
                       {selected.customer_phone && (
-                        <a href={`tel:${selected.customer_phone}`} className="flex items-center gap-1 hover:text-[#f7f3ea]"><Phone className="w-3.5 h-3.5" /> {selected.customer_phone}</a>
+                        <a href={`tel:${selected.customer_phone}`} className="flex items-center gap-1 hover:text-[#f7f3ea]"><Phone className="w-3.5 h-3.5" /> <T>{selected.customer_phone}</T></a>
                       )}
                     </div>
 
@@ -745,7 +748,7 @@ export default function AdminProjects() {
                       {messages.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-full text-center py-8">
                           <MessageCircle className="w-8 h-8 text-[#817b70] mb-3 opacity-55" />
-                          <p className="text-xs text-[#817b70]">Henüz karşılıklı mesajlaşma bulunmuyor</p>
+                          <p className="text-xs text-[#817b70]"><T>{"Henüz karşılıklı mesajlaşma bulunmuyor"}</T></p>
                         </div>
                       ) : (
                         messages.map((msg, idx) => {
@@ -756,14 +759,13 @@ export default function AdminProjects() {
                               {/* Client initials */}
                               {!isAdmin && showAvatar && (
                                 <div className="w-7 h-7 rounded-lg bg-[#39d0c2]/20 border border-[#39d0c2]/30 flex items-center justify-center text-[10px] font-bold text-[#39d0c2] shrink-0">
-                                  {selected.customer_name.charAt(0).toUpperCase()}
+                                  <T>{selected.customer_name.charAt(0).toUpperCase()}</T>
                                 </div>
                               )}
                               {/* Admin initials */}
                               {isAdmin && showAvatar && (
                                 <div className="w-7 h-7 rounded-lg bg-[#d7ff43]/20 border border-[#d7ff43]/30 flex items-center justify-center text-[10px] font-bold text-[#d7ff43] shrink-0">
-                                  M
-                                </div>
+                                  <T>{"M"}</T></div>
                               )}
                               {!showAvatar && <div className="w-7 shrink-0" />}
 
@@ -773,9 +775,9 @@ export default function AdminProjects() {
                                   ? "bg-[#d7ff43] text-[#10100d] rounded-br-none"
                                   : "bg-white/5 border border-white/10 text-[#f7f3ea] rounded-bl-none"
                               )}>
-                                <p className="leading-relaxed whitespace-pre-wrap">{msg.message}</p>
+                                <p className="leading-relaxed whitespace-pre-wrap"><T>{msg.message}</T></p>
                                 <p className={cn("text-[9px] mt-1.5 font-mono text-right", isAdmin ? "text-[#10100d]/50" : "text-[#817b70]")}>
-                                  {new Date(msg.created_at).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}
+                                  <T>{new Date(msg.created_at).toLocaleTimeString(intlLocale, { hour: "2-digit", minute: "2-digit" })}</T>
                                 </p>
                               </div>
                             </div>
@@ -786,7 +788,7 @@ export default function AdminProjects() {
                     </div>
 
                     <div className="mt-4 pt-3 border-t border-white/10 flex gap-2">
-                      <input
+                      <LocalizedElement as="input"
                         value={msgInput}
                         onChange={(e) => setMsgInput(e.target.value)}
                         onKeyDown={(e) => {
@@ -814,12 +816,12 @@ export default function AdminProjects() {
                   <div className="space-y-4 flex-1">
                     <div className="flex items-center gap-2 text-xs text-[#d7ff43] bg-[#d7ff43]/5 border border-[#d7ff43]/10 p-3 rounded-lg mb-2">
                       <Info className="w-4 h-4 shrink-0" />
-                      <span>Bu form projenin genel bilgilerini ve müşteri kartını günceller.</span>
+                      <span><T>{"Bu form projenin genel bilgilerini ve müşteri kartını günceller."}</T></span>
                     </div>
 
                     <div className="space-y-3.5">
                       <div>
-                        <label className="text-[10px] font-bold text-[#817b70] uppercase block mb-1">Proje Başlığı</label>
+                        <label className="text-[10px] font-bold text-[#817b70] uppercase block mb-1"><T>{"Proje Başlığı"}</T></label>
                         <input
                           value={editForm.title}
                           onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
@@ -829,7 +831,7 @@ export default function AdminProjects() {
 
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div className="sm:col-span-1">
-                          <label className="text-[10px] font-bold text-[#817b70] uppercase block mb-1">Müşteri İsmi</label>
+                          <label className="text-[10px] font-bold text-[#817b70] uppercase block mb-1"><T>{"Müşteri İsmi"}</T></label>
                           <input
                             value={editForm.customer_name}
                             onChange={(e) => setEditForm({ ...editForm, customer_name: e.target.value })}
@@ -837,7 +839,7 @@ export default function AdminProjects() {
                           />
                         </div>
                         <div className="sm:col-span-1">
-                          <label className="text-[10px] font-bold text-[#817b70] uppercase block mb-1">Müşteri E-posta</label>
+                          <label className="text-[10px] font-bold text-[#817b70] uppercase block mb-1"><T>{"Müşteri E-posta"}</T></label>
                           <input
                             value={editForm.customer_email}
                             onChange={(e) => setEditForm({ ...editForm, customer_email: e.target.value })}
@@ -845,7 +847,7 @@ export default function AdminProjects() {
                           />
                         </div>
                         <div className="sm:col-span-1">
-                          <label className="text-[10px] font-bold text-[#817b70] uppercase block mb-1">Müşteri Telefon</label>
+                          <label className="text-[10px] font-bold text-[#817b70] uppercase block mb-1"><T>{"Müşteri Telefon"}</T></label>
                           <input
                             value={editForm.customer_phone}
                             onChange={(e) => setEditForm({ ...editForm, customer_phone: e.target.value })}
@@ -855,7 +857,7 @@ export default function AdminProjects() {
                       </div>
 
                       <div>
-                        <label className="text-[10px] font-bold text-[#817b70] uppercase block mb-1">Proje Açıklaması / Kapsamı</label>
+                        <label className="text-[10px] font-bold text-[#817b70] uppercase block mb-1"><T>{"Proje Açıklaması / Kapsamı"}</T></label>
                         <textarea
                           value={editForm.summary}
                           onChange={(e) => setEditForm({ ...editForm, summary: e.target.value })}
@@ -870,7 +872,7 @@ export default function AdminProjects() {
                           className="flex items-center gap-1.5 bg-[#d7ff43] text-[#10100d] px-5 py-2.5 rounded-lg text-xs font-bold hover:shadow-[0_0_15px_rgba(215,255,67,0.2)] transition-all"
                         >
                           <Save className="w-3.5 h-3.5" />
-                          <span>Bilgileri Güncelle</span>
+                          <span><T>{"Bilgileri Güncelle"}</T></span>
                         </button>
                       </div>
                     </div>
@@ -882,13 +884,13 @@ export default function AdminProjects() {
                   <div className="space-y-6 flex-1 max-h-[500px] overflow-y-auto pr-1 scrollbar-thin">
                     <div className="flex items-center gap-2 text-xs text-[#39d0c2] bg-[#39d0c2]/5 border border-[#39d0c2]/10 p-3 rounded-lg">
                       <Settings className="w-4 h-4 shrink-0" />
-                      <span>Burada tanımladığınız roadmap ve sprint görevleri `/track` portalındaki müşteri dashboardunda görsel olarak sunulur.</span>
+                      <span><T>{"Burada tanımladığınız roadmap ve sprint görevleri `/track` portalındaki müşteri dashboardunda görsel olarak sunulur."}</T></span>
                     </div>
 
                     {/* Basic Meta Settings */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div>
-                        <label className="text-[10px] font-bold text-[#817b70] uppercase block mb-1">Hedef Teslim Tarihi</label>
+                        <label className="text-[10px] font-bold text-[#817b70] uppercase block mb-1"><T>{"Hedef Teslim Tarihi"}</T></label>
                         <input
                           type="date"
                           value={builderForm.target_date}
@@ -897,21 +899,21 @@ export default function AdminProjects() {
                         />
                       </div>
                       <div>
-                        <label className="text-[10px] font-bold text-[#817b70] uppercase block mb-1">Proje Sağlık Durumu</label>
+                        <label className="text-[10px] font-bold text-[#817b70] uppercase block mb-1"><T>{"Proje Sağlık Durumu"}</T></label>
                         <select
                           value={builderForm.health}
                           onChange={(e) => setBuilderForm({ ...builderForm, health: e.target.value })}
                           className="w-full rounded-lg border border-white/10 bg-white/5 px-3.5 py-2 text-xs text-[#f7f3ea] focus:outline-none focus:border-[#d7ff43]"
                         >
-                          <option value="excellent">Harika (Excellent)</option>
-                          <option value="good">İyi (Good)</option>
-                          <option value="at_risk">Risk Altında (At Risk)</option>
-                          <option value="delayed">Gecikme (Delayed)</option>
+                          <option value="excellent"><T>{"Harika (Excellent)"}</T></option>
+                          <option value="good"><T>{"İyi (Good)"}</T></option>
+                          <option value="at_risk"><T>{"Risk Altında (At Risk)"}</T></option>
+                          <option value="delayed"><T>{"Gecikme (Delayed)"}</T></option>
                         </select>
                       </div>
                       <div>
-                        <label className="text-[10px] font-bold text-[#817b70] uppercase block mb-1">Önizleme Sunucu Adresi</label>
-                        <input
+                        <label className="text-[10px] font-bold text-[#817b70] uppercase block mb-1"><T>{"Önizleme Sunucu Adresi"}</T></label>
+                        <LocalizedElement as="input"
                           type="url"
                           placeholder="https://..."
                           value={builderForm.preview_url}
@@ -923,8 +925,8 @@ export default function AdminProjects() {
 
                     {/* Tech Badges input */}
                     <div>
-                      <label className="text-[10px] font-bold text-[#817b70] uppercase block mb-1">Kullanılan Teknolojiler (Virgülle Ayırın)</label>
-                      <input
+                      <label className="text-[10px] font-bold text-[#817b70] uppercase block mb-1"><T>{"Kullanılan Teknolojiler (Virgülle Ayırın)"}</T></label>
+                      <LocalizedElement as="input"
                         placeholder="React, Next.js, Postgres, Node, GraphQL"
                         value={builderForm.tech_stack_str}
                         onChange={(e) => setBuilderForm({ ...builderForm, tech_stack_str: e.target.value })}
@@ -937,20 +939,18 @@ export default function AdminProjects() {
                       <div className="flex items-center justify-between">
                         <h4 className="text-xs font-bold text-[#f7f3ea] uppercase tracking-wider flex items-center gap-1.5">
                           <HeartPulse className="w-3.5 h-3.5 text-[#d7ff43]" />
-                          Yol Haritası Aşamaları
-                        </h4>
+                          <T>{"Yol Haritası Aşamaları"}</T></h4>
                         <button
                           onClick={addMilestone}
                           className="flex items-center gap-1 text-[10px] font-bold text-[#d7ff43] hover:underline"
                         >
-                          <PlusCircle className="w-3.5 h-3.5" /> Ekle
-                        </button>
+                          <PlusCircle className="w-3.5 h-3.5" /> <T>{"Ekle"}</T></button>
                       </div>
 
                       <div className="space-y-2">
                         {builderForm.roadmap.map((step, idx) => (
                           <div key={idx} className="flex flex-col sm:flex-row gap-2 bg-white/5 p-3 rounded-lg items-center">
-                            <input
+                            <LocalizedElement as="input"
                               value={step.name}
                               placeholder="Aşama Adı (e.g. Kapsam Analizi)"
                               onChange={(e) => updateMilestone(idx, { name: e.target.value })}
@@ -963,7 +963,7 @@ export default function AdminProjects() {
                                 className="bg-[#181713] border border-white/10 rounded px-1.5 py-1 text-xs text-[#b8afa1] focus:outline-none focus:border-[#d7ff43]"
                               >
                                 {["0%", "10%", "25%", "50%", "75%", "90%", "100%"].map((pct) => (
-                                  <option key={pct} value={pct}>{pct}</option>
+                                  <option key={pct} value={pct}><T>{pct}</T></option>
                                 ))}
                               </select>
                               <select
@@ -971,9 +971,9 @@ export default function AdminProjects() {
                                 onChange={(e) => updateMilestone(idx, { status: e.target.value as any })}
                                 className="bg-[#181713] border border-white/10 rounded px-1.5 py-1 text-xs text-[#b8afa1] focus:outline-none focus:border-[#d7ff43]"
                               >
-                                <option value="pending">Beklemede (Pending)</option>
-                                <option value="active">Çalışılıyor (Active)</option>
-                                <option value="done">Tamamlandı (Done)</option>
+                                <option value="pending"><T>{"Beklemede (Pending)"}</T></option>
+                                <option value="active"><T>{"Çalışılıyor (Active)"}</T></option>
+                                <option value="done"><T>{"Tamamlandı (Done)"}</T></option>
                               </select>
                               <button
                                 onClick={() => removeMilestone(idx)}
@@ -985,7 +985,7 @@ export default function AdminProjects() {
                           </div>
                         ))}
                         {builderForm.roadmap.length === 0 && (
-                          <p className="text-[10px] text-[#817b70] text-center py-3">Yol haritası eklenmemiş. Otomatik mock değerler atanacaktır.</p>
+                          <p className="text-[10px] text-[#817b70] text-center py-3"><T>{"Yol haritası eklenmemiş. Otomatik mock değerler atanacaktır."}</T></p>
                         )}
                       </div>
                     </div>
@@ -995,21 +995,19 @@ export default function AdminProjects() {
                       <div className="flex items-center justify-between">
                         <h4 className="text-xs font-bold text-[#f7f3ea] uppercase tracking-wider flex items-center gap-1.5">
                           <CheckSquare className="w-3.5 h-3.5 text-[#39d0c2]" />
-                          Sprint Görev Panosu
-                        </h4>
+                          <T>{"Sprint Görev Panosu"}</T></h4>
                         <button
                           onClick={addTask}
                           className="flex items-center gap-1 text-[10px] font-bold text-[#39d0c2] hover:underline"
                         >
-                          <PlusCircle className="w-3.5 h-3.5" /> Ekle
-                        </button>
+                          <PlusCircle className="w-3.5 h-3.5" /> <T>{"Ekle"}</T></button>
                       </div>
 
                       <div className="space-y-3">
                         {builderForm.tasks.map((task, idx) => (
                           <div key={idx} className="bg-white/5 p-3.5 rounded-lg border border-white/5 space-y-2.5">
                             <div className="flex gap-2">
-                              <input
+                              <LocalizedElement as="input"
                                 value={task.title}
                                 placeholder="Görev Tanımı"
                                 onChange={(e) => updateTask(idx, { title: e.target.value })}
@@ -1025,8 +1023,8 @@ export default function AdminProjects() {
 
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                               <div>
-                                <label className="text-[8px] font-bold text-[#817b70] uppercase block mb-0.5">Kategori</label>
-                                <input
+                                <label className="text-[8px] font-bold text-[#817b70] uppercase block mb-0.5"><T>{"Kategori"}</T></label>
+                                <LocalizedElement as="input"
                                   value={task.category}
                                   placeholder="e.g. Frontend"
                                   onChange={(e) => updateTask(idx, { category: e.target.value })}
@@ -1034,8 +1032,8 @@ export default function AdminProjects() {
                                 />
                               </div>
                               <div>
-                                <label className="text-[8px] font-bold text-[#817b70] uppercase block mb-0.5">Atanan</label>
-                                <input
+                                <label className="text-[8px] font-bold text-[#817b70] uppercase block mb-0.5"><T>{"Atanan"}</T></label>
+                                <LocalizedElement as="input"
                                   value={task.assignee}
                                   placeholder="e.g. Can Y."
                                   onChange={(e) => updateTask(idx, { assignee: e.target.value })}
@@ -1043,35 +1041,35 @@ export default function AdminProjects() {
                                 />
                               </div>
                               <div>
-                                <label className="text-[8px] font-bold text-[#817b70] uppercase block mb-0.5">Öncelik</label>
+                                <label className="text-[8px] font-bold text-[#817b70] uppercase block mb-0.5"><T>{"Öncelik"}</T></label>
                                 <select
                                   value={task.priority}
                                   onChange={(e) => updateTask(idx, { priority: e.target.value })}
                                   className="w-full rounded border border-white/10 bg-[#181713] px-2 py-0.5 text-xs text-[#b8afa1] focus:outline-none focus:border-[#d7ff43]"
                                 >
-                                  <option value="Düşük">Düşük</option>
-                                  <option value="Orta">Orta</option>
-                                  <option value="Yüksek">Yüksek</option>
-                                  <option value="Kritik">Kritik</option>
+                                  <option value="Düşük"><T>{"Düşük"}</T></option>
+                                  <option value="Orta"><T>{"Orta"}</T></option>
+                                  <option value="Yüksek"><T>{"Yüksek"}</T></option>
+                                  <option value="Kritik"><T>{"Kritik"}</T></option>
                                 </select>
                               </div>
                               <div>
-                                <label className="text-[8px] font-bold text-[#817b70] uppercase block mb-0.5">Durum</label>
+                                <label className="text-[8px] font-bold text-[#817b70] uppercase block mb-0.5"><T>{"Durum"}</T></label>
                                 <select
                                   value={task.status}
                                   onChange={(e) => updateTask(idx, { status: e.target.value as any })}
                                   className="w-full rounded border border-white/10 bg-[#181713] px-2 py-0.5 text-xs text-[#b8afa1] focus:outline-none focus:border-[#d7ff43]"
                                 >
-                                  <option value="todo">Yapılacak (Todo)</option>
-                                  <option value="doing">Yapılıyor (Doing)</option>
-                                  <option value="done">Tamamlandı (Done)</option>
+                                  <option value="todo"><T>{"Yapılacak (Todo)"}</T></option>
+                                  <option value="doing"><T>{"Yapılıyor (Doing)"}</T></option>
+                                  <option value="done"><T>{"Tamamlandı (Done)"}</T></option>
                                 </select>
                               </div>
                             </div>
                           </div>
                         ))}
                         {builderForm.tasks.length === 0 && (
-                          <p className="text-[10px] text-[#817b70] text-center py-3">Sprint görevi tanımlanmamış. Otomatik mock değerler atanacaktır.</p>
+                          <p className="text-[10px] text-[#817b70] text-center py-3"><T>{"Sprint görevi tanımlanmamış. Otomatik mock değerler atanacaktır."}</T></p>
                         )}
                       </div>
                     </div>
@@ -1083,7 +1081,7 @@ export default function AdminProjects() {
                         className="flex items-center gap-1.5 bg-[#39d0c2] text-[#10100d] px-5 py-2.5 rounded-lg text-xs font-bold hover:shadow-[0_0_15px_rgba(57,208,194,0.2)] transition-all"
                       >
                         <Save className="w-3.5 h-3.5" />
-                        <span>Senkronize Et ve Kaydet</span>
+                        <span><T>{"Senkronize Et ve Kaydet"}</T></span>
                       </button>
                     </div>
                   </div>
@@ -1094,7 +1092,7 @@ export default function AdminProjects() {
                   <div className="space-y-4 flex-1">
                     <div className="flex items-center gap-2 text-xs text-[#d7ff43] bg-[#d7ff43]/5 border border-[#d7ff43]/10 p-3 rounded-lg">
                       <GitBranch className="w-4 h-4 shrink-0" />
-                      <span>Bu commitler `/track` portalında "Canlı Önizleme & Git" sekmesinde gösterilir. Manuel olarak ekleyip düzenleyebilirsiniz.</span>
+                      <span><T>{"Bu commitler `/track` portalında \"Canlı Önizleme & Git\" sekmesinde gösterilir. Manuel olarak ekleyip düzenleyebilirsiniz."}</T></span>
                     </div>
 
                     <div className="space-y-2">
@@ -1102,8 +1100,8 @@ export default function AdminProjects() {
                         <div key={idx} className="bg-white/5 p-3 rounded-lg border border-white/5 space-y-2">
                           <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
                             <div>
-                              <label className="text-[8px] font-bold text-[#817b70] uppercase block mb-0.5">Commit Hash</label>
-                              <input
+                              <label className="text-[8px] font-bold text-[#817b70] uppercase block mb-0.5"><T>{"Commit Hash"}</T></label>
+                              <LocalizedElement as="input"
                                 value={commit.hash}
                                 placeholder="e.g. 8d9fa3c"
                                 onChange={(e) => {
@@ -1115,8 +1113,8 @@ export default function AdminProjects() {
                               />
                             </div>
                             <div className="sm:col-span-2">
-                              <label className="text-[8px] font-bold text-[#817b70] uppercase block mb-0.5">Commit Mesajı</label>
-                              <input
+                              <label className="text-[8px] font-bold text-[#817b70] uppercase block mb-0.5"><T>{"Commit Mesajı"}</T></label>
+                              <LocalizedElement as="input"
                                 value={commit.message}
                                 placeholder="feat: add new feature"
                                 onChange={(e) => {
@@ -1128,8 +1126,8 @@ export default function AdminProjects() {
                               />
                             </div>
                             <div>
-                              <label className="text-[8px] font-bold text-[#817b70] uppercase block mb-0.5">Zaman</label>
-                              <input
+                              <label className="text-[8px] font-bold text-[#817b70] uppercase block mb-0.5"><T>{"Zaman"}</T></label>
+                              <LocalizedElement as="input"
                                 value={commit.time}
                                 placeholder="3 saat önce"
                                 onChange={(e) => {
@@ -1143,8 +1141,8 @@ export default function AdminProjects() {
                           </div>
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                              <label className="text-[8px] font-bold text-[#817b70] uppercase">Geliştirici:</label>
-                              <input
+                              <label className="text-[8px] font-bold text-[#817b70] uppercase"><T>{"Geliştirici:"}</T></label>
+                              <LocalizedElement as="input"
                                 value={commit.author}
                                 placeholder="can"
                                 onChange={(e) => {
@@ -1170,7 +1168,7 @@ export default function AdminProjects() {
                       {builderForm.commits.length === 0 && (
                         <div className="text-center py-8 border border-dashed border-white/10 rounded-xl bg-white/[0.01]">
                           <GitBranch className="w-6 h-6 text-[#817b70] mx-auto mb-2 opacity-50" />
-                          <p className="text-[10px] text-[#817b70]">Henüz commit eklenmemiş. Portalda varsayılan örnek commitler gösterilecektir.</p>
+                          <p className="text-[10px] text-[#817b70]"><T>{"Henüz commit eklenmemiş. Portalda varsayılan örnek commitler gösterilecektir."}</T></p>
                         </div>
                       )}
                     </div>
@@ -1185,8 +1183,7 @@ export default function AdminProjects() {
                         }}
                         className="flex items-center gap-1.5 text-xs font-bold text-[#39d0c2] hover:bg-[#39d0c2]/10 border border-[#39d0c2]/30 px-3 py-2 rounded-lg transition-all"
                       >
-                        <PlusCircle className="w-3.5 h-3.5" /> Yeni Commit Ekle
-                      </button>
+                        <PlusCircle className="w-3.5 h-3.5" /> <T>{"Yeni Commit Ekle"}</T></button>
                     </div>
 
                     <div className="pt-3 border-t border-white/5 flex justify-end">
@@ -1195,7 +1192,7 @@ export default function AdminProjects() {
                         className="flex items-center gap-1.5 bg-[#39d0c2] text-[#10100d] px-5 py-2.5 rounded-lg text-xs font-bold hover:shadow-[0_0_15px_rgba(57,208,194,0.2)] transition-all"
                       >
                         <Save className="w-3.5 h-3.5" />
-                        <span>Commitleri Kaydet</span>
+                        <span><T>{"Commitleri Kaydet"}</T></span>
                       </button>
                     </div>
                   </div>
@@ -1207,10 +1204,8 @@ export default function AdminProjects() {
                     <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-5 flex gap-3 text-xs leading-relaxed text-red-200">
                       <AlertCircle className="w-6 h-6 text-red-400 shrink-0" />
                       <div>
-                        <span className="font-bold text-[#f7f3ea] block mb-1">PROJEYİ TAMAMEN SİLME İŞLEMİ</span>
-                        Bu işlem bu projeyi veritabanından, müşteri portalını ve projeye dair tüm mesaj geçmişini geri döndürülemeyecek şekilde silecektir. 
-                        Müşteri bu adımdan sonra artık portal sayfasına erişemeyecektir.
-                      </div>
+                        <span className="font-bold text-[#f7f3ea] block mb-1"><T>{"PROJEYİ TAMAMEN SİLME İŞLEMİ"}</T></span>
+                        <T>{"Bu işlem bu projeyi veritabanından, müşteri portalını ve projeye dair tüm mesaj geçmişini geri döndürülemeyecek şekilde silecektir. Müşteri bu adımdan sonra artık portal sayfasına erişemeyecektir."}</T></div>
                     </div>
 
                     <div className="pt-6 border-t border-white/5 flex justify-center">
@@ -1219,7 +1214,7 @@ export default function AdminProjects() {
                         className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-[#f7f3ea] px-6 py-3.5 rounded-xl text-xs font-bold shadow-[0_4px_20px_rgba(220,38,38,0.15)] transition-all active:scale-[0.98]"
                       >
                         <Trash2 className="w-4 h-4 shrink-0" />
-                        <span>Projeyi Kalıcı Olarak Yok Et</span>
+                        <span><T>{"Projeyi Kalıcı Olarak Yok Et"}</T></span>
                       </button>
                     </div>
                   </div>
@@ -1231,10 +1226,9 @@ export default function AdminProjects() {
               <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-4">
                 <KanbanIcon className="w-6 h-6 text-[#817b70]" />
               </div>
-              <h3 className="text-sm font-bold text-[#f7f3ea]">Proje Seçilmedi</h3>
+              <h3 className="text-sm font-bold text-[#f7f3ea]"><T>{"Proje Seçilmedi"}</T></h3>
               <p className="text-xs text-[#817b70] mt-1.5 max-w-xs leading-relaxed">
-                Proje detaylarını incelemek, müşteri portalı ayarlarını yapılandırmak veya mesaj göndermek için sol taraftaki listeden bir proje seçin.
-              </p>
+                <T>{"Proje detaylarını incelemek, müşteri portalı ayarlarını yapılandırmak veya mesaj göndermek için sol taraftaki listeden bir proje seçin."}</T></p>
             </div>
           )}
         </div>

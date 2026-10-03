@@ -5,11 +5,14 @@ import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { WhatsAppButton } from "@/components/layout/whatsapp-button"
 import { ThemeCustomizer } from "@/components/layout/theme-customizer"
+import { SiteFrame } from "@/components/layout/site-frame"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { LanguageProvider } from "@/components/i18n/provider"
+import { getLanguage, localizeMetadata } from "@/lib/i18n/server"
 
-export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://meg.dev"),
+const sourceMetadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://megdev.com.tr"),
   title: {
     default: "Meg Dev | Yazılım Geliştirme ve Dijital Çözümler",
     template: "%s | Meg Dev",
@@ -44,7 +47,7 @@ export const metadata: Metadata = {
     title: "Meg Dev | Yazılım Geliştirme ve Dijital Çözümler",
     description:
       "Web siteleri, mobil uygulamalar, yapay zeka çözümleri ve özel yazılım projeleri geliştiriyoruz. İşletmenizi geleceğe taşıyan yenilikçi yazılım çözümleri.",
-    url: "https://meg.dev",
+    url: "https://megdev.com.tr",
     siteName: "Meg Dev",
     images: [
       {
@@ -79,15 +82,18 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export async function generateMetadata() { return localizeMetadata(sourceMetadata) }
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const { locale, dictionary, t } = await getLanguage()
   return (
-    <html lang="tr" className="h-full antialiased dark">
+    <html lang={locale} className="h-full antialiased dark">
       <head>
-        <meta name="theme-color" content="#10100d" />
+        <meta name="theme-color" content="#10130e" />
         <meta name="google-site-verification" content="21Co6j1h-UaDjB7Jrj-Y2509q5285ToFPx7VkHAe8H4" />
         <script
           type="application/ld+json"
@@ -96,7 +102,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Organization",
               name: "Meg Dev",
-              url: process.env.NEXT_PUBLIC_APP_URL || "https://meg.dev",
+              url: process.env.NEXT_PUBLIC_APP_URL || "https://megdev.com.tr",
               logo: "/megdevicon.png",
               email: "destek@megdev.info",
               telephone: "+905379830414",
@@ -123,9 +129,9 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebSite",
               name: "Meg Dev",
-              url: process.env.NEXT_PUBLIC_APP_URL || "https://meg.dev",
-              description: "Web siteleri, mobil uygulamalar, yapay zeka çözümleri ve özel yazılım projeleri geliştiriyoruz.",
-              inLanguage: "tr",
+              url: process.env.NEXT_PUBLIC_APP_URL || "https://megdev.com.tr",
+              description: t("Web siteleri, mobil uygulamalar, yapay zeka çözümleri ve özel yazılım projeleri geliştiriyoruz."),
+              inLanguage: locale,
             }),
           }}
         />
@@ -155,11 +161,13 @@ export default function RootLayout({
             alt=""
           />
         </noscript>
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <WhatsAppButton />
-        <ThemeCustomizer />
+        <LanguageProvider locale={locale} dictionary={dictionary}><SiteFrame>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <WhatsAppButton />
+          <ThemeCustomizer />
+        </SiteFrame></LanguageProvider>
         <Analytics />
         <SpeedInsights />
       </body>

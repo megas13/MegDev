@@ -1,10 +1,14 @@
 "use client"
 
+
+import { useLanguage } from "@/components/i18n/provider"
+import { T, LocalizedElement } from "@/components/i18n/text"
 import { useState } from "react"
 import type { LucideIcon } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { siteConfig } from "@/constants"
 import emailjs from "@emailjs/browser"
+import styles from "./public-experience.module.css"
 import { 
   Calculator, 
   ArrowRight, 
@@ -60,6 +64,8 @@ interface DeliverySpeed {
 }
 
 export function CalculatorSection() {
+  const { intlLocale, t } = useLanguage()
+
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -250,7 +256,7 @@ export function CalculatorSection() {
 
   // Generate Lead Submission texts
   const generateSummaryText = () => {
-    const modulesNames = selectedModules.map(mId => extraModules.find(m => m.id === mId)?.name).join(", ")
+    const modulesNames = selectedModules.map(mId => t(extraModules.find(m => m.id === mId)?.name || "")).join(", ")
     
     const infraLabel = {
       "megdev-recommends": "Meg Dev Önerisi (AWS / Vercel)",
@@ -259,18 +265,15 @@ export function CalculatorSection() {
       "custom-server": "Kendi Sunucumuz (On-Premise)"
     }[infrastructure] || infrastructure
 
-    return `Merhaba Meg Dev, proje hesaplayıcı teklif özeti:
-- İsim: ${name}
-- Telefon: ${phone}
-- E-posta: ${email || "Girilmedi"}
-- Proje Tipi: ${selectedTypeObj.name}
-- Ek Modüller: ${modulesNames || "Yok"}
-- Tasarım Seviyesi: ${selectedDesignObj.name}
-- Süreç Hızı: ${selectedSpeedObj.name}
-- Altyapı Tercihi: ${infraLabel}
-- Tahmini Bütçe: ${minCost.toLocaleString("tr-TR")} TL - ${maxCost.toLocaleString("tr-TR")} TL
-- Tahmini Süre: ${finalWeeks} Hafta
-- Özel Notlar: ${notes || "Yok"}`
+    return [
+      t("Merhaba Meg Dev, proje hesaplayıcı teklif özeti:"),
+      `${t("İsim")}: ${name}`, `${t("Telefon")}: ${phone}`, `${t("E-posta")}: ${email || t("Girilmedi")}`,
+      `${t("Proje Tipi")}: ${t(selectedTypeObj.name)}`, `${t("Ek Modüller")}: ${modulesNames || t("Yok")}`,
+      `${t("Tasarım Seviyesi")}: ${t(selectedDesignObj.name)}`, `${t("Süreç Hızı")}: ${t(selectedSpeedObj.name)}`,
+      `${t("Altyapı Tercihi")}: ${t(infraLabel)}`,
+      `${t("Tahmini Bütçe")}: ${minCost.toLocaleString(intlLocale)} – ${maxCost.toLocaleString(intlLocale)} ${t("TL")}`,
+      `${t("Tahmini Süre")}: ${finalWeeks} ${t("Hafta")}`, `${t("Özel Notlar")}: ${notes || t("Yok")}`,
+    ].join("\n")
   }
 
   const handleWhatsAppSubmit = async (e: React.FormEvent) => {
@@ -349,19 +352,15 @@ export function CalculatorSection() {
   }
 
   return (
-    <section id="calculator" className="relative overflow-hidden border-t border-white/10 bg-[#11110e] py-28 lg:py-36">
-      <div className="absolute inset-0 opacity-[.12] [background-image:radial-gradient(rgba(215,255,67,.28)_1px,transparent_1px)] [background-size:28px_28px] [mask-image:linear-gradient(to_bottom,black,transparent_75%)]" />
-      <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 45, repeat: Infinity, ease: "linear" }} className="pointer-events-none absolute -right-52 -top-52 h-[42rem] w-[42rem] rounded-full border border-dashed border-primary/15" />
-      <motion.div animate={{ rotate: [360, 0] }} transition={{ duration: 32, repeat: Infinity, ease: "linear" }} className="pointer-events-none absolute -right-28 -top-28 h-[26rem] w-[26rem] rounded-full border border-primary/10" />
-
+    <section id="calculator" className={`${styles.calculator} relative overflow-hidden border-t border-white/10 py-28 lg:py-36`}>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-12 max-w-4xl">
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-[.24em] text-primary"><Sparkles className="h-3.5 w-3.5 animate-pulse" /> Canlı proje simülatörü</span>
-            <h2 className="mt-6 text-4xl font-black uppercase leading-[.92] tracking-tight sm:text-6xl lg:text-7xl">Projen kaç haftada,<br/><span className="text-primary">hangi bütçeyle çıkar?</span></h2>
+            <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-[.24em] text-primary"><T>{"Proje planı / Bütçe ve takvim"}</T></span>
+            <h2 className="mt-6 text-4xl font-black uppercase leading-[.92] tracking-tight sm:text-6xl lg:text-7xl"><T>{"Fikrinize bir plan."}</T><br/><span className="text-primary"><T>{"Bütçenize bir çerçeve."}</T></span></h2>
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <p className="mt-6 max-w-2xl text-base leading-7 text-muted-foreground">Beş seçim yap; proje kapsamını, yaklaşık bütçeyi ve üretim takvimini canlı olarak birlikte kuralım.</p>
+            <p className="mt-6 max-w-2xl text-base leading-7 text-muted-foreground"><T>{"Beş seçim yap; proje kapsamını, yaklaşık bütçeyi ve üretim takvimini canlı olarak birlikte kuralım."}</T></p>
           </motion.div>
         </div>
 
@@ -372,9 +371,9 @@ export function CalculatorSection() {
             <div className="flex min-h-0 flex-1 flex-col">
               {/* Step indicator */}
               <div className="shrink-0 border-b border-white/10 bg-background/35 px-4 py-4 sm:px-6">
-                <div className="mb-3 flex items-center justify-between"><span className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[.2em] text-primary"><Calculator className="h-4 w-4" /> Proje konsolu</span><span className="font-mono text-xs text-muted-foreground">0{step} / 05</span></div>
+                <div className="mb-3 flex items-center justify-between"><span className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[.2em] text-primary"><Calculator className="h-4 w-4" /> <T>{" Proje hesaplayıcı"}</T></span><span className="font-mono text-xs text-muted-foreground"><T>{"0"}</T><T>{step}</T> <T>{" / 05"}</T></span></div>
                 <div className="grid grid-cols-5 gap-1.5">
-                  {["Proje", "Modüller", "Tasarım", "Teslimat", "İletişim"].map((label, index) => { const item = index + 1; return <button key={label} onClick={() => item <= step && setStep(item)} className={`relative flex min-w-0 items-center justify-center gap-2 rounded-xl border px-2 py-2.5 transition-all ${item === step ? "border-primary/40 bg-primary/10 text-primary" : item < step ? "border-primary/20 bg-primary/[.04] text-primary" : "border-white/5 bg-white/[.02] text-muted-foreground"}`}><span className={`grid h-6 w-6 shrink-0 place-items-center rounded-full font-mono text-[9px] ${item === step ? "bg-primary text-background" : "border border-current/25"}`}>{item < step ? <Check className="h-3 w-3" /> : item}</span><span className="hidden truncate text-[11px] font-bold sm:block">{label}</span></button> })}
+                  {["Proje", "Modüller", "Tasarım", "Teslimat", "İletişim"].map((label, index) => { const item = index + 1; return <button key={label} onClick={() => item <= step && setStep(item)} className={`relative flex min-w-0 items-center justify-center gap-2 rounded-xl border px-2 py-2.5 transition-all ${item === step ? "border-primary/40 bg-primary/10 text-primary" : item < step ? "border-primary/20 bg-primary/[.04] text-primary" : "border-white/5 bg-white/[.02] text-muted-foreground"}`}><span className={`grid h-6 w-6 shrink-0 place-items-center rounded-full font-mono text-[9px] ${item === step ? "bg-primary text-background" : "border border-current/25"}`}><T>{item < step ? <Check className="h-3 w-3" /> : item}</T></span><span className="hidden truncate text-[11px] font-bold sm:block"><T>{label}</T></span></button> })}
                 </div>
               </div>
               
@@ -386,12 +385,12 @@ export function CalculatorSection() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -12 }}
                   transition={{ duration: 0.32, ease: "easeOut" }}
-                  className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-5 [scrollbar-color:rgba(215,255,67,.45)_transparent] sm:px-7"
+                  className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-5 [scrollbar-color:rgba(255,255,255,.3)_transparent] sm:px-7"
                 >
                   {/* STEP 1: PROJECT TYPES */}
                   {step === 1 && (
                     <div className="space-y-4">
-                      <p className="text-sm text-muted-foreground mb-4 font-medium">Geliştirmek istediğiniz ana proje yapısını seçin:</p>
+                      <p className="text-sm text-muted-foreground mb-4 font-medium"><T>{"Geliştirmek istediğiniz ana proje yapısını seçin:"}</T></p>
                       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                         {projectTypes.map((type) => {
                           const isSelected = projectType === type.id
@@ -402,14 +401,14 @@ export function CalculatorSection() {
                               onClick={() => setProjectType(type.id)}
                               className={`p-4 border text-left cursor-pointer transition-all duration-300 rounded-2xl flex flex-col justify-between h-full min-h-[160px] relative overflow-hidden group hover:-translate-y-1 ${
                                 isSelected
-                                  ? "border-primary/60 bg-primary/[.07] shadow-[0_16px_45px_rgba(215,255,67,0.08)]"
+                                  ? "border-primary/60 bg-primary/[.07] shadow-[0_16px_45px_rgba(255,255,255,0.08)]"
                                   : "border-white/10 bg-white/[.025] hover:border-white/25 hover:bg-white/[.045]"
                               }`}
                             >
-                              {isSelected && <motion.div layoutId="calculator-project-glow" className="absolute inset-x-6 top-0 h-px bg-primary shadow-[0_0_18px_rgba(215,255,67,.9)]" />}
+                              {isSelected && <motion.div layoutId="calculator-project-glow" className="absolute inset-x-6 top-0 h-px bg-primary shadow-[0_0_18px_rgba(255,255,255,.9)]" />}
                               <div>
                                 <div className="flex justify-between items-start mb-3">
-                                  <div className={`p-2.5 rounded-[4px] border ${isSelected ? "border-primary/30 bg-primary/10 text-primary" : "border-foreground/10 bg-background/50 text-muted-foreground"}`}>
+                                  <div className={`p-2.5 rounded-xl border ${isSelected ? "border-primary/30 bg-primary/10 text-primary" : "border-foreground/10 bg-background/50 text-muted-foreground"}`}>
                                     <IconComponent className="w-5 h-5" />
                                   </div>
                                   {isSelected && (
@@ -418,14 +417,14 @@ export function CalculatorSection() {
                                     </span>
                                   )}
                                 </div>
-                                <span className="font-bold text-sm sm:text-base text-foreground group-hover:text-primary transition-colors block">{type.name}</span>
-                                <p className="text-xs text-muted-foreground mt-2 leading-relaxed">{type.description}</p>
+                                <span className="font-bold text-sm sm:text-base text-foreground group-hover:text-primary transition-colors block"><T>{type.name}</T></span>
+                                <p className="text-xs text-muted-foreground mt-2 leading-relaxed"><T>{type.description}</T></p>
                                 
                               </div>
 
                               <div className="mt-3 flex items-center justify-between border-t border-foreground/5 pt-3 font-mono text-[10px]">
-                                <span className="text-muted-foreground">Başlangıç</span>
-                                <span className="font-bold text-primary">{type.baseCost.toLocaleString("tr-TR")} TL · {type.baseWeeks} hf.</span>
+                                <span className="text-muted-foreground"><T>{"Başlangıç"}</T></span>
+                                <span className="font-bold text-primary"><T>{type.baseCost.toLocaleString(intlLocale)}</T> <T>{" TL · "}</T><T>{type.baseWeeks}</T> <T>{" hf."}</T></span>
                               </div>
                             </button>
                           )
@@ -437,7 +436,7 @@ export function CalculatorSection() {
                   {/* STEP 2: EXTRA MODULES */}
                   {step === 2 && (
                     <div className="space-y-6">
-                      <p className="text-sm text-muted-foreground font-medium">Projenize dahil edilmesini istediğiniz ek modülleri seçin (İsteğe bağlı):</p>
+                      <p className="text-sm text-muted-foreground font-medium"><T>{"Projenize dahil edilmesini istediğiniz ek modülleri seçin (İsteğe bağlı):"}</T></p>
                       
                       {/* Categorized Modules */}
                       {(["core", "advanced", "infra"] as const).map((cat) => {
@@ -451,7 +450,7 @@ export function CalculatorSection() {
                         
                         return (
                           <div key={cat} className="space-y-3">
-                            <h5 className="text-xs uppercase tracking-widest text-primary font-bold border-b border-foreground/5 pb-1">{catTitle}</h5>
+                            <h5 className="text-xs uppercase tracking-widest text-primary font-bold border-b border-foreground/5 pb-1"><T>{catTitle}</T></h5>
                             <div className="grid gap-3 sm:grid-cols-2">
                               {catModules.map((mod) => {
                                 const isSelected = selectedModules.includes(mod.id)
@@ -459,24 +458,24 @@ export function CalculatorSection() {
                                   <button
                                     key={mod.id}
                                     onClick={() => toggleModule(mod.id)}
-                                    className={`p-4 border text-left cursor-pointer transition-all rounded-[6px] flex flex-col justify-between h-full group ${
+                                    className={`p-4 border text-left cursor-pointer transition-all rounded-2xl flex flex-col justify-between h-full group ${
                                       isSelected
-                                        ? "border-primary bg-primary/5 shadow-[0_0_15px_rgba(215,255,67,0.04)]"
+                                        ? "border-primary bg-primary/5 shadow-[0_0_15px_rgba(255,255,255,0.04)]"
                                         : "border-foreground/10 bg-card/45 hover:border-foreground/20"
                                     }`}
                                   >
                                     <div>
                                       <div className="flex justify-between items-center mb-2">
-                                        <span className="font-bold text-sm text-foreground group-hover:text-primary transition-colors">{mod.name}</span>
+                                        <span className="font-bold text-sm text-foreground group-hover:text-primary transition-colors"><T>{mod.name}</T></span>
                                         <div className={`w-4 h-4 border flex items-center justify-center rounded-sm ${isSelected ? "bg-primary border-primary text-background" : "border-foreground/30 text-transparent"}`}>
                                           <Check className="w-3.5 h-3.5 stroke-[3]" />
                                         </div>
                                       </div>
-                                      <p className="text-xs text-muted-foreground leading-relaxed">{mod.description}</p>
+                                      <p className="text-xs text-muted-foreground leading-relaxed"><T>{mod.description}</T></p>
                                     </div>
                                     <div className="mt-3 pt-2 border-t border-foreground/5 flex justify-between items-center text-[10px] font-mono text-muted-foreground">
-                                      <span>+{mod.cost.toLocaleString("tr-TR")} TL</span>
-                                      <span className="text-primary font-semibold">+{mod.weeks} Hafta</span>
+                                      <span><T>{"+"}</T><T>{mod.cost.toLocaleString(intlLocale)}</T> <T>{" TL"}</T></span>
+                                      <span className="text-primary font-semibold"><T>{"+"}</T><T>{mod.weeks}</T> <T>{" Hafta"}</T></span>
                                     </div>
                                   </button>
                                 )
@@ -491,7 +490,7 @@ export function CalculatorSection() {
                   {/* STEP 3: DESIGN LEVELS */}
                   {step === 3 && (
                     <div className="space-y-4">
-                      <p className="text-sm text-muted-foreground mb-4 font-medium">Projenizin UI/UX arayüz tasarım seviyesini belirleyin:</p>
+                      <p className="text-sm text-muted-foreground mb-4 font-medium"><T>{"Projenizin UI/UX arayüz tasarım seviyesini belirleyin:"}</T></p>
                       <div className="space-y-4">
                         {designLevels.map((lvl) => {
                           const isSelected = designLevel === lvl.id
@@ -499,9 +498,9 @@ export function CalculatorSection() {
                             <button
                               key={lvl.id}
                               onClick={() => setDesignLevel(lvl.id)}
-                              className={`w-full p-5 border text-left cursor-pointer transition-all rounded-[6px] flex flex-col md:flex-row justify-between items-start md:items-center gap-4 group ${
+                              className={`w-full p-5 border text-left cursor-pointer transition-all rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4 group ${
                                 isSelected
-                                  ? "border-primary bg-primary/5 shadow-[0_0_15px_rgba(215,255,67,0.04)]"
+                                  ? "border-primary bg-primary/5 shadow-[0_0_15px_rgba(255,255,255,0.04)]"
                                   : "border-foreground/10 bg-card/45 hover:border-foreground/20"
                               }`}
                             >
@@ -512,26 +511,26 @@ export function CalculatorSection() {
                                       <Check className="w-3 h-3 stroke-[3]" />
                                     </span>
                                   )}
-                                  <span className="font-bold text-sm sm:text-base text-foreground group-hover:text-primary transition-colors">{lvl.name}</span>
+                                  <span className="font-bold text-sm sm:text-base text-foreground group-hover:text-primary transition-colors"><T>{lvl.name}</T></span>
                                 </div>
-                                <p className="text-xs text-muted-foreground leading-relaxed">{lvl.description}</p>
+                                <p className="text-xs text-muted-foreground leading-relaxed"><T>{lvl.description}</T></p>
                                 
                                 {/* Bullet points */}
                                 <div className="flex flex-wrap gap-x-4 gap-y-1.5 pt-2">
                                   {lvl.features.map((feat, fidx) => (
                                     <span key={fidx} className="text-[11px] text-foreground/80 flex items-center gap-1">
                                       <span className="w-1 h-1 bg-primary rounded-full" />
-                                      {feat}
+                                      <T>{feat}</T>
                                     </span>
                                   ))}
                                 </div>
                               </div>
                               <div className="text-right md:border-l md:border-foreground/10 md:pl-6 min-w-[120px] self-stretch flex flex-row md:flex-col justify-between md:justify-center items-center">
                                 <div className="text-xs font-mono text-muted-foreground">
-                                  {lvl.cost > 0 ? `+${lvl.cost.toLocaleString("tr-TR")} TL` : "Ek Ücret Yok"}
+                                  <T>{lvl.cost > 0 ? `+${lvl.cost.toLocaleString(intlLocale)} TL` : "Ek Ücret Yok"}</T>
                                 </div>
                                 <div className="text-xs font-mono text-primary font-bold mt-0.5">
-                                  {lvl.weeks > 0 ? `+${lvl.weeks} Hafta` : "Süre Artışı Yok"}
+                                  <T>{lvl.weeks > 0 ? `+${lvl.weeks} Hafta` : "Süre Artışı Yok"}</T>
                                 </div>
                               </div>
                             </button>
@@ -544,7 +543,7 @@ export function CalculatorSection() {
                   {/* STEP 4: SPEEDS */}
                   {step === 4 && (
                     <div className="space-y-4">
-                      <p className="text-sm text-muted-foreground mb-4 font-medium">Geliştirme süreci ve teslimat hızı tercihini belirleyin:</p>
+                      <p className="text-sm text-muted-foreground mb-4 font-medium"><T>{"Geliştirme süreci ve teslimat hızı tercihini belirleyin:"}</T></p>
                       <div className="space-y-4">
                         {deliverySpeeds.map((spd) => {
                           const isSelected = deliverySpeed === spd.id
@@ -552,9 +551,9 @@ export function CalculatorSection() {
                             <button
                               key={spd.id}
                               onClick={() => setDeliverySpeed(spd.id)}
-                              className={`w-full p-5 border text-left cursor-pointer transition-all rounded-[6px] flex flex-col md:flex-row justify-between items-start md:items-center gap-4 group ${
+                              className={`w-full p-5 border text-left cursor-pointer transition-all rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4 group ${
                                 isSelected
-                                  ? "border-primary bg-primary/5 shadow-[0_0_15px_rgba(215,255,67,0.04)]"
+                                  ? "border-primary bg-primary/5 shadow-[0_0_15px_rgba(255,255,255,0.04)]"
                                   : "border-foreground/10 bg-card/45 hover:border-foreground/20"
                               }`}
                             >
@@ -565,20 +564,20 @@ export function CalculatorSection() {
                                       <Check className="w-3 h-3 stroke-[3]" />
                                     </span>
                                   )}
-                                  <span className="font-bold text-sm sm:text-base text-foreground group-hover:text-primary transition-colors">{spd.name}</span>
+                                  <span className="font-bold text-sm sm:text-base text-foreground group-hover:text-primary transition-colors"><T>{spd.name}</T></span>
                                   <span className="text-[10px] font-mono px-2.5 py-0.5 border border-primary/20 bg-primary/10 text-primary rounded-full font-bold">
-                                    {spd.badge}
+                                    <T>{spd.badge}</T>
                                   </span>
                                 </div>
-                                <p className="text-xs text-muted-foreground leading-relaxed">{spd.description}</p>
+                                <p className="text-xs text-muted-foreground leading-relaxed"><T>{spd.description}</T></p>
                               </div>
                               
                               {/* Visual comparison bar representing time & cost factors */}
                               <div className="w-full md:w-32 space-y-1">
                                 <div className="flex justify-between text-[10px] font-mono text-muted-foreground">
-                                  <span>Bütçe:</span>
+                                  <span><T>{"Bütçe:"}</T></span>
                                   <span className={spd.costFactor > 1 ? "text-rose-400 font-bold" : spd.costFactor < 1 ? "text-emerald-400 font-bold" : ""}>
-                                    {spd.costFactor === 1.0 ? "Standart" : `${spd.costFactor * 100}%`}
+                                    <T>{spd.costFactor === 1.0 ? "Standart" : `${spd.costFactor * 100}%`}</T>
                                   </span>
                                 </div>
                                 <div className="h-1.5 w-full bg-background rounded-full overflow-hidden">
@@ -588,9 +587,9 @@ export function CalculatorSection() {
                                   />
                                 </div>
                                 <div className="flex justify-between text-[10px] font-mono text-muted-foreground pt-1">
-                                  <span>Teslimat:</span>
+                                  <span><T>{"Teslimat:"}</T></span>
                                   <span className={spd.weeksFactor < 1 ? "text-emerald-400 font-bold" : spd.weeksFactor > 1 ? "text-amber-400 font-bold" : ""}>
-                                    {spd.weeksFactor === 1.0 ? "Normal" : `${spd.weeksFactor * 100}%`}
+                                    <T>{spd.weeksFactor === 1.0 ? "Normal" : `${spd.weeksFactor * 100}%`}</T>
                                   </span>
                                 </div>
                                 <div className="h-1.5 w-full bg-background rounded-full overflow-hidden">
@@ -615,75 +614,74 @@ export function CalculatorSection() {
                           <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-primary text-background">
                             <Send className="w-8 h-8" />
                           </div>
-                          <h3 className="text-xl font-black mb-2 text-foreground">Teklif Talebiniz Alındı!</h3>
+                          <h3 className="text-xl font-black mb-2 text-foreground"><T>{"Teklif Talebiniz Alındı!"}</T></h3>
                           <p className="text-xs text-muted-foreground max-w-sm mx-auto leading-relaxed">
-                            Proje hesaplama detaylarınız başarıyla e-posta kutumuza ulaştı. Ekibimiz en kısa sürede sizinle iletişime geçecektir.
-                          </p>
+                            <T>{"Proje hesaplama detaylarınız başarıyla e-posta kutumuza ulaştı. Ekibimiz en kısa sürede sizinle iletişime geçecektir."}</T></p>
                         </motion.div>
                       ) : (
                         <>
-                          <p className="text-sm text-muted-foreground mb-4 font-medium">Teklifi size veya ekibinize iletebilmemiz için iletişim bilgilerinizi girin:</p>
+                          <p className="text-sm text-muted-foreground mb-4 font-medium"><T>{"Teklifi size veya ekibinize iletebilmemiz için iletişim bilgilerinizi girin:"}</T></p>
                           <div className="grid gap-4">
                             <div className="grid sm:grid-cols-2 gap-4">
                               <div>
-                                <label className="block text-xs uppercase tracking-wider text-muted-foreground font-bold mb-1.5">Adınız Soyadınız *</label>
-                                <input
+                                <label className="block text-xs uppercase tracking-wider text-muted-foreground font-bold mb-1.5"><T>{"Adınız Soyadınız *"}</T></label>
+                                <LocalizedElement as="input"
                                   type="text"
                                   required
                                   value={name}
                                   onChange={(e) => setName(e.target.value)}
                                   placeholder="Örn. Mehmet Yılmaz"
-                                  className="w-full bg-card border border-foreground/10 px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground rounded-[4px]"
+                                  className="w-full bg-card border border-foreground/10 px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground rounded-xl"
                                 />
                               </div>
                               <div>
-                                <label className="block text-xs uppercase tracking-wider text-muted-foreground font-bold mb-1.5">Telefon Numaranız *</label>
-                                <input
+                                <label className="block text-xs uppercase tracking-wider text-muted-foreground font-bold mb-1.5"><T>{"Telefon Numaranız *"}</T></label>
+                                <LocalizedElement as="input"
                                   type="tel"
                                   required
                                   value={phone}
                                   onChange={(e) => setPhone(e.target.value)}
                                   placeholder="Örn. 0530 123 45 67"
-                                  className="w-full bg-card border border-foreground/10 px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground rounded-[4px]"
+                                  className="w-full bg-card border border-foreground/10 px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground rounded-xl"
                                 />
                               </div>
                             </div>
                             
                             <div className="grid sm:grid-cols-2 gap-4">
                               <div>
-                                <label className="block text-xs uppercase tracking-wider text-muted-foreground font-bold mb-1.5">E-posta Adresiniz *</label>
-                                <input
+                                <label className="block text-xs uppercase tracking-wider text-muted-foreground font-bold mb-1.5"><T>{"E-posta Adresiniz *"}</T></label>
+                                <LocalizedElement as="input"
                                   type="email"
                                   required
                                   value={email}
                                   onChange={(e) => setEmail(e.target.value)}
                                   placeholder="Örn. mehmet@sirketiniz.com"
-                                  className="w-full bg-card border border-foreground/10 px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground rounded-[4px]"
+                                  className="w-full bg-card border border-foreground/10 px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground rounded-xl"
                                 />
                               </div>
                               <div>
-                                <label className="block text-xs uppercase tracking-wider text-muted-foreground font-bold mb-1.5">Tercih Edilen Altyapı / Sunucu</label>
+                                <label className="block text-xs uppercase tracking-wider text-muted-foreground font-bold mb-1.5"><T>{"Tercih Edilen Altyapı / Sunucu"}</T></label>
                                 <select
                                   value={infrastructure}
                                   onChange={(e) => setInfrastructure(e.target.value)}
-                                  className="w-full bg-card border border-foreground/10 px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground rounded-[4px]"
+                                  className="w-full bg-card border border-foreground/10 px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground rounded-xl"
                                 >
-                                  <option value="megdev-recommends">Meg Dev Önerisi (AWS / Vercel)</option>
-                                  <option value="aws">AWS (Amazon Web Services)</option>
-                                  <option value="vercel">Vercel / Netlify (Serverless)</option>
-                                  <option value="custom-server">Kendi Sunucumuz (On-Premise)</option>
+                                  <option value="megdev-recommends"><T>{"Meg Dev Önerisi (AWS / Vercel)"}</T></option>
+                                  <option value="aws"><T>{"AWS (Amazon Web Services)"}</T></option>
+                                  <option value="vercel"><T>{"Vercel / Netlify (Serverless)"}</T></option>
+                                  <option value="custom-server"><T>{"Kendi Sunucumuz (On-Premise)"}</T></option>
                                 </select>
                               </div>
                             </div>
                             
                             <div>
-                              <label className="block text-xs uppercase tracking-wider text-muted-foreground font-bold mb-1.5">Proje Detayları & Özel İstekleriniz (Opsiyonel)</label>
-                              <textarea
+                              <label className="block text-xs uppercase tracking-wider text-muted-foreground font-bold mb-1.5"><T>{"Proje Detayları & Özel İstekleriniz (Opsiyonel)"}</T></label>
+                              <LocalizedElement as="textarea"
                                 value={notes}
                                 onChange={(e) => setNotes(e.target.value)}
                                 placeholder="Projenizle ilgili eklemek istediğiniz detaylar, özel entegrasyonlar veya hedeflerinizi yazabilirsiniz."
                                 rows={3}
-                                className="w-full bg-card border border-foreground/10 px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground rounded-[4px] resize-none"
+                                className="w-full bg-card border border-foreground/10 px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors text-foreground rounded-xl resize-none"
                               />
                             </div>
                           </div>
@@ -692,27 +690,25 @@ export function CalculatorSection() {
                             <button
                               onClick={handleWhatsAppSubmit}
                               disabled={loading || !name || !phone}
-                              className="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-sm px-4 py-3.5 transition-all cursor-pointer rounded-[4px]"
+                              className="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-sm px-4 py-3.5 transition-all cursor-pointer rounded-xl"
                             >
                               {loading ? (
                                 <Loader2 className="w-4 h-4 animate-spin" />
                               ) : (
                                 <MessageSquare className="w-4 h-4" />
                               )}
-                              WhatsApp ile Gönder
-                            </button>
+                              <T>{"WhatsApp ile Gönder"}</T></button>
                             <button
                               onClick={handleEmailSubmit}
                               disabled={loading || !name || !email || !phone}
-                              className="flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark disabled:opacity-40 disabled:cursor-not-allowed text-background font-bold text-sm px-4 py-3.5 transition-all cursor-pointer rounded-[4px]"
+                              className="flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark disabled:opacity-40 disabled:cursor-not-allowed text-background font-bold text-sm px-4 py-3.5 transition-all cursor-pointer rounded-xl"
                             >
                               {loading ? (
                                 <Loader2 className="w-4 h-4 animate-spin" />
                               ) : (
                                 <Send className="w-4 h-4" />
                               )}
-                              E-posta ile Gönder
-                            </button>
+                              <T>{"E-posta ile Gönder"}</T></button>
                           </div>
                         </>
                       )}
@@ -730,26 +726,24 @@ export function CalculatorSection() {
                 className="inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-2.5 text-xs font-bold text-muted-foreground transition hover:border-white/25 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30"
               >
                 <ArrowLeft className="w-4 h-4" />
-                Geri
-              </button>
+                <T>{"Geri"}</T></button>
 
               <div className="hidden min-w-0 items-center gap-5 sm:flex">
-                <div className="min-w-0"><span className="block font-mono text-[9px] uppercase tracking-widest text-muted-foreground">Bütçe</span><motion.strong key={`${minCost}-${maxCost}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="whitespace-nowrap text-sm text-primary">{minCost.toLocaleString("tr-TR")}—{maxCost.toLocaleString("tr-TR")} TL</motion.strong></div>
-                <div><span className="block font-mono text-[9px] uppercase tracking-widest text-muted-foreground">Takvim</span><strong className="whitespace-nowrap text-sm">{finalWeeks} hafta</strong></div>
-                <div><span className="block font-mono text-[9px] uppercase tracking-widest text-muted-foreground">Modül</span><strong className="text-sm">{selectedModules.length}</strong></div>
+                <div className="min-w-0"><span className="block font-mono text-[9px] uppercase tracking-widest text-muted-foreground"><T>{"Bütçe"}</T></span><motion.strong key={`${minCost}-${maxCost}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="whitespace-nowrap text-sm text-primary"><T>{minCost.toLocaleString(intlLocale)}</T><T>{"—"}</T><T>{maxCost.toLocaleString(intlLocale)}</T> <T>{" TL"}</T></motion.strong></div>
+                <div><span className="block font-mono text-[9px] uppercase tracking-widest text-muted-foreground"><T>{"Takvim"}</T></span><strong className="whitespace-nowrap text-sm"><T>{finalWeeks}</T> <T>{" hafta"}</T></strong></div>
+                <div><span className="block font-mono text-[9px] uppercase tracking-widest text-muted-foreground"><T>{"Modül"}</T></span><strong className="text-sm"><T>{selectedModules.length}</T></strong></div>
               </div>
 
               {step < 5 ? (
                 <button
                   onClick={() => setStep((s) => s + 1)}
-                  className="group inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-xs font-black text-[#10100d] shadow-[0_10px_30px_rgba(215,255,67,.16)] transition hover:-translate-y-0.5"
+                  className="group inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-xs font-black text-[#151515] shadow-[0_10px_30px_rgba(255,255,255,.16)] transition hover:-translate-y-0.5"
                 >
-                  Sonraki Adım
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  <T>{"Sonraki Adım"}</T><ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </button>
               ) : (
                 <span className="text-xs text-muted-foreground font-mono">
-                  {submitted ? "// TALEBİNİZ ALINDI" : "// FORMU DOLDURUN"}
+                  <T>{submitted ? "// TALEBİNİZ ALINDI" : "// FORMU DOLDURUN"}</T>
                 </span>
               )}
             </div>
@@ -759,63 +753,63 @@ export function CalculatorSection() {
           <div className="hidden">
             <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full border-[45px] border-white/[.02]" />
             <div className="relative flex flex-col justify-between gap-4 border-b border-white/10 pb-6 sm:flex-row sm:items-end">
-              <div><span className="flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-widest text-primary"><Sparkles className="h-3.5 w-3.5 animate-pulse" /> Canlı proje analizi</span><h4 className="mt-2 text-2xl font-black">Seçimlerinin teknik özeti</h4></div>
-              <span className="w-fit rounded-full border border-white/10 px-3 py-1.5 font-mono text-[10px] text-muted-foreground">Her seçimde otomatik güncellenir</span>
+              <div><span className="flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-widest text-primary"><Sparkles className="h-3.5 w-3.5 animate-pulse" /> <T>{" Canlı proje analizi"}</T></span><h4 className="mt-2 text-2xl font-black"><T>{"Seçimlerinin teknik özeti"}</T></h4></div>
+              <span className="w-fit rounded-full border border-white/10 px-3 py-1.5 font-mono text-[10px] text-muted-foreground"><T>{"Her seçimde otomatik güncellenir"}</T></span>
             </div>
 
             <div className="relative mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3 [&>div]:rounded-2xl [&>div]:border [&>div]:border-white/10 [&>div]:bg-white/[.025] [&>div]:p-5">
               <div className="md:col-span-2 xl:col-span-1">
-                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">TAHMİNİ BÜTÇE ARALIĞI</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground"><T>{"TAHMİNİ BÜTÇE ARALIĞI"}</T></p>
                 <motion.p key={`${minCost}-${maxCost}`} initial={{ opacity: 0, y: 15, filter: "blur(5px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} className="mt-2 text-3xl font-black text-primary">
-                  {minCost.toLocaleString("tr-TR")} <span className="text-xl">-</span> {maxCost.toLocaleString("tr-TR")} <span className="text-lg font-normal">TL</span>
+                  <T>{minCost.toLocaleString(intlLocale)}</T> <span className="text-xl"><T>{"-"}</T></span> <T>{maxCost.toLocaleString(intlLocale)}</T> <span className="text-lg font-normal"><T>{"TL"}</T></span>
                 </motion.p>
-                <p className="mt-1 text-[10px] leading-snug text-muted-foreground">Vergiler hariç, tahmini geliştirici bütçesidir.</p>
+                <p className="mt-1 text-[10px] leading-snug text-muted-foreground"><T>{"Vergiler hariç, tahmini geliştirici bütçesidir."}</T></p>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground font-bold">TESLİMAT SÜRESİ</p>
+                  <p className="text-xs uppercase tracking-wider text-muted-foreground font-bold"><T>{"TESLİMAT SÜRESİ"}</T></p>
                   <p className="text-2xl font-black mt-2 text-foreground">
-                    {finalWeeks} <span className="text-sm font-normal text-muted-foreground font-medium">Hafta</span>
+                    <T>{finalWeeks}</T> <span className="text-sm font-normal text-muted-foreground font-medium"><T>{"Hafta"}</T></span>
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground font-bold">AKTİF EKLENTİ</p>
+                  <p className="text-xs uppercase tracking-wider text-muted-foreground font-bold"><T>{"AKTİF EKLENTİ"}</T></p>
                   <p className="text-2xl font-black mt-2 text-foreground">
-                    {selectedModules.length} <span className="text-sm font-normal text-muted-foreground font-medium">Adet</span>
+                    <T>{selectedModules.length}</T> <span className="text-sm font-normal text-muted-foreground font-medium"><T>{"Adet"}</T></span>
                   </p>
                 </div>
               </div>
 
               {/* Detailed Invoice Breakdown */}
               <div className="space-y-3">
-                <p className="text-xs uppercase tracking-wider text-muted-foreground font-bold">FİYAT KIRILIMI</p>
+                <p className="text-xs uppercase tracking-wider text-muted-foreground font-bold"><T>{"FİYAT KIRILIMI"}</T></p>
                 <div className="space-y-2 text-xs">
                   {/* Base Cost */}
                   <div className="flex justify-between items-start">
-                    <span className="text-muted-foreground">Taban Fiyat ({selectedTypeObj.name}):</span>
-                    <span className="font-bold text-foreground">{selectedTypeObj.baseCost.toLocaleString("tr-TR")} TL</span>
+                    <span className="text-muted-foreground"><T>{"Taban Fiyat ("}</T><T>{selectedTypeObj.name}</T><T>{"):"}</T></span>
+                    <span className="font-bold text-foreground"><T>{selectedTypeObj.baseCost.toLocaleString(intlLocale)}</T> <T>{" TL"}</T></span>
                   </div>
                   
                   {/* Design Level Cost */}
                   {selectedDesignObj.cost > 0 && (
                     <div className="flex justify-between items-start">
-                      <span className="text-muted-foreground">Tasarım ({selectedDesignObj.name}):</span>
-                      <span className="font-bold text-foreground">+{selectedDesignObj.cost.toLocaleString("tr-TR")} TL</span>
+                      <span className="text-muted-foreground"><T>{"Tasarım ("}</T><T>{selectedDesignObj.name}</T><T>{"):"}</T></span>
+                      <span className="font-bold text-foreground"><T>{"+"}</T><T>{selectedDesignObj.cost.toLocaleString(intlLocale)}</T> <T>{" TL"}</T></span>
                     </div>
                   )}
 
                   {/* Modules Cost */}
                   {selectedModules.length > 0 && (
                     <div className="space-y-1 pl-2 border-l border-primary/20">
-                      <div className="text-[10px] text-muted-foreground uppercase font-semibold">Seçili Modüller:</div>
+                      <div className="text-[10px] text-muted-foreground uppercase font-semibold"><T>{"Seçili Modüller:"}</T></div>
                       {selectedModules.map((mId) => {
                         const mod = extraModules.find((m) => m.id === mId)
                         if (!mod) return null
                         return (
                           <div key={mId} className="flex justify-between text-[11px]">
-                            <span className="text-muted-foreground truncate max-w-[210px]">{mod.name}:</span>
-                            <span className="font-medium text-foreground">+{mod.cost.toLocaleString("tr-TR")} TL</span>
+                            <span className="text-muted-foreground truncate max-w-[210px]"><T>{mod.name}</T><T>{":"}</T></span>
+                            <span className="font-medium text-foreground"><T>{"+"}</T><T>{mod.cost.toLocaleString(intlLocale)}</T> <T>{" TL"}</T></span>
                           </div>
                         )
                       })}
@@ -825,35 +819,34 @@ export function CalculatorSection() {
                   {/* Speed Factor */}
                   {selectedSpeedObj.id !== "normal" && (
                     <div className="flex justify-between items-start">
-                      <span className="text-muted-foreground font-medium">Hız Katsayısı ({selectedSpeedObj.name}):</span>
+                      <span className="text-muted-foreground font-medium"><T>{"Hız Katsayısı ("}</T><T>{selectedSpeedObj.name}</T><T>{"):"}</T></span>
                       <span className={`font-bold ${selectedSpeedObj.costFactor > 1 ? "text-rose-400" : "text-emerald-400"}`}>
-                        {selectedSpeedObj.costFactor > 1 ? "+" : ""}
-                        {Math.round((selectedSpeedObj.costFactor - 1) * 100)}%
-                      </span>
+                        <T>{selectedSpeedObj.costFactor > 1 ? "+" : ""}</T>
+                        <T>{Math.round((selectedSpeedObj.costFactor - 1) * 100)}</T><T>{"%"}</T></span>
                     </div>
                   )}
                   
                   {/* Subtotal */}
                   <div className="flex justify-between items-start pt-2 border-t border-foreground/10 font-bold text-foreground">
-                    <span>Yaklaşık Toplam:</span>
-                    <span className="text-primary">{finalCost.toLocaleString("tr-TR")} TL</span>
+                    <span><T>{"Yaklaşık Toplam:"}</T></span>
+                    <span className="text-primary"><T>{finalCost.toLocaleString(intlLocale)}</T> <T>{" TL"}</T></span>
                   </div>
                 </div>
               </div>
 
               {/* Dynamic Project Roadmap */}
               <div className="space-y-3 md:col-span-2 xl:col-span-1">
-                <p className="text-xs uppercase tracking-wider text-muted-foreground font-bold">PROJE YOL HARİTASI</p>
+                <p className="text-xs uppercase tracking-wider text-muted-foreground font-bold"><T>{"PROJE YOL HARİTASI"}</T></p>
                 <div className="relative pl-4 border-l border-primary/20 space-y-4 py-1 text-xs">
                   {getRoadmapPhases(finalWeeks).map((phase, idx) => (
                     <div key={idx} className="relative">
                       {/* Bullet point icon */}
                       <span className="absolute -left-[21px] top-0.5 flex h-2.5 w-2.5 items-center justify-center rounded-full bg-primary ring-4 ring-card" />
                       <div className="font-bold flex justify-between text-foreground">
-                        <span>{phase.name}</span>
-                        <span className="text-primary font-mono">{phase.weeks} Hafta</span>
+                        <span><T>{phase.name}</T></span>
+                        <span className="text-primary font-mono"><T>{phase.weeks}</T> <T>{" Hafta"}</T></span>
                       </div>
-                      <p className="text-[10px] text-muted-foreground mt-1 leading-snug">{phase.desc}</p>
+                      <p className="text-[10px] text-muted-foreground mt-1 leading-snug"><T>{phase.desc}</T></p>
                     </div>
                   ))}
                 </div>
@@ -862,16 +855,16 @@ export function CalculatorSection() {
               {/* Dynamic parameters list summary */}
               <div className="space-y-2 font-mono text-[10px] text-muted-foreground">
                 <div className="flex justify-between gap-2">
-                  <span>Proje Tipi:</span>
-                  <span className="text-foreground text-right">{selectedTypeObj.name}</span>
+                  <span><T>{"Proje Tipi:"}</T></span>
+                  <span className="text-foreground text-right"><T>{selectedTypeObj.name}</T></span>
                 </div>
                 <div className="flex justify-between gap-2">
-                  <span>Arayüz Seviyesi:</span>
-                  <span className="text-foreground text-right">{selectedDesignObj.name}</span>
+                  <span><T>{"Arayüz Seviyesi:"}</T></span>
+                  <span className="text-foreground text-right"><T>{selectedDesignObj.name}</T></span>
                 </div>
                 <div className="flex justify-between gap-2">
-                  <span>Geliştirme Hızı:</span>
-                  <span className="text-foreground text-right">{selectedSpeedObj.name}</span>
+                  <span><T>{"Geliştirme Hızı:"}</T></span>
+                  <span className="text-foreground text-right"><T>{selectedSpeedObj.name}</T></span>
                 </div>
               </div>
             </div>

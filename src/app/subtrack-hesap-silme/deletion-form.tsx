@@ -1,5 +1,6 @@
 "use client"
 
+import { T, LocalizedElement } from "@/components/i18n/text"
 import { useState, type FormEvent } from "react"
 import { CheckCircle2, Loader2, Mail, ShieldCheck, Trash2 } from "lucide-react"
 
@@ -66,11 +67,9 @@ export function DeletionForm() {
         role="status"
       >
         <CheckCircle2 className="mx-auto mb-4 h-12 w-12 text-emerald-400" />
-        <h2 className="mb-2 text-2xl font-bold">Silme işlemi tamamlandı</h2>
+        <h2 className="mb-2 text-2xl font-bold"><T>{"Silme işlemi tamamlandı"}</T></h2>
         <p className="text-muted-foreground">
-          SubTrack hesabınız ve hesabınızla ilişkili kullanıcı verileri kalıcı
-          olarak silindi.
-        </p>
+          <T>{"SubTrack hesabınız ve hesabınızla ilişkili kullanıcı verileri kalıcı olarak silindi."}</T></p>
       </div>
     )
   }
@@ -87,10 +86,9 @@ export function DeletionForm() {
         </div>
         <div>
           <p className="text-sm font-semibold text-primary">
-            Adım {step === "email" ? "1" : "2"} / 2
-          </p>
+            <T>{"Adım"}</T><T>{step === "email" ? "1" : "2"}</T> <T>{"/ 2"}</T></p>
           <h2 className="text-xl font-bold">
-            {step === "email" ? "E-posta doğrulaması" : "Kodu doğrulayın"}
+            <T>{step === "email" ? "E-posta doğrulaması" : "Kodu doğrulayın"}</T>
           </h2>
         </div>
       </div>
@@ -99,9 +97,8 @@ export function DeletionForm() {
         <form onSubmit={handleEmailSubmit} className="space-y-5">
           <div>
             <label htmlFor="subtrack-email" className="mb-2 block font-medium">
-              SubTrack hesabınızdaki e-posta adresi
-            </label>
-            <input
+              <T>{"SubTrack hesabınızdaki e-posta adresi"}</T></label>
+            <LocalizedElement as="input"
               id="subtrack-email"
               name="email"
               type="email"
@@ -116,7 +113,7 @@ export function DeletionForm() {
           </div>
 
           <div className="hidden" aria-hidden="true">
-            <label htmlFor="website">Web sitesi</label>
+            <label htmlFor="website"><T>{"Web sitesi"}</T></label>
             <input
               id="website"
               name="website"
@@ -133,21 +130,17 @@ export function DeletionForm() {
             className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 font-semibold text-background transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Mail className="h-5 w-5" />}
-            Doğrulama kodu gönder
-          </button>
+            <T>{"Doğrulama kodu gönder"}</T></button>
         </form>
       ) : (
         <form onSubmit={handleDeleteSubmit} className="space-y-5">
           <p className="text-sm text-muted-foreground">
-            Kod <strong className="text-foreground">{email}</strong> adresine
-            gönderildi. E-postadaki doğrulama kodunu aşağıya girin.
-          </p>
+            <T>{"Kod"}</T><strong className="text-foreground"><T>{email}</T></strong> <T>{"adresine gönderildi. E-postadaki doğrulama kodunu aşağıya girin."}</T></p>
 
           <div>
             <label htmlFor="subtrack-code" className="mb-2 block font-medium">
-              Doğrulama kodu
-            </label>
-            <input
+              <T>{"Doğrulama kodu"}</T></label>
+            <LocalizedElement as="input"
               id="subtrack-code"
               name="code"
               type="text"
@@ -165,9 +158,7 @@ export function DeletionForm() {
           </div>
 
           <div className="rounded-xl border border-red-400/30 bg-red-400/10 p-4 text-sm text-muted-foreground">
-            Bu işlem geri alınamaz. Doğrulama tamamlandığında hesabınız ve
-            ilişkili kullanıcı verileriniz kalıcı olarak silinir.
-          </div>
+            <T>{"Bu işlem geri alınamaz. Doğrulama tamamlandığında hesabınız ve ilişkili kullanıcı verileriniz kalıcı olarak silinir."}</T></div>
 
           <button
             type="submit"
@@ -175,8 +166,7 @@ export function DeletionForm() {
             className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-red-500 px-5 py-3 font-semibold text-white transition hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Trash2 className="h-5 w-5" />}
-            Hesabımı ve verilerimi kalıcı olarak sil
-          </button>
+            <T>{"Hesabımı ve verilerimi kalıcı olarak sil"}</T></button>
 
           <div className="flex flex-col gap-3 sm:flex-row">
             <button
@@ -185,8 +175,7 @@ export function DeletionForm() {
               onClick={() => void submit("send-code")}
               className="flex-1 rounded-xl border border-foreground/15 px-4 py-3 font-medium transition hover:bg-foreground/5 disabled:opacity-60"
             >
-              Kodu yeniden gönder
-            </button>
+              <T>{"Kodu yeniden gönder"}</T></button>
             <button
               type="button"
               disabled={loading}
@@ -197,8 +186,7 @@ export function DeletionForm() {
               }}
               className="flex-1 rounded-xl border border-foreground/15 px-4 py-3 font-medium transition hover:bg-foreground/5 disabled:opacity-60"
             >
-              E-postayı değiştir
-            </button>
+              <T>{"E-postayı değiştir"}</T></button>
           </div>
         </form>
       )}
@@ -212,7 +200,7 @@ export function DeletionForm() {
           }`}
           role={notice.type === "error" ? "alert" : "status"}
         >
-          {notice.message}
+          <T>{notice.message}</T>
         </p>
       )}
     </div>

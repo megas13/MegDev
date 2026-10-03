@@ -1,9 +1,12 @@
+import { localizeMetadata } from "@/lib/i18n/server"
+import { T } from "@/components/i18n/text"
+import { PageIntro } from "@/components/ui/page-intro"
 import type { Metadata } from "next"
 import { Shield, Database, Eye, Users, Cookie, Scale, Mail, Lock, Trash2, FileText, ChevronRight } from "lucide-react"
-import Link from "next/link"
+import Link from "@/components/i18n/link"
 
-export const metadata: Metadata = {
-  title: "KVKK & Gizlilik Politikası | Meg Dev",
+const sourceMetadata: Metadata = {
+  title: "KVKK & Gizlilik Politikası",
   description:
     "Meg Dev olarak kişisel verilerinizin güvenliğine önem veriyoruz. 6698 sayılı KVKK kapsamında veri işleme politikamız.",
 }
@@ -16,15 +19,12 @@ const sections = [
     content: (
       <div className="space-y-3">
         <p>
-          6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca,
-          kişisel verileriniz; veri sorumlusu sıfatıyla Meg Dev ("Şirket")
-          tarafından aşağıda açıklanan kapsamda işlenebilecektir.
-        </p>
+          <T>{"6698 sayılı Kişisel Verilerin Korunması Kanunu (\"KVKK\") uyarınca, kişisel verileriniz; veri sorumlusu sıfatıyla Meg Dev (\"Şirket\") tarafından aşağıda açıklanan kapsamda işlenebilecektir."}</T></p>
         <div className="bg-background/50 border border-foreground/10 rounded-xl p-5 space-y-2 text-sm">
-          <p><strong className="text-foreground">Şirket:</strong> Meg Dev</p>
-          <p><strong className="text-foreground">Adres:</strong> Demokrasi Mah 2233. Sk Melikgazi/KAYSERİ</p>
-          <p><strong className="text-foreground">E-posta:</strong> destek@megdev.info</p>
-          <p><strong className="text-foreground">Telefon:</strong> +90 537 983 04 14</p>
+          <p><strong className="text-foreground"><T>{"Şirket:"}</T></strong> <T>{" Meg Dev"}</T></p>
+          <p><strong className="text-foreground"><T>{"Adres:"}</T></strong> <T>{" Demokrasi Mah 2233. Sk Melikgazi/KAYSERİ"}</T></p>
+          <p><strong className="text-foreground"><T>{"E-posta:"}</T></strong> <T>{" destek@megdev.info"}</T></p>
+          <p><strong className="text-foreground"><T>{"Telefon:"}</T></strong> <T>{" +90 537 983 04 14"}</T></p>
         </div>
       </div>
     ),
@@ -36,9 +36,7 @@ const sections = [
     content: (
       <div className="space-y-3">
         <p>
-          Hizmetlerimizden yararlanmanız sırasında aşağıdaki kişisel verileriniz
-          toplanabilmektedir:
-        </p>
+          <T>{"Hizmetlerimizden yararlanmanız sırasında aşağıdaki kişisel verileriniz toplanabilmektedir:"}</T></p>
         <ul className="space-y-2">
           {[
             ["Kimlik Bilgileri", "Ad, soyad"],
@@ -50,8 +48,8 @@ const sections = [
             <li key={title} className="flex items-start gap-3">
               <ChevronRight className="w-4 h-4 text-primary mt-0.5 shrink-0" />
               <div>
-                <strong className="text-foreground">{title}:</strong>{" "}
-                <span className="text-muted-foreground">{desc}</span>
+                <strong className="text-foreground"><T>{title}</T><T>{":"}</T></strong><T>{" "}</T>
+                <span className="text-muted-foreground"><T>{desc}</T></span>
               </div>
             </li>
           ))}
@@ -65,7 +63,7 @@ const sections = [
     icon: Eye,
     content: (
       <div className="space-y-3">
-        <p>Kişisel verileriniz KVKK'nın 5. ve 6. maddelerinde belirtilen hukuki sebepler kapsamında şu amaçlarla işlenmektedir:</p>
+        <p><T>{"Kişisel verileriniz KVKK'nın 5. ve 6. maddelerinde belirtilen hukuki sebepler kapsamında şu amaçlarla işlenmektedir:"}</T></p>
         <ul className="space-y-2">
           {[
             "Hizmetlerimizin sunulması, yürütülmesi ve geliştirilmesi (sözleşmenin ifası)",
@@ -77,7 +75,7 @@ const sections = [
           ].map((item) => (
             <li key={item} className="flex items-start gap-3">
               <ChevronRight className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-              <span className="text-muted-foreground">{item}</span>
+              <span className="text-muted-foreground"><T>{item}</T></span>
             </li>
           ))}
         </ul>
@@ -91,9 +89,7 @@ const sections = [
     content: (
       <div className="space-y-3">
         <p>
-          Kişisel verileriniz, KVKK'nın 8. ve 9. maddelerinde belirtilen şartlar
-          çerçevesinde aşağıdaki alıcı gruplarına aktarılabilir:
-        </p>
+          <T>{"Kişisel verileriniz, KVKK'nın 8. ve 9. maddelerinde belirtilen şartlar çerçevesinde aşağıdaki alıcı gruplarına aktarılabilir:"}</T></p>
         <div className="grid sm:grid-cols-2 gap-3">
           {[
             { name: "Nhost (Almanya)", desc: "Bulut veritabanı altyapısı" },
@@ -102,15 +98,13 @@ const sections = [
             { name: "Yetkili Kamu Kurumları", desc: "Hukuki yükümlülükler gereği" },
           ].map((item) => (
             <div key={item.name} className="bg-background/50 border border-foreground/10 rounded-xl p-4">
-              <p className="font-semibold text-sm text-foreground">{item.name}</p>
-              <p className="text-xs text-muted-foreground mt-1">{item.desc}</p>
+              <p className="font-semibold text-sm text-foreground"><T>{item.name}</T></p>
+              <p className="text-xs text-muted-foreground mt-1"><T>{item.desc}</T></p>
             </div>
           ))}
         </div>
         <p className="text-sm text-muted-foreground">
-          Yurt dışına aktarımda, verilerin aktarıldığı ülkelerde yeterli korumanın
-          bulunmaması halinde KVKK'nın öngördüğü güvenceler sağlanmaktadır.
-        </p>
+          <T>{"Yurt dışına aktarımda, verilerin aktarıldığı ülkelerde yeterli korumanın bulunmaması halinde KVKK'nın öngördüğü güvenceler sağlanmaktadır."}</T></p>
       </div>
     ),
   },
@@ -121,24 +115,20 @@ const sections = [
     content: (
       <div className="space-y-3">
         <p>
-          Web sitemizde yalnızca zorunlu teknik çerezler kullanılmaktadır.
-          Üçüncü taraf reklam veya izleme çerezleri kullanılmamaktadır.
-        </p>
+          <T>{"Web sitemizde yalnızca zorunlu teknik çerezler kullanılmaktadır. Üçüncü taraf reklam veya izleme çerezleri kullanılmamaktadır."}</T></p>
         <div className="grid sm:grid-cols-2 gap-3">
           {[
             { name: "Oturum Çerezleri", desc: "Site içi gezinmeyi sağlar, oturum sonunda silinir" },
             { name: "Performans Çerezleri", desc: "Site hızı ve kullanım istatistikleri (Vercel Analytics)" },
           ].map((item) => (
             <div key={item.name} className="bg-background/50 border border-foreground/10 rounded-xl p-4">
-              <p className="font-semibold text-sm text-foreground">{item.name}</p>
-              <p className="text-xs text-muted-foreground mt-1">{item.desc}</p>
+              <p className="font-semibold text-sm text-foreground"><T>{item.name}</T></p>
+              <p className="text-xs text-muted-foreground mt-1"><T>{item.desc}</T></p>
             </div>
           ))}
         </div>
         <p className="text-sm text-muted-foreground">
-          Tarayıcı ayarlarından çerez tercihlerinizi yönetebilir, çerezleri
-          silebilir veya engelleyebilirsiniz.
-        </p>
+          <T>{"Tarayıcı ayarlarından çerez tercihlerinizi yönetebilir, çerezleri silebilir veya engelleyebilirsiniz."}</T></p>
       </div>
     ),
   },
@@ -149,8 +139,7 @@ const sections = [
     content: (
       <div className="space-y-3">
         <p>
-          KVKK'nın 11. maddesi uyarınca aşağıdaki haklara sahipsiniz:
-        </p>
+          <T>{"KVKK'nın 11. maddesi uyarınca aşağıdaki haklara sahipsiniz:"}</T></p>
         <ul className="space-y-2">
           {[
             "Kişisel verilerinizin işlenip işlenmediğini öğrenme",
@@ -165,7 +154,7 @@ const sections = [
           ].map((item) => (
             <li key={item} className="flex items-start gap-3">
               <ChevronRight className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-              <span className="text-muted-foreground">{item}</span>
+              <span className="text-muted-foreground"><T>{item}</T></span>
             </li>
           ))}
         </ul>
@@ -179,18 +168,13 @@ const sections = [
     content: (
       <div className="space-y-3">
         <p>
-          Yukarıda belirtilen haklarınızı kullanmak için başvurunuzu
-          aşağıdaki kanallardan iletebilirsiniz:
-        </p>
+          <T>{"Yukarıda belirtilen haklarınızı kullanmak için başvurunuzu aşağıdaki kanallardan iletebilirsiniz:"}</T></p>
         <div className="bg-background/50 border border-foreground/10 rounded-xl p-5 space-y-2 text-sm">
-          <p><strong className="text-foreground">E-posta:</strong> destek@megdev.info</p>
-          <p><strong className="text-foreground">Adres:</strong> Demokrasi Mah 2233. Sk Melikgazi/KAYSERİ</p>
+          <p><strong className="text-foreground"><T>{"E-posta:"}</T></strong> <T>{" destek@megdev.info"}</T></p>
+          <p><strong className="text-foreground"><T>{"Adres:"}</T></strong> <T>{" Demokrasi Mah 2233. Sk Melikgazi/KAYSERİ"}</T></p>
         </div>
         <p className="text-sm text-muted-foreground">
-          Başvurunuz, talebin niteliğine göre en geç 30 gün içinde ücretsiz
-          olarak sonuçlandırılacaktır. Kimliğinizi doğrulamak amacıyla ek bilgi
-          talep edilebilir.
-        </p>
+          <T>{"Başvurunuz, talebin niteliğine göre en geç 30 gün içinde ücretsiz olarak sonuçlandırılacaktır. Kimliğinizi doğrulamak amacıyla ek bilgi talep edilebilir."}</T></p>
       </div>
     ),
   },
@@ -200,7 +184,7 @@ const sections = [
     icon: Lock,
     content: (
       <div className="space-y-3">
-        <p>Kişisel verilerinizin güvenliği için aşağıdaki önlemler alınmaktadır:</p>
+        <p><T>{"Kişisel verilerinizin güvenliği için aşağıdaki önlemler alınmaktadır:"}</T></p>
         <ul className="space-y-2">
           {[
             "SSL/TLS şifreleme ile güvenli veri iletimi",
@@ -211,7 +195,7 @@ const sections = [
           ].map((item) => (
             <li key={item} className="flex items-start gap-3">
               <ChevronRight className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-              <span className="text-muted-foreground">{item}</span>
+              <span className="text-muted-foreground"><T>{item}</T></span>
             </li>
           ))}
         </ul>
@@ -225,9 +209,7 @@ const sections = [
     content: (
       <div className="space-y-3">
         <p>
-          Kişisel verileriniz, işlenme amacının gerektirdiği süre boyunca ve
-          yasal yükümlülükler çerçevesinde saklanır:
-        </p>
+          <T>{"Kişisel verileriniz, işlenme amacının gerektirdiği süre boyunca ve yasal yükümlülükler çerçevesinde saklanır:"}</T></p>
         <div className="grid sm:grid-cols-2 gap-3">
           {[
             { name: "İletişim Formu Mesajları", desc: "1 yıl" },
@@ -236,15 +218,13 @@ const sections = [
             { name: "Log Kayıtları", desc: "1 yıl" },
           ].map((item) => (
             <div key={item.name} className="bg-background/50 border border-foreground/10 rounded-xl p-4 flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">{item.name}</span>
-              <span className="text-sm font-semibold text-primary">{item.desc}</span>
+              <span className="text-sm text-muted-foreground"><T>{item.name}</T></span>
+              <span className="text-sm font-semibold text-primary"><T>{item.desc}</T></span>
             </div>
           ))}
         </div>
         <p className="text-sm text-muted-foreground">
-          Süre sonunda verileriniz güvenli bir şekilde silinir, yok edilir veya
-          anonim hale getirilir.
-        </p>
+          <T>{"Süre sonunda verileriniz güvenli bir şekilde silinir, yok edilir veya anonim hale getirilir."}</T></p>
       </div>
     ),
   },
@@ -255,12 +235,9 @@ const sections = [
     content: (
       <div className="space-y-3">
         <p>
-          Bu gizlilik politikası gerektiğinde güncellenebilir. Güncellemeler
-          web sitemizde yayınlandığı tarihte yürürlüğe girer. Önemli
-          değişikliklerde e-posta yoluyla bilgilendirme yapılabilir.
-        </p>
+          <T>{"Bu gizlilik politikası gerektiğinde güncellenebilir. Güncellemeler web sitemizde yayınlandığı tarihte yürürlüğe girer. Önemli değişikliklerde e-posta yoluyla bilgilendirme yapılabilir."}</T></p>
         <div className="bg-background/50 border border-foreground/10 rounded-xl p-4 text-sm">
-          <p><strong className="text-foreground">Son güncelleme:</strong> Haziran 2026</p>
+          <p><strong className="text-foreground"><T>{"Son güncelleme:"}</T></strong> <T>{" Haziran 2026"}</T></p>
         </div>
       </div>
     ),
@@ -269,62 +246,43 @@ const sections = [
 
 export default function KVVKPage() {
   return (
-    <div className="pt-20">
-      <div className="relative py-20 lg:py-28 overflow-hidden">
-        <div className="absolute inset-0 grid-pattern opacity-30" />
-        <div className="absolute inset-0 bg-gradient-to-b from-accent/10 via-transparent to-transparent" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-accent/20 to-primary/20 flex items-center justify-center">
-            <Shield className="w-8 h-8 text-primary" />
-          </div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
-            <span className="text-gradient">KVKK & Gizlilik Politikası</span>
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında kişisel
-            verilerinizin işlenmesine ilişkin politikamız.
-          </p>
-        </div>
-      </div>
+    <div data-document>
+      <PageIntro eyebrow="GİZLİLİK" title="KVKK ve gizlilik." description="6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında kişisel verilerinizin işlenmesine ilişkin politikamız." />
 
-      <section className="relative py-16 lg:py-24 overflow-hidden">
+      <section className="relative py-16 lg:py-24 bg-background/85 border-t border-foreground/10">
         <div className="absolute inset-0 grid-pattern opacity-15" />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-6">
             {sections.map((section) => {
               const Icon = section.icon
               return (
-                <div key={section.id} id={section.id} className="sharp-panel rounded-2xl p-8">
+                <div key={section.id} id={section.id} className="document-panel scroll-mt-28">
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
                       <Icon className="w-6 h-6 text-primary" />
                     </div>
-                    <h2 className="text-xl font-bold">{section.title}</h2>
+                    <h2 className="text-xl font-bold"><T>{section.title}</T></h2>
                   </div>
-                  {section.content}
+                  <T>{section.content}</T>
                 </div>
               )
             })}
           </div>
 
           <div className="mt-12 noise-panel border border-foreground/10 rounded-2xl p-8 text-center">
-            <h2 className="text-xl font-bold mb-3">Sorularınız mı var?</h2>
+            <h2 className="text-xl font-bold mb-3"><T>{"Sorularınız mı var?"}</T></h2>
             <p className="text-muted-foreground mb-6">
-              KVKK ve kişisel verilerinizin işlenmesi hakkında sorularınız için
-              bizimle iletişime geçebilirsiniz.
-            </p>
+              <T>{"KVKK ve kişisel verilerinizin işlenmesi hakkında sorularınız için bizimle iletişime geçebilirsiniz."}</T></p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="mailto:destek@megdev.info"
                 className="inline-flex items-center gap-2 bg-primary text-background px-6 py-3 rounded-full font-semibold hover:bg-primary-dark transition-colors"
               >
                 <Mail className="w-4 h-4" />
-                destek@megdev.info
-              </a>
+                <T>{"destek@megdev.info"}</T></a>
               <Link href="/contact">
                 <span className="inline-flex items-center gap-2 border border-foreground/20 bg-foreground/5 hover:bg-foreground/10 text-foreground px-6 py-3 rounded-full font-semibold transition-colors cursor-pointer">
-                  İletişim Formu
-                </span>
+                  <T>{"İletişim Formu"}</T></span>
               </Link>
             </div>
           </div>
@@ -333,3 +291,5 @@ export default function KVVKPage() {
     </div>
   )
 }
+
+export async function generateMetadata() { return localizeMetadata(sourceMetadata) }

@@ -1,5 +1,8 @@
 "use client"
 
+
+import { useLanguage } from "@/components/i18n/provider"
+import { T, LocalizedElement } from "@/components/i18n/text"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { cn } from "@/lib/utils"
 import {
@@ -114,8 +117,7 @@ function ImageDropZone({
   return (
     <div className="space-y-3">
       <label className="text-xs font-semibold text-[#817b70] uppercase tracking-wider">
-        Proje Görseli
-      </label>
+        <T>{"Proje Görseli"}</T></label>
 
       {/* Preview or Drop Zone */}
       {value ? (
@@ -136,16 +138,14 @@ function ImageDropZone({
               className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white text-sm px-4 py-2 rounded-xl hover:bg-white/20 transition-all"
             >
               <Upload className="w-4 h-4" />
-              Değiştir
-            </button>
+              <T>{"Değiştir"}</T></button>
             <button
               type="button"
               onClick={() => onChange("")}
               className="flex items-center gap-2 bg-red-500/20 backdrop-blur-sm border border-red-500/30 text-red-400 text-sm px-4 py-2 rounded-xl hover:bg-red-500/30 transition-all"
             >
               <X className="w-4 h-4" />
-              Kaldır
-            </button>
+              <T>{"Kaldır"}</T></button>
           </div>
         </div>
       ) : (
@@ -166,7 +166,7 @@ function ImageDropZone({
               <div className="w-12 h-12 rounded-2xl bg-[#d7ff43]/10 flex items-center justify-center">
                 <Loader2 className="w-6 h-6 text-[#d7ff43] animate-spin" />
               </div>
-              <p className="text-sm text-[#b8afa1]">Yükleniyor...</p>
+              <p className="text-sm text-[#b8afa1]"><T>{"Yükleniyor..."}</T></p>
             </>
           ) : (
             <>
@@ -185,11 +185,10 @@ function ImageDropZone({
               </div>
               <div className="text-center">
                 <p className="text-sm font-medium text-[#f7f3ea]">
-                  {isDragging ? "Bırak!" : "Görsel sürükle ya da tıkla"}
+                  <T>{isDragging ? "Bırak!" : "Görsel sürükle ya da tıkla"}</T>
                 </p>
                 <p className="text-xs text-[#817b70] mt-1">
-                  PNG, JPG, WEBP — max 10MB
-                </p>
+                  <T>{"PNG, JPG, WEBP — max 10MB"}</T></p>
               </div>
             </>
           )}
@@ -201,7 +200,7 @@ function ImageDropZone({
       )}
 
       {/* URL fallback */}
-      <input
+      <LocalizedElement as="input"
         type="url"
         placeholder="ya da görsel URL yapıştır…"
         value={value}
@@ -215,14 +214,13 @@ function ImageDropZone({
       {error && (
         <div className="flex items-center gap-2 text-xs text-red-400 bg-red-400/10 border border-red-400/20 rounded-xl px-3 py-2">
           <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-          {error}
+          <T>{error}</T>
         </div>
       )}
       {success && (
         <div className="flex items-center gap-2 text-xs text-green-400 bg-green-400/10 border border-green-400/20 rounded-xl px-3 py-2">
           <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
-          Görsel başarıyla yüklendi!
-        </div>
+          <T>{"Görsel başarıyla yüklendi!"}</T></div>
       )}
     </div>
   )
@@ -239,9 +237,9 @@ function Field({
   return (
     <div className="space-y-1.5">
       <label className="text-xs font-semibold text-[#817b70] uppercase tracking-wider">
-        {label}
+        <T>{label}</T>
       </label>
-      {children}
+      <T>{children}</T>
     </div>
   )
 }
@@ -251,6 +249,8 @@ const inputCls =
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export default function AdminPortfolio() {
+  const { intlLocale } = useLanguage()
+
   const [items, setItems] = useState<Portfolio[]>([])
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState<Portfolio | null>(null)
@@ -345,18 +345,16 @@ export default function AdminPortfolio() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-black text-[#f7f3ea]">Portföy</h1>
+          <h1 className="text-2xl font-black text-[#f7f3ea]"><T>{"Portföy"}</T></h1>
           <p className="text-sm text-[#817b70] mt-0.5">
-            {items.length} proje
-          </p>
+            <T>{items.length}</T> <T>{"proje"}</T></p>
         </div>
         <button
           onClick={openNew}
           className="flex items-center gap-2 bg-gradient-to-r from-[#d7ff43] to-[#39d0c2] text-[#10100d] px-5 py-2.5 rounded-xl text-sm font-bold transition-all hover:shadow-[0_0_30px_rgba(215,255,67,0.25)] hover:scale-[1.02] active:scale-[0.98]"
         >
           <Plus className="w-4 h-4" />
-          Yeni Proje
-        </button>
+          <T>{"Yeni Proje"}</T></button>
       </div>
 
       {/* Modal */}
@@ -377,10 +375,10 @@ export default function AdminPortfolio() {
                 </div>
                 <div>
                   <h2 className="text-base font-bold text-[#f7f3ea]">
-                    {editing ? "Projeyi Düzenle" : "Yeni Proje Ekle"}
+                    <T>{editing ? "Projeyi Düzenle" : "Yeni Proje Ekle"}</T>
                   </h2>
                   <p className="text-xs text-[#817b70]">
-                    {editing ? `#${editing.id.slice(0, 8)}` : "Portföyüne yeni bir proje ekle"}
+                    <T>{editing ? `#${editing.id.slice(0, 8)}` : "Portföyüne yeni bir proje ekle"}</T>
                   </p>
                 </div>
               </div>
@@ -405,7 +403,7 @@ export default function AdminPortfolio() {
               {/* Title & Slug */}
               <div className="grid grid-cols-2 gap-4">
                 <Field label="Proje Adı *">
-                  <input
+                  <LocalizedElement as="input"
                     placeholder="Örn: E-ticaret Platformu"
                     value={form.title}
                     onChange={(e) => handleTitleChange(e.target.value)}
@@ -413,7 +411,7 @@ export default function AdminPortfolio() {
                   />
                 </Field>
                 <Field label="Slug">
-                  <input
+                  <LocalizedElement as="input"
                     placeholder="e-ticaret-platformu"
                     value={form.slug}
                     onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))}
@@ -424,7 +422,7 @@ export default function AdminPortfolio() {
 
               {/* Description */}
               <Field label="Açıklama *">
-                <textarea
+                <LocalizedElement as="textarea"
                   placeholder="Proje hakkında detaylı açıklama yazın…"
                   value={form.description}
                   onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
@@ -451,12 +449,12 @@ export default function AdminPortfolio() {
                       )}
                     >
                       <Tag className="w-3 h-3" />
-                      {cat}
+                      <T>{cat}</T>
                     </button>
                   ))}
                 </div>
                 {/* Custom category */}
-                <input
+                <LocalizedElement as="input"
                   placeholder="ya da özel kategori yaz…"
                   value={CATEGORIES.includes(form.category) ? "" : form.category}
                   onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
@@ -466,7 +464,7 @@ export default function AdminPortfolio() {
 
               {/* Technologies */}
               <Field label="Teknolojiler">
-                <input
+                <LocalizedElement as="input"
                   placeholder="React, Node.js, PostgreSQL (virgülle ayır)"
                   value={form.technologies}
                   onChange={(e) => setForm((f) => ({ ...f, technologies: e.target.value }))}
@@ -483,7 +481,7 @@ export default function AdminPortfolio() {
                           key={i}
                           className="px-2.5 py-1 rounded-lg bg-[#39d0c2]/10 border border-[#39d0c2]/25 text-[#39d0c2] text-xs font-medium"
                         >
-                          {tech}
+                          <T>{tech}</T>
                         </span>
                       ))}
                   </div>
@@ -494,7 +492,7 @@ export default function AdminPortfolio() {
               <Field label="Proje URL'si">
                 <div className="relative">
                   <ExternalLink className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#4a4540]" />
-                  <input
+                  <LocalizedElement as="input"
                     type="url"
                     placeholder="https://proje.com"
                     value={form.project_url}
@@ -524,9 +522,8 @@ export default function AdminPortfolio() {
                   />
                   <div className="text-left">
                     <p className={cn("text-sm font-semibold", form.featured ? "text-[#d7ff43]" : "text-[#f7f3ea]")}>
-                      Öne Çıkan Proje
-                    </p>
-                    <p className="text-xs text-[#817b70]">Ana sayfada göster</p>
+                      <T>{"Öne Çıkan Proje"}</T></p>
+                    <p className="text-xs text-[#817b70]"><T>{"Ana sayfada göster"}</T></p>
                   </div>
                 </div>
                 <div
@@ -550,21 +547,19 @@ export default function AdminPortfolio() {
                   onClick={closeForm}
                   className="flex-1 rounded-xl border border-white/10 bg-white/5 text-[#b8afa1] text-sm font-semibold py-3.5 hover:bg-white/8 hover:border-white/20 transition-all"
                 >
-                  İptal
-                </button>
+                  <T>{"İptal"}</T></button>
                 <button
                   onClick={save}
                   disabled={saving || !form.title || !form.description}
                   className="flex-[2] rounded-xl bg-gradient-to-r from-[#d7ff43] to-[#39d0c2] text-[#10100d] font-bold py-3.5 text-sm transition-all hover:shadow-[0_0_30px_rgba(215,255,67,0.2)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  {saving ? (
+                  <T>{saving ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      Kaydediliyor…
-                    </>
+                      <T>{"Kaydediliyor…"}</T></>
                   ) : (
                     editing ? "Güncelle" : "Projeyi Ekle"
-                  )}
+                  )}</T>
                 </button>
               </div>
             </div>
@@ -585,10 +580,9 @@ export default function AdminPortfolio() {
           <div className="w-16 h-16 rounded-2xl bg-white/5 group-hover:bg-white/8 flex items-center justify-center mx-auto mb-4 transition-all">
             <Layers className="w-8 h-8 text-[#817b70]" />
           </div>
-          <p className="text-[#b8afa1] font-medium">Henüz proje yok</p>
+          <p className="text-[#b8afa1] font-medium"><T>{"Henüz proje yok"}</T></p>
           <p className="text-sm text-[#817b70] mt-1">
-            Tıkla veya + Yeni Proje butonuna bas
-          </p>
+            <T>{"Tıkla veya + Yeni Proje butonuna bas"}</T></p>
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -619,8 +613,7 @@ export default function AdminPortfolio() {
                     className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm border border-white/20 text-white text-xs px-3 py-1.5 rounded-lg hover:bg-white/20 transition-all"
                   >
                     <Pencil className="w-3.5 h-3.5" />
-                    Düzenle
-                  </button>
+                    <T>{"Düzenle"}</T></button>
                   <button
                     onClick={() => remove(item.id)}
                     disabled={deleteId === item.id}
@@ -631,15 +624,13 @@ export default function AdminPortfolio() {
                     ) : (
                       <Trash2 className="w-3.5 h-3.5" />
                     )}
-                    Sil
-                  </button>
+                    <T>{"Sil"}</T></button>
                 </div>
                 {/* Featured badge */}
                 {item.featured && (
                   <div className="absolute top-2.5 left-2.5 flex items-center gap-1 bg-[#d7ff43]/90 text-[#10100d] text-[10px] font-black px-2 py-0.5 rounded-lg">
                     <Star className="w-2.5 h-2.5 fill-[#10100d]" />
-                    ÖNE ÇIKAN
-                  </div>
+                    <T>{"ÖNE ÇIKAN"}</T></div>
                 )}
               </div>
 
@@ -647,7 +638,7 @@ export default function AdminPortfolio() {
               <div className="p-4">
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <p className="text-sm font-bold text-[#f7f3ea] leading-tight line-clamp-1">
-                    {item.title}
+                    <T>{item.title}</T>
                   </p>
                   {item.project_url && (
                     <a
@@ -661,17 +652,17 @@ export default function AdminPortfolio() {
                   )}
                 </div>
                 <p className="text-xs text-[#817b70] line-clamp-2 mb-3">
-                  {item.description}
+                  <T>{item.description}</T>
                 </p>
 
                 <div className="flex items-center justify-between">
                   {item.category && (
                     <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-[#39d0c2]/10 text-[#39d0c2] border border-[#39d0c2]/20">
-                      {item.category}
+                      <T>{item.category}</T>
                     </span>
                   )}
                   <span className="text-[10px] text-[#4a4540] ml-auto">
-                    {new Date(item.created_at).toLocaleDateString("tr-TR")}
+                    <T>{new Date(item.created_at).toLocaleDateString(intlLocale)}</T>
                   </span>
                 </div>
 
@@ -682,12 +673,12 @@ export default function AdminPortfolio() {
                         key={i}
                         className="text-[10px] px-2 py-0.5 rounded-md bg-white/5 border border-white/8 text-[#817b70]"
                       >
-                        {tech}
+                        <T>{tech}</T>
                       </span>
                     ))}
                     {item.technologies.length > 3 && (
                       <span className="text-[10px] px-2 py-0.5 rounded-md bg-white/5 border border-white/8 text-[#4a4540]">
-                        +{item.technologies.length - 3}
+                        <T>{"+"}</T><T>{item.technologies.length - 3}</T>
                       </span>
                     )}
                   </div>

@@ -1,75 +1,39 @@
 "use client"
 
+import { T, LocalizedElement } from "@/components/i18n/text"
+import { useLanguage } from "@/components/i18n/provider"
 import { useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { ChevronDown, Search } from "lucide-react"
-import { SectionHeading } from "@/components/ui/section-heading"
 import { faqs } from "@/constants"
+import styles from "./public-experience.module.css"
 
 export function FAQSection() {
+  const { t, intlLocale } = useLanguage()
   const [openId, setOpenId] = useState<number | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
-
-  const filtered = faqs.filter(
-    (faq) =>
-      faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      faq.answer.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  const query = searchQuery.toLocaleLowerCase(intlLocale)
+  const filtered = faqs.filter((faq) => t(faq.question).toLocaleLowerCase(intlLocale).includes(query) || t(faq.answer).toLocaleLowerCase(intlLocale).includes(query))
 
   return (
-    <section className="relative py-24 lg:py-32">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          title="Sık Sorulan Sorular"
-          subtitle="Projeler ve çalışma sürecimiz hakkında en çok merak edilen başlıklar."
-        />
-
-        <div className="relative mb-8">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-          <input
-            type="text"
-            placeholder="Sorularınızı arayın..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-[8px] border border-foreground/10 bg-card py-3 pl-12 pr-4 text-foreground placeholder:text-muted-foreground transition-colors focus:outline-none focus:border-primary/70"
-          />
-        </div>
-
-        <div className="space-y-2">
-          {filtered.map((faq) => (
-            <motion.div
-              key={faq.id}
-              layout
-              className="overflow-hidden border border-foreground/10 bg-card"
-            >
-              <button
-                onClick={() => setOpenId(openId === faq.id ? null : faq.id)}
-                className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-card-hover"
-              >
-                <span className="font-bold pr-4">{faq.question}</span>
-                <ChevronDown
-                  className={`w-5 h-5 text-muted-foreground shrink-0 transition-transform duration-200 ${
-                    openId === faq.id ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-              <AnimatePresence>
-                {openId === faq.id && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="overflow-hidden"
-                  >
-                    <p className="px-5 pb-5 text-sm text-muted-foreground leading-relaxed">
-                      {faq.answer}
-                    </p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          ))}
+    <section className={styles.section}>
+      <div className={`${styles.container} ${styles.faqGrid}`}>
+        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className={styles.heading}>
+          <p className={styles.eyebrow}><T>{"Merak edilenler / SSS"}</T></p>
+          <h2><T>{"Aklınızdaki sorular."}</T></h2>
+          <p><T>{"Projeler ve çalışma sürecimiz hakkında en çok merak edilen başlıklar."}</T></p>
+        </motion.div>
+        <div>
+          <div className={styles.search}><Search aria-hidden="true" /><LocalizedElement as="input" aria-label="Sık sorulan sorularda ara" type="search" placeholder="Sorularınızı arayın..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className={styles.input} /></div>
+          <div>
+            {filtered.map((faq) => (
+              <motion.div key={faq.id} layout className={styles.faqItem}>
+                <button onClick={() => setOpenId(openId === faq.id ? null : faq.id)} className={styles.faqQuestion} aria-expanded={openId === faq.id} aria-controls={`faq-answer-${faq.id}`}><span><T>{faq.question}</T></span><ChevronDown className={`transition-transform ${openId === faq.id ? "rotate-180" : ""}`} aria-hidden="true" /></button>
+                <div id={`faq-answer-${faq.id}`}><AnimatePresence>{openId === faq.id && <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: .25 }} className="overflow-hidden"><p className={styles.faqAnswer}><T>{faq.answer}</T></p></motion.div>}</AnimatePresence></div>
+              </motion.div>
+            ))}
+            {filtered.length === 0 && <p className={styles.empty}><T>{"Bu arama için bir sonuç bulunamadı."}</T></p>}
+          </div>
         </div>
       </div>
     </section>

@@ -1,7 +1,8 @@
+import { localizeMetadata } from "@/lib/i18n/server"
 import type { Metadata } from "next"
 import { NdaPageClient } from "./nda-page-client"
 
-export const metadata: Metadata = {
+const sourceMetadata: Metadata = {
   title: "Gizlilik Sözleşmesi | Meg Dev",
   description: "Meg Dev proje gizlilik sözleşmesi güvenli kabul sayfası.",
   robots: { index: false, follow: false },
@@ -11,3 +12,5 @@ export default async function NdaPage({ params }: { params: Promise<{ token: str
   const { token } = await params
   return <NdaPageClient token={token} />
 }
+
+export async function generateMetadata() { return localizeMetadata(sourceMetadata) }

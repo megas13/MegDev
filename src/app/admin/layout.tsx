@@ -1,7 +1,11 @@
 "use client"
 
+import { basePath } from "@/lib/i18n/config"
+
+
+import { T, LocalizedElement } from "@/components/i18n/text"
 import { useState } from "react"
-import Link from "next/link"
+import Link from "@/components/i18n/link"
 import { usePathname } from "next/navigation"
 import { AuthProvider, useAuth } from "@/components/admin/auth-provider"
 import { cn } from "@/lib/utils"
@@ -21,7 +25,7 @@ const navItems = [
 
 function AdminShell({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading, signIn, signOut } = useAuth()
-  const pathname = usePathname()
+  const pathname = basePath(usePathname())
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [loggingIn, setLoggingIn] = useState(false)
@@ -43,9 +47,9 @@ function AdminShell({ children }: { children: React.ReactNode }) {
         <div className="w-full max-w-sm relative z-10">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-black tracking-tight">
-              <span className="bg-gradient-to-r from-[#d7ff43] to-[#39d0c2] bg-clip-text text-transparent">Meg Dev</span>
+              <span className="bg-gradient-to-r from-[#d7ff43] to-[#39d0c2] bg-clip-text text-transparent"><T>{"Meg Dev"}</T></span>
             </h1>
-            <p className="text-sm text-[#b8afa1] mt-2">Admin Paneli</p>
+            <p className="text-sm text-[#b8afa1] mt-2"><T>{"Admin Paneli"}</T></p>
           </div>
           <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-8 shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
             <form
@@ -61,7 +65,7 @@ function AdminShell({ children }: { children: React.ReactNode }) {
               }}
               className="space-y-4"
             >
-              <input
+              <LocalizedElement as="input"
                 type="password"
                 placeholder="Admin Şifresi"
                 value={password}
@@ -69,13 +73,13 @@ function AdminShell({ children }: { children: React.ReactNode }) {
                 required
                 className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-[#f7f3ea] placeholder:text-[#817b70] focus:outline-none focus:border-[#d7ff43] bg-white/[0.03] transition-all"
               />
-              {error && <p className="text-sm text-[#ff6b35]">{error}</p>}
+              {error && <p className="text-sm text-[#ff6b35]"><T>{error}</T></p>}
               <button
                 type="submit"
                 disabled={loggingIn}
                 className="w-full rounded-xl bg-gradient-to-r from-[#d7ff43] to-[#39d0c2] text-[#10100d] font-bold py-3.5 transition-all hover:shadow-[0_0_30px_rgba(215,255,67,0.3)] disabled:opacity-50"
               >
-                {loggingIn ? "Giriş yapılıyor..." : "Giriş Yap"}
+                <T>{loggingIn ? "Giriş yapılıyor..." : "Giriş Yap"}</T>
               </button>
             </form>
           </div>
@@ -97,8 +101,8 @@ function AdminShell({ children }: { children: React.ReactNode }) {
         <div className="flex flex-col h-full p-4">
           <div className="flex items-center justify-between mb-8 px-3 pt-2">
             <div>
-              <span className="text-xl font-black tracking-tight bg-gradient-to-r from-[#d7ff43] to-[#39d0c2] bg-clip-text text-transparent">Meg Dev</span>
-              <p className="text-[10px] uppercase tracking-[0.2em] text-[#817b70]">Admin Panel</p>
+              <span className="text-xl font-black tracking-tight bg-gradient-to-r from-[#d7ff43] to-[#39d0c2] bg-clip-text text-transparent"><T>{"Meg Dev"}</T></span>
+              <p className="text-[10px] uppercase tracking-[0.2em] text-[#817b70]"><T>{"Admin Panel"}</T></p>
             </div>
             <button onClick={() => setSidebarOpen(false)} className="lg:hidden p-2 text-[#b8afa1] hover:text-[#f7f3ea]">
               <X className="w-5 h-5" />
@@ -125,7 +129,7 @@ function AdminShell({ children }: { children: React.ReactNode }) {
                     <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#d7ff43] rounded-full shadow-[0_0_10px_rgba(215,255,67,0.5)]" />
                   )}
                   <Icon className={cn("w-4 h-4", isActive && "text-[#d7ff43]")} />
-                  {item.label}
+                  <T>{item.label}</T>
                 </Link>
               )
             })}
@@ -136,8 +140,7 @@ function AdminShell({ children }: { children: React.ReactNode }) {
             className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-[#ff6b35] hover:bg-[#ff6b35]/10 transition-all mt-auto"
           >
             <LogOut className="w-4 h-4" />
-            Çıkış Yap
-          </button>
+            <T>{"Çıkış Yap"}</T></button>
         </div>
       </aside>
 
@@ -150,18 +153,18 @@ function AdminShell({ children }: { children: React.ReactNode }) {
               </button>
               <div>
                 <h2 className="text-lg font-bold text-[#f7f3ea]">
-                  {navItems.find((i) => i.href === pathname)?.label || "Admin"}
+                  <T>{navItems.find((i) => i.href === pathname)?.label || "Admin"}</T>
                 </h2>
                 <p className="text-xs text-[#817b70]">
-                  {pathname === "/admin" ? "Genel bakış" : `${navItems.find((i) => i.href === pathname)?.label || ""} yönetimi`}
+                  <T>{pathname === "/admin" ? "Genel bakış" : `${navItems.find((i) => i.href === pathname)?.label || ""} yönetimi`}</T>
                 </p>
               </div>
             </div>
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#d7ff43] to-[#39d0c2] flex items-center justify-center text-[10px] font-black text-[#10100d]">M</div>
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#d7ff43] to-[#39d0c2] flex items-center justify-center text-[10px] font-black text-[#10100d]"><T>{"M"}</T></div>
           </div>
         </header>
 
-        <main className="p-4 lg:p-8">{children}</main>
+        <main className="p-4 lg:p-8"><T>{children}</T></main>
       </div>
     </div>
   )
@@ -170,7 +173,7 @@ function AdminShell({ children }: { children: React.ReactNode }) {
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <AuthProvider>
-      <AdminShell>{children}</AdminShell>
+      <AdminShell><T>{children}</T></AdminShell>
     </AuthProvider>
   )
 }

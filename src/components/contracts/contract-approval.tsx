@@ -1,5 +1,6 @@
 "use client"
 
+import { T } from "@/components/i18n/text"
 import { useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
 import { CheckCircle2, FileCheck2, Loader2, Mail, ShieldCheck } from "lucide-react"
@@ -72,36 +73,36 @@ export function ContractApproval({ token, purpose }: { token: string; purpose: "
     if (number && index < 5) inputs.current[index + 1]?.focus()
   }
 
-  if (!contract && !error) return <main className="min-h-screen bg-[#10100d] grid place-items-center"><Loader2 className="h-9 w-9 animate-spin text-[#d7ff43]" /></main>
+  if (!contract && !error) return <main className="min-h-screen bg-background grid place-items-center"><Loader2 className="h-9 w-9 animate-spin text-primary" /></main>
 
   return (
-    <main className="min-h-screen bg-[#10100d] text-[#f7f3ea] px-4 py-10 md:py-16">
+    <main className="min-h-screen bg-background text-foreground px-4 py-10 md:py-16">
       <div className="mx-auto max-w-5xl">
         <motion.header initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#d7ff43]/20 bg-[#d7ff43]/10 px-4 py-2 text-xs font-bold tracking-widest text-[#d7ff43]"><ShieldCheck className="h-4 w-4" /> GÜVENLİ ELEKTRONİK KAYIT</div>
-          <h1 className="max-w-3xl text-3xl font-black md:text-5xl">{isTermination ? "Sözleşme fesih ve ayrılık formu" : "Müşteri bulma ve aracılık sözleşmesi"}</h1>
-          {contract && <p className="mt-3 text-[#b8afa1]">{contract.provider_name} · {contract.representative_name}</p>}
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-xs font-bold tracking-widest text-primary"><ShieldCheck className="h-4 w-4" /> <T>{" GÜVENLİ ELEKTRONİK KAYIT"}</T></div>
+          <h1 className="max-w-3xl text-3xl font-black md:text-5xl"><T>{isTermination ? "Sözleşme fesih ve ayrılık formu" : "Müşteri bulma ve aracılık sözleşmesi"}</T></h1>
+          {contract && <p className="mt-3 text-muted-foreground"><T>{contract.provider_name}</T> <T>{" · "}</T><T>{contract.representative_name}</T></p>}
         </motion.header>
 
-        {error && !contract ? <div className="rounded-2xl border border-red-400/20 bg-red-400/10 p-5 text-red-200">{error}</div> : contract && (
+        {error && !contract ? <div className="rounded-2xl border border-red-400/20 bg-red-400/10 p-5 text-red-200"><T>{error}</T></div> : contract && (
           <div className="grid gap-6 lg:grid-cols-[1fr_350px]">
             <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-3xl border border-white/10 bg-white/[0.035] p-5 md:p-8">
-              <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-5"><div><p className="text-xs uppercase tracking-widest text-[#817b70]">Belge sürümü</p><p className="font-bold">{isTermination ? contract.termination_version : contract.contract_version}</p></div><FileCheck2 className="h-7 w-7 text-[#39d0c2]" /></div>
-              <pre className="whitespace-pre-wrap font-sans text-sm leading-7 text-[#d7d1c6]">{documentText || "Bu sözleşme için henüz fesih formu oluşturulmamış."}</pre>
-              <p className="mt-8 break-all border-t border-white/10 pt-5 font-mono text-[10px] text-[#817b70]">SHA-256: {isTermination ? contract.termination_hash : contract.contract_hash}</p>
+              <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-5"><div><p className="text-xs uppercase tracking-widest text-muted-foreground"><T>{"Belge sürümü"}</T></p><p className="font-bold"><T>{isTermination ? contract.termination_version : contract.contract_version}</T></p></div><FileCheck2 className="h-7 w-7 text-accent" /></div>
+              <pre className="whitespace-pre-wrap font-sans text-sm leading-7 text-[#d7d1c6]"><T>{documentText || "Bu sözleşme için henüz fesih formu oluşturulmamış."}</T></pre>
+              <p className="mt-8 break-all border-t border-white/10 pt-5 font-mono text-[10px] text-muted-foreground"><T>{"SHA-256: "}</T><T>{isTermination ? contract.termination_hash : contract.contract_hash}</T></p>
             </motion.section>
 
             <aside className="lg:sticky lg:top-6 lg:self-start">
               <motion.div initial={{ opacity: 0, x: 18 }} animate={{ opacity: 1, x: 0 }} className="rounded-3xl border border-white/10 bg-[#181814] p-6 shadow-2xl">
-                {completed ? <div className="py-6 text-center"><CheckCircle2 className="mx-auto h-14 w-14 text-[#d7ff43]" /><h2 className="mt-4 text-xl font-black">{isTermination ? "Fesih onaylandı" : "Sözleşme kabul edildi"}</h2><p className="mt-2 text-sm text-[#b8afa1]">Kayıt başarıyla tamamlandı ve değişmez belge özeti saklandı.</p></div> : <>
-                  <Mail className="h-8 w-8 text-[#39d0c2]" /><h2 className="mt-4 text-xl font-black">E-posta ile doğrula</h2><p className="mt-2 text-sm leading-6 text-[#b8afa1]">Kod <strong className="text-[#f7f3ea]">{contract.representative_email}</strong> adresine gönderilecek.</p>
-                  {!sent ? <button disabled={busy || !documentText} onClick={() => action("send_code")} className="mt-6 w-full rounded-xl bg-[#d7ff43] px-4 py-3.5 font-black text-[#10100d] disabled:opacity-50">{busy ? "Gönderiliyor..." : "Doğrulama kodu gönder"}</button> : <>
-                    <div className="mt-6 flex gap-2">{digits.map((digit, index) => <motion.input key={index} ref={(element) => { inputs.current[index] = element }} value={digit} onChange={(event) => updateDigit(index, event.target.value)} onKeyDown={(event) => { if (event.key === "Backspace" && !digit && index > 0) inputs.current[index - 1]?.focus() }} inputMode="numeric" maxLength={1} animate={digit ? { scale: [1, 1.08, 1], borderColor: "#d7ff43" } : {}} className="h-12 min-w-0 flex-1 rounded-xl border border-white/15 bg-white/5 text-center text-xl font-black outline-none focus:border-[#39d0c2]" />)}</div>
-                    <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-xl border border-white/10 p-3 text-sm leading-5 text-[#b8afa1]"><input type="checkbox" checked={accepted} onChange={(event) => setAccepted(event.target.checked)} className="mt-1 accent-[#d7ff43]" /><span>Belgenin tamamını okudum; elektronik kayıt oluşturulmasını ve {isTermination ? "fesih şartlarını" : "sözleşme şartlarını"} açıkça kabul ediyorum.</span></label>
-                    <button disabled={busy || !accepted || digits.some((digit) => !digit)} onClick={() => action("accept")} className="mt-4 w-full rounded-xl bg-gradient-to-r from-[#d7ff43] to-[#39d0c2] px-4 py-3.5 font-black text-[#10100d] disabled:opacity-40">{busy ? "Kaydediliyor..." : isTermination ? "Feshi onayla" : "Sözleşmeyi kabul et"}</button>
-                    <button disabled={busy} onClick={() => action("send_code")} className="mt-3 w-full text-xs text-[#817b70] hover:text-[#f7f3ea]">Kodu yeniden gönder</button>
+                {completed ? <div className="py-6 text-center"><CheckCircle2 className="mx-auto h-14 w-14 text-primary" /><h2 className="mt-4 text-xl font-black"><T>{isTermination ? "Fesih onaylandı" : "Sözleşme kabul edildi"}</T></h2><p className="mt-2 text-sm text-muted-foreground"><T>{"Kayıt başarıyla tamamlandı ve değişmez belge özeti saklandı."}</T></p></div> : <>
+                  <Mail className="h-8 w-8 text-accent" /><h2 className="mt-4 text-xl font-black"><T>{"E-posta ile doğrula"}</T></h2><p className="mt-2 text-sm leading-6 text-muted-foreground"><T>{"Kod "}</T><strong className="text-foreground"><T>{contract.representative_email}</T></strong> <T>{" adresine gönderilecek."}</T></p>
+                  {!sent ? <button disabled={busy || !documentText} onClick={() => action("send_code")} className="mt-6 w-full rounded-xl bg-primary px-4 py-3.5 font-black text-background disabled:opacity-50"><T>{busy ? "Gönderiliyor..." : "Doğrulama kodu gönder"}</T></button> : <>
+                    <div className="mt-6 flex gap-2">{digits.map((digit, index) => <motion.input key={index} ref={(element) => { inputs.current[index] = element }} value={digit} onChange={(event) => updateDigit(index, event.target.value)} onKeyDown={(event) => { if (event.key === "Backspace" && !digit && index > 0) inputs.current[index - 1]?.focus() }} inputMode="numeric" maxLength={1} animate={digit ? { scale: [1, 1.08, 1], borderColor: "#d7ff43" } : {}} className="h-12 min-w-0 flex-1 rounded-xl border border-white/15 bg-white/5 text-center text-xl font-black outline-none focus:border-accent" />)}</div>
+                    <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-xl border border-white/10 p-3 text-sm leading-5 text-muted-foreground"><input type="checkbox" checked={accepted} onChange={(event) => setAccepted(event.target.checked)} className="mt-1 accent-primary" /><span><T>{"Belgenin tamamını okudum; elektronik kayıt oluşturulmasını ve "}</T><T>{isTermination ? "fesih şartlarını" : "sözleşme şartlarını"}</T> <T>{" açıkça kabul ediyorum."}</T></span></label>
+                    <button disabled={busy || !accepted || digits.some((digit) => !digit)} onClick={() => action("accept")} className="mt-4 w-full rounded-xl bg-primary px-4 py-3.5 font-black text-background disabled:opacity-40"><T>{busy ? "Kaydediliyor..." : isTermination ? "Feshi onayla" : "Sözleşmeyi kabul et"}</T></button>
+                    <button disabled={busy} onClick={() => action("send_code")} className="mt-3 w-full text-xs text-muted-foreground hover:text-foreground"><T>{"Kodu yeniden gönder"}</T></button>
                   </>}
-                  {error && <p className="mt-4 rounded-xl bg-red-400/10 p-3 text-sm text-red-200">{error}</p>}
+                  {error && <p className="mt-4 rounded-xl bg-red-400/10 p-3 text-sm text-red-200"><T>{error}</T></p>}
                 </>}
               </motion.div>
             </aside>

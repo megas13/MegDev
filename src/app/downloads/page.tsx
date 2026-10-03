@@ -1,7 +1,10 @@
+import { localizeMetadata } from "@/lib/i18n/server"
+import { T } from "@/components/i18n/text"
 import type { Metadata } from "next"
 import { ArrowRight, ExternalLink, Smartphone } from "lucide-react"
-import Link from "next/link"
+import Link from "@/components/i18n/link"
 import { Button } from "@/components/ui/button"
+import { PageIntro } from "@/components/ui/page-intro"
 
 const downloads = [
   {
@@ -18,32 +21,17 @@ const downloads = [
   },
 ]
 
-export const metadata: Metadata = {
-  title: "İndirmeler | Meg Dev",
+const sourceMetadata: Metadata = {
+  title: "İndirmeler",
   description: "Meg Dev mobil uygulamalarını indirin.",
 }
 
 export default function DownloadsPage() {
   return (
-    <div className="pt-20">
-      <div className="relative py-20 lg:py-28 overflow-hidden">
-        <div className="absolute inset-0 grid-pattern opacity-30" />
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/10 via-transparent to-transparent" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
-            <Smartphone className="w-8 h-8 text-primary" />
-          </div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
-            <span className="text-gradient">İndirmeler</span>
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Yayındaki mobil uygulamaların en güncel APK dosyalarını buradan
-            indirebilirsiniz.
-          </p>
-        </div>
-      </div>
+    <div>
+      <PageIntro eyebrow="UYGULAMALAR" title="Deneyimi yanınıza alın." description="Yayındaki mobil uygulamaların en güncel APK dosyalarını buradan indirebilirsiniz." index="İNDİRMELER" />
 
-      <section className="relative py-16 lg:py-24 overflow-hidden">
+      <section className="relative py-16 lg:py-24 bg-background/85 border-t border-foreground/10">
         <div className="absolute inset-0 grid-pattern opacity-15" />
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid gap-6 md:grid-cols-2">
@@ -52,34 +40,30 @@ export default function DownloadsPage() {
                 key={download.name}
                 href={download.href}
                 download={download.fileName}
-                className="sharp-panel rounded-2xl p-8 flex flex-col items-center text-center hover:border-primary/30 transition-all duration-300 group"
+                className="rounded-3xl border border-foreground/15 bg-card/65 p-8 sm:p-10 flex flex-col items-start hover:border-foreground/40 transition-colors duration-300 group"
               >
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <Smartphone className="w-10 h-10 text-primary" />
+                <div className="w-14 h-14 rounded-full border border-foreground/20 flex items-center justify-center mb-8 group-hover:-translate-y-1 transition-transform duration-300">
+                  <Smartphone className="w-6 h-6 text-primary" />
                 </div>
-                <h2 className="text-2xl font-bold mb-2">{download.name}</h2>
+                <h2 className="text-3xl font-medium mb-3"><T>{download.name}</T></h2>
                 <p className="text-muted-foreground mb-6">
-                  {download.description}
+                  <T>{download.description}</T>
                 </p>
-                <div className="flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-background font-semibold group-hover:bg-primary/90 transition-colors">
+                <div className="mt-auto flex items-center gap-3 px-6 py-3 rounded-full bg-primary text-background text-sm font-semibold group-hover:bg-primary/90 transition-colors">
                   <ExternalLink className="w-5 h-5" />
-                  İndir
-                </div>
+                  <T>{"İndir"}</T></div>
               </a>
             ))}
           </div>
 
           <div className="mt-12 noise-panel border border-foreground/10 rounded-2xl p-8 text-center">
             <h2 className="text-xl font-bold mb-3">
-              İstediğiniz dosyayı bulamadınız mı?
-            </h2>
+              <T>{"İstediğiniz dosyayı bulamadınız mı?"}</T></h2>
             <p className="text-muted-foreground mb-6">
-              İhtiyacınız olan dosya veya kaynak için bizimle iletişime geçin.
-            </p>
+              <T>{"İhtiyacınız olan dosya veya kaynak için bizimle iletişime geçin."}</T></p>
             <Link href="/contact">
               <Button size="lg" className="text-base">
-                İletişime Geçin
-                <ArrowRight className="w-5 h-5" />
+                <T>{"İletişime Geçin"}</T><ArrowRight className="w-5 h-5" />
               </Button>
             </Link>
           </div>
@@ -88,3 +72,5 @@ export default function DownloadsPage() {
     </div>
   )
 }
+
+export async function generateMetadata() { return localizeMetadata(sourceMetadata) }

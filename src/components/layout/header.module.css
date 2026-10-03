@@ -1,0 +1,24 @@
+.header { position: fixed; inset: 0 0 auto; z-index: 50; color: var(--site-foreground); background: #10130eeb; border-bottom: 1px solid var(--site-border); backdrop-filter: blur(16px); }
+.scrolled { background: #10130ef5; }
+.nav { display: flex; align-items: center; justify-content: space-between; gap: 18px; height: 82px; width: min(1180px,calc(100% - 96px)); margin: 0 auto; }
+.brand { display: flex; align-items: center; flex-shrink: 0; font-size: 20px; font-weight: 900; letter-spacing: -.025em; }
+.wordmark { background: linear-gradient(135deg,#f7f3ea 0%,var(--primary) 52%,#39d0c2 100%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+.links { display: flex; align-items: center; gap: 2px; }
+.link { position: relative; padding: 12px 10px; color: var(--site-muted-foreground); font-size: 11px; font-weight: 500; white-space: nowrap; transition: color .2s; }
+.link:hover,.link[aria-current="page"] { color: var(--primary); }
+.link[aria-current="page"]::after { content: ''; position: absolute; bottom: 4px; left: 10px; right: 10px; height: 1px; background: var(--primary); }
+.contact { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 40px; padding: 11px 16px; color: #10130d; background: var(--primary); border-radius: 8px; font-size: 11px; font-weight: 550; white-space: nowrap; transition: background .2s; }
+.contact:hover { background: #e4ff84; }
+.menuToggle { display: none; width: 40px; height: 40px; align-items: center; justify-content: center; border-radius: 8px; border: 1px solid var(--site-border); background: var(--site-card); }
+.mobileMenu { display: none; overflow: hidden; background: var(--site-background); border-top: 1px solid var(--site-border); }
+.mobileInner { padding: 26px 24px 30px; max-height: calc(100svh - 72px); overflow-y: auto; }
+.menuLabel { display: block; margin-bottom: 20px; color: var(--primary); font: 9px ui-monospace,monospace; letter-spacing: .14em; }
+.mobileLink { display: flex; align-items: center; gap: 18px; min-height: 54px; border-bottom: 1px solid var(--site-border); color: var(--site-muted-foreground); font-size: 22px; letter-spacing: -.04em; }
+.mobileLink > svg { margin-left: auto; width: 17px; }
+.mobileLink[aria-current="page"] { color: var(--primary); }
+.menuIndex { font: 10px ui-monospace,monospace; color: #6d7763; }
+.mobileContact { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 15px; margin-top: 24px; background: var(--primary); color: #10130d; border-radius: 8px; font-size: 13px; font-weight: 550; }
+@media(max-width:1200px) { .contact { display: none; } }
+@media(max-width:1000px) { .links { display: none; } .menuToggle { display: flex; } .mobileMenu { display: block; } .nav { height: 72px; width: calc(100% - 40px); gap: 12px; } .nav > :nth-last-child(2) { margin-left: auto; } }
+@media(max-width:480px) { .nav { gap: 10px; } }
+@media(prefers-reduced-motion:reduce) { .link,.contact { transition: none; } }

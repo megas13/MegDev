@@ -1,5 +1,6 @@
 "use client"
 
+import { T } from "@/components/i18n/text"
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
 
 interface AuthContextType {
@@ -48,7 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, isLoading, signIn, signOut }}>
-      {children}
+      <T>{children}</T>
     </AuthContext.Provider>
   )
 }

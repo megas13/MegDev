@@ -1,11 +1,16 @@
 "use client"
 
+
+import { useLanguage } from "@/components/i18n/provider"
+import { T } from "@/components/i18n/text"
 import { useEffect, useState } from "react"
-import Link from "next/link"
+import Link from "@/components/i18n/link"
 import { CheckCircle, Loader, ShieldAlert } from "lucide-react"
 import { NdaAcceptance, type NdaStatus } from "@/components/nda/nda-acceptance"
 
 export function NdaPageClient({ token }: { token: string }) {
+  const { intlLocale } = useLanguage()
+
   const [status, setStatus] = useState<NdaStatus | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -30,10 +35,10 @@ export function NdaPageClient({ token }: { token: string }) {
 
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#10100d] text-[#f7f3ea]">
+      <main className="flex min-h-screen items-center justify-center bg-background text-foreground">
         <div className="text-center">
-          <Loader className="mx-auto mb-3 h-8 w-8 animate-spin text-[#d7ff43]" />
-          <p className="text-sm text-[#817b70]">Gizlilik sözleşmesi hazırlanıyor...</p>
+          <Loader className="mx-auto mb-3 h-8 w-8 animate-spin text-primary" />
+          <p className="text-sm text-muted-foreground"><T>{"Gizlilik sözleşmesi hazırlanıyor..."}</T></p>
         </div>
       </main>
     )
@@ -41,11 +46,11 @@ export function NdaPageClient({ token }: { token: string }) {
 
   if (error || !status) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#10100d] px-4 text-[#f7f3ea]">
+      <main className="flex min-h-screen items-center justify-center bg-background px-4 text-foreground">
         <div className="max-w-md rounded-2xl border border-[#ff6b35]/30 bg-[#ff6b35]/5 p-8 text-center">
           <ShieldAlert className="mx-auto mb-4 h-10 w-10 text-[#ff6b35]" />
-          <h1 className="text-xl font-bold">Sözleşme açılamadı</h1>
-          <p className="mt-2 text-sm leading-6 text-[#b8afa1]">{error}</p>
+          <h1 className="text-xl font-bold"><T>{"Sözleşme açılamadı"}</T></h1>
+          <p className="mt-2 text-sm leading-6 text-muted-foreground"><T>{error}</T></p>
         </div>
       </main>
     )
@@ -53,24 +58,22 @@ export function NdaPageClient({ token }: { token: string }) {
 
   if (status.accepted) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#10100d] px-4 text-[#f7f3ea]">
-        <div className="w-full max-w-lg rounded-2xl border border-[#d7ff43]/25 bg-white/[0.03] p-8 text-center shadow-2xl">
-          <CheckCircle className="mx-auto mb-4 h-12 w-12 text-[#d7ff43]" />
-          <h1 className="text-2xl font-black">Sözleşme kabul edildi</h1>
-          <p className="mt-3 text-sm leading-6 text-[#b8afa1]">
-            {status.project_title} projesine ait gizlilik sözleşmesi başarıyla kaydedildi.
-          </p>
+      <main className="flex min-h-screen items-center justify-center bg-background px-4 text-foreground">
+        <div className="w-full max-w-lg rounded-2xl border border-primary/25 bg-white/[0.03] p-8 text-center shadow-2xl">
+          <CheckCircle className="mx-auto mb-4 h-12 w-12 text-primary" />
+          <h1 className="text-2xl font-black"><T>{"Sözleşme kabul edildi"}</T></h1>
+          <p className="mt-3 text-sm leading-6 text-muted-foreground">
+            <T>{status.project_title}</T> <T>{"projesine ait gizlilik sözleşmesi başarıyla kaydedildi."}</T></p>
           {status.accepted_at && (
-            <p className="mt-2 text-xs text-[#817b70]">
-              Kabul tarihi: {new Date(status.accepted_at).toLocaleString("tr-TR")}
+            <p className="mt-2 text-xs text-muted-foreground">
+              <T>{"Kabul tarihi:"}</T><T>{new Date(status.accepted_at).toLocaleString(intlLocale)}</T>
             </p>
           )}
           <Link
             href={`/track/${token}`}
-            className="mt-6 inline-flex rounded-xl bg-gradient-to-r from-[#d7ff43] to-[#39d0c2] px-6 py-3 font-bold text-[#10100d]"
+            className="mt-6 inline-flex rounded-xl bg-primary px-6 py-3 font-bold text-background"
           >
-            Proje Paneline Devam Et
-          </Link>
+            <T>{"Proje Paneline Devam Et"}</T></Link>
         </div>
       </main>
     )

@@ -1,9 +1,11 @@
 "use client"
 
+import { T, LocalizedElement } from "@/components/i18n/text"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { SectionHeading } from "@/components/ui/section-heading"
-import { ArrowRight, ChevronRight, Sparkles } from "lucide-react"
+import { ArrowUpRight } from "lucide-react"
+import styles from "./marketing-sections.module.css"
 
 interface ToolNode {
   id: string
@@ -88,95 +90,22 @@ export function ToolStackSection() {
   const activeToolObj = tools.find((t) => t.id === selectedTool) || tools[0]
 
   return (
-    <section id="tool-stack" className="relative py-24 lg:py-32 overflow-hidden border-t border-foreground/5">
-      <div className="absolute inset-0 grid-pattern opacity-10" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent/5 rounded-full blur-[160px] pointer-events-none" />
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          title="Süreç ve Entegrasyon Araçlarımız"
-          subtitle="Yazılım geliştirme aşamalarımızı şeffaf, hızlı ve hatasız kılmak için sektör standardı iş araçlarını birbirine bağlıyoruz."
-        />
-
-        {/* Pipeline Diagram */}
-        <div className="mt-16 relative flex flex-col items-center">
-          <div className="flex flex-wrap justify-center items-center gap-6 lg:gap-12 w-full max-w-5xl relative z-10">
-            {tools.map((tool, idx) => {
-              const isSelected = selectedTool === tool.id
-              return (
-                <div key={tool.id} className="flex items-center">
-                  <button
-                    onClick={() => setSelectedTool(tool.id)}
-                    className={`flex flex-col items-center justify-center p-5 border transition-all duration-300 w-24 h-24 sm:w-28 sm:h-28 rounded-full cursor-pointer relative ${
-                      isSelected
-                        ? "border-primary bg-primary/10 shadow-[0_0_30px_rgba(215,255,67,0.15)] scale-110"
-                        : "border-foreground/10 bg-card hover:border-foreground/30 hover:scale-105"
-                    }`}
-                  >
-                    {tool.icon}
-                    <span className="text-[10px] uppercase font-black tracking-wider mt-2.5 block text-muted-foreground group-hover:text-foreground">
-                      {tool.name}
-                    </span>
-                    {isSelected && (
-                      <span className="absolute -top-1 -right-1 flex h-4 w-4">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-4 w-4 bg-primary text-[8px] font-mono text-background font-bold items-center justify-center">✓</span>
-                      </span>
-                    )}
-                  </button>
-
-                  {/* Flow Arrow */}
-                  {idx < tools.length - 1 && (
-                    <div className="hidden lg:flex items-center justify-center text-muted-foreground/30 mx-2 lg:mx-4 animate-pulse">
-                      <ArrowRight className="w-5 h-5" />
-                    </div>
-                  )}
-                </div>
-              )
-            })}
+    <section id="tool-stack" className={styles.section}>
+      <div className={styles.shell}>
+        <SectionHeading align="left" title="Her adımda bağlantıda." subtitle="Yazılım geliştirme aşamalarımızı şeffaf, hızlı ve hatasız kılmak için sektör standardı iş araçlarını birbirine bağlıyoruz." />
+        <div className={styles.toolLayout}>
+          <LocalizedElement as="div" className={styles.toolList} aria-label="Entegrasyon araçları">
+            {tools.map(tool => <button key={tool.id} onClick={() => setSelectedTool(tool.id)} className={styles.tool} aria-pressed={selectedTool === tool.id} aria-controls="tool-details">
+              <span className={styles.toolIcon}><T>{tool.icon}</T></span><span className={styles.toolName}><T>{tool.name}</T></span><ArrowUpRight size={16} />
+            </button>)}
+          </LocalizedElement>
+          <div id="tool-details" aria-live="polite">
+            <AnimatePresence mode="wait">
+              <motion.article key={selectedTool} className={styles.toolDetails} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -15 }} transition={{ duration: .25 }}>
+                <span className={styles.label}><T>{"MEGDEV / ENTEGRASYON"}</T></span><h4><T>{activeToolObj.name}</T></h4><p className={styles.toolRole}><T>{activeToolObj.role}</T></p><p className={styles.toolDescription}><T>{activeToolObj.description}</T></p>
+              </motion.article>
+            </AnimatePresence>
           </div>
-
-          {/* Connected Curved Underline Decorator */}
-          <div className="hidden lg:block w-full max-w-4xl h-0.5 bg-gradient-to-r from-pink-500 via-primary to-sky-500 opacity-20 -mt-14 z-0 rounded-full" />
-        </div>
-
-        {/* Selected Tool Details Display */}
-        <div className="mt-12 max-w-3xl mx-auto">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={selectedTool}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.25 }}
-              className="sharp-panel noise-panel p-6 sm:p-8 rounded-[8px] bg-card/80 border border-foreground/10 relative overflow-hidden"
-            >
-              {/* Corner Badge */}
-              <div className="absolute top-0 right-0 h-16 w-16 overflow-hidden pointer-events-none">
-                <div className="absolute top-3 right-[-32px] w-24 bg-primary text-background font-mono font-bold text-[8px] text-center rotate-45 uppercase tracking-wider py-1">
-                  Entegre
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between border-b border-foreground/10 pb-4 mb-4">
-                <div>
-                  <span className="text-[10px] font-mono text-primary uppercase font-bold tracking-widest flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 animate-pulse" />
-                    Entegrasyon Adımı
-                  </span>
-                  <h4 className="text-xl font-black text-foreground mt-1 flex items-center gap-2">
-                    {activeToolObj.name}
-                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-base text-muted-foreground font-normal">{activeToolObj.role}</span>
-                  </h4>
-                </div>
-              </div>
-
-              <p className="text-sm sm:text-base leading-relaxed text-muted-foreground">
-                {activeToolObj.description}
-              </p>
-            </motion.div>
-          </AnimatePresence>
         </div>
       </div>
     </section>

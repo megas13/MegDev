@@ -1,7 +1,8 @@
 "use client"
 
+import { T } from "@/components/i18n/text"
 import { useEffect } from "react"
-import Link from "next/link"
+import Link from "@/components/i18n/link"
 import { TriangleAlert, RefreshCw, House } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -27,28 +28,22 @@ export default function Error({
         </div>
 
         <p className="text-[140px] sm:text-[180px] font-black leading-none text-gradient mb-4">
-          500
-        </p>
+          <T>{"500"}</T></p>
         <h1 className="text-2xl sm:text-3xl font-bold mb-3">
-          Bir Hata Oluştu
-        </h1>
+          <T>{"Bir Hata Oluştu"}</T></h1>
         <p className="text-muted-foreground mb-8 leading-relaxed">
-          Beklenmedik bir sorunla karşılaştık. Lütfen tekrar deneyin veya
-          bizimle iletişime geçin. Sorunu en kısa sürede çözeceğiz.
-        </p>
+          <T>{"Beklenmedik bir sorunla karşılaştık. Lütfen tekrar deneyin veya bizimle iletişime geçin. Sorunu en kısa sürede çözeceğiz."}</T></p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button onClick={reset}>
             <Button size="lg" className="text-base w-full sm:w-auto">
               <RefreshCw className="w-4 h-4" />
-              Tekrar Dene
-            </Button>
+              <T>{"Tekrar Dene"}</T></Button>
           </button>
           <Link href="/">
             <Button variant="outline" size="lg" className="text-base w-full sm:w-auto">
               <House className="w-4 h-4" />
-              Ana Sayfaya Dön
-            </Button>
+              <T>{"Ana Sayfaya Dön"}</T></Button>
           </Link>
         </div>
       </div>

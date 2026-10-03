@@ -1,0 +1,8 @@
+.widget { position: fixed; bottom: 24px; right: 24px; z-index: 40; width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; color: #171719; background: var(--primary); border: 1px solid rgba(255,255,255,.35); box-shadow: 0 8px 32px rgba(0,0,0,.3); transition: background .2s; }
+.widget:hover { background: #e4ff84; }
+.icon { width: 25px; height: 25px; }
+.tooltip { position: absolute; right: 70px; padding: 11px 15px; border: 1px solid rgba(255,255,255,.18); background: var(--site-card); color: #dedfe2; border-radius: 8px; font-size: 11px; white-space: nowrap; opacity: 0; transform: translateX(5px); pointer-events: none; transition: transform .2s,opacity .2s; }
+.widget:hover .tooltip,.widget:focus-visible .tooltip { opacity: 1; transform: translateX(0); }
+.widget:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+@media (hover: none) { .tooltip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .widget,.tooltip { transition: none; } }

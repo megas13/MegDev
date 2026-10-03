@@ -1,0 +1,6 @@
+.switcher { display: flex; align-items: center; flex-shrink: 0; gap: 2px; padding: 3px; border: 1px solid var(--site-border,#ffffff26); border-radius: 8px; background: transparent; color: var(--site-muted-foreground,#a4ad98); }
+.switcher a { display: grid; place-items: center; min-width: 28px; min-height: 28px; font: 500 9px/1 ui-monospace,monospace; border-radius: 5px; transition: background .2s,color .2s; }
+.switcher a:hover { color: #fff; }
+.switcher a[aria-current] { color: #10130d; background: #d7ff43; }
+.switcher a:focus-visible { outline: 2px solid #d7ff43; outline-offset: 3px; }
+@media(max-width:380px) { .switcher a { min-width: 25px; } }

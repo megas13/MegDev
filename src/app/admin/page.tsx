@@ -1,7 +1,8 @@
 "use client"
 
+import { T } from "@/components/i18n/text"
 import { useEffect, useState } from "react"
-import Link from "next/link"
+import Link from "@/components/i18n/link"
 import { cn } from "@/lib/utils"
 import { FileText, FolderKanban, Inbox, ArrowUpRight } from "lucide-react"
 
@@ -30,8 +31,8 @@ export default function AdminDashboard() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-black text-[#f7f3ea]">Dashboard</h1>
-        <p className="text-sm text-[#817b70] mt-1">Meg Dev admin paneline hoş geldiniz</p>
+        <h1 className="text-3xl font-black text-[#f7f3ea]"><T>{"Dashboard"}</T></h1>
+        <p className="text-sm text-[#817b70] mt-1"><T>{"Meg Dev admin paneline hoş geldiniz"}</T></p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -51,9 +52,9 @@ export default function AdminDashboard() {
                   </div>
                   <ArrowUpRight className="w-4 h-4 text-[#817b70] group-hover:text-[#f7f3ea] transition-colors" />
                 </div>
-                <p className="text-4xl font-black text-[#f7f3ea]">{card.value}</p>
-                <p className="text-sm text-[#b8afa1] mt-1">{card.label}</p>
-                {card.sub && <p className="text-xs mt-2 text-[#ff6b35]">{card.sub}</p>}
+                <p className="text-4xl font-black text-[#f7f3ea]"><T>{card.value}</T></p>
+                <p className="text-sm text-[#b8afa1] mt-1"><T>{card.label}</T></p>
+                {card.sub && <p className="text-xs mt-2 text-[#ff6b35]"><T>{card.sub}</T></p>}
               </div>
             </Link>
           )
@@ -61,7 +62,7 @@ export default function AdminDashboard() {
       </div>
 
       <div className="mt-12 p-6 bg-white/[0.02] border border-white/5 rounded-2xl">
-        <p className="text-sm text-[#817b70] text-center">Tüm veriler Nhost üzerinde güvenle saklanmaktadır</p>
+        <p className="text-sm text-[#817b70] text-center"><T>{"Tüm veriler Nhost üzerinde güvenle saklanmaktadır"}</T></p>
       </div>
     </div>
   )

@@ -1,9 +1,11 @@
+import { localizeMetadata } from "@/lib/i18n/server"
+import { T } from "@/components/i18n/text"
 import type { Metadata } from "next"
-import Link from "next/link"
+import Link from "@/components/i18n/link"
 import { ArrowLeft, House, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
-export const metadata: Metadata = {
+const sourceMetadata: Metadata = {
   title: "Sayfa Bulunamadı | Meg Dev",
 }
 
@@ -19,31 +21,27 @@ export default function NotFound() {
         </div>
 
         <p className="text-[140px] sm:text-[180px] font-black leading-none text-gradient mb-4">
-          404
-        </p>
+          <T>{"404"}</T></p>
         <h1 className="text-2xl sm:text-3xl font-bold mb-3">
-          Sayfa Bulunamadı
-        </h1>
+          <T>{"Sayfa Bulunamadı"}</T></h1>
         <p className="text-muted-foreground mb-8 leading-relaxed">
-          Aradığınız sayfa kaldırılmış, adı değiştirilmiş veya geçici olarak
-          kullanılamıyor olabilir. Ana sayfaya dönerek gezinmeye devam edebilirsiniz.
-        </p>
+          <T>{"Aradığınız sayfa kaldırılmış, adı değiştirilmiş veya geçici olarak kullanılamıyor olabilir. Ana sayfaya dönerek gezinmeye devam edebilirsiniz."}</T></p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/">
             <Button size="lg" className="text-base w-full sm:w-auto">
               <House className="w-4 h-4" />
-              Ana Sayfaya Dön
-            </Button>
+              <T>{"Ana Sayfaya Dön"}</T></Button>
           </Link>
           <Link href="/contact">
             <Button variant="outline" size="lg" className="text-base w-full sm:w-auto">
               <ArrowLeft className="w-4 h-4" />
-              İletişime Geç
-            </Button>
+              <T>{"İletişime Geç"}</T></Button>
           </Link>
         </div>
       </div>
     </div>
   )
 }
+
+export async function generateMetadata() { return localizeMetadata(sourceMetadata) }

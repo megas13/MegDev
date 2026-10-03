@@ -1,16 +1,13 @@
 "use client"
 
+import { T, LocalizedElement } from "@/components/i18n/text"
 import { useState, type FormEvent, useRef } from "react"
 import emailjs from "@emailjs/browser"
 import { motion } from "framer-motion"
-import { Check, Clock, Copy, Loader2, Mail, MapPin, MessageCircle, Phone, Send } from "lucide-react"
+import { Clock, Loader2, Mail, MapPin, MessageCircle, Phone, Send, ArrowUpRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { SectionHeading } from "@/components/ui/section-heading"
+import styles from "./public-experience.module.css"
 import { siteConfig } from "@/constants"
-
-const inputClass =
-  "w-full rounded-[8px] border border-foreground/10 bg-background/70 px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/70 transition-colors"
 
 export function ContactSection() {
   const form = useRef<HTMLFormElement>(null)
@@ -74,143 +71,54 @@ export function ContactSection() {
   ]
 
   return (
-    <section id="contact" className="relative py-24 lg:py-32">
-      <div className="absolute inset-0 grid-pattern opacity-20" />
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          title="İletişime Geçin"
-          subtitle="Projenizi anlatın; teknik kapsam, süre ve bütçe için size net bir dönüş yapalım."
-        />
-
-        <div className="grid lg:grid-cols-5 gap-8">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="lg:col-span-2 space-y-4"
-          >
-            {contactInfo.map((info, index) => {
-              const content = (
-                <>
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[8px] bg-primary text-background">
-                    {info.icon}
-                  </div>
-                  <div>
-                    <div className="text-sm text-muted-foreground">{info.label}</div>
-                    <div className="font-semibold">{info.value}</div>
-                  </div>
-                </>
-              )
-
-              return (
-                <motion.div
-                  key={info.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  {info.label === "E-posta" ? (
-                    <div className="relative group">
-                      <a href={info.href} target="_blank" rel="noopener noreferrer" className="flex items-start gap-4 border border-foreground/10 bg-card/80 p-4 transition-colors hover:border-primary/50 pr-24">
-                        {content}
-                      </a>
-                      <button
-                        onClick={async (e) => {
-                          e.preventDefault()
-                          e.stopPropagation()
-                          try {
-                            await navigator.clipboard.writeText(siteConfig.email)
-                            setCopied(true)
-                            setTimeout(() => setCopied(false), 2000)
-                          } catch {}
-                        }}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-primary bg-primary/10 hover:bg-primary/20 px-2.5 py-1.5 rounded transition-all cursor-pointer z-10"
-                      >
-                        {copied ? "Kopyalandı" : "Kopyala"}
-                      </button>
-                    </div>
-                  ) : info.href ? (
-                    <a href={info.href} target="_blank" rel="noopener noreferrer" className="flex items-start gap-4 border border-foreground/10 bg-card/80 p-4 transition-colors hover:border-primary/50">
-                      {content}
-                    </a>
-                  ) : (
-                    <div className="flex items-start gap-4 border border-foreground/10 bg-card/80 p-4">
-                      {content}
-                    </div>
-                  )}
-                </motion.div>
-              )
-            })}
-
-            <a
-              href={`https://wa.me/${siteConfig.whatsapp}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex w-full items-center justify-center gap-2 rounded-full border border-[#25D366]/35 bg-[#25D366]/10 p-4 font-semibold text-[#25D366] transition-colors hover:bg-[#25D366]/20"
-            >
-              <MessageCircle className="w-5 h-5" />
-              WhatsApp&apos;tan Yazın
-            </a>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="lg:col-span-3"
-          >
-            <Card className="p-6 sm:p-8">
-              {submitted ? (
-                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-12">
-                  <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary text-background">
-                    <Send className="w-10 h-10" />
-                  </div>
-                  <h3 className="text-2xl font-black mb-2">Mesajınız alındı.</h3>
-                  <p className="text-muted-foreground">En kısa sürede size dönüş yapacağız.</p>
-                </motion.div>
-              ) : (
-                <form ref={form} onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-semibold mb-2">Adınız Soyadınız *</label>
-                      <input type="text" name="name" required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className={inputClass} placeholder="Adınız Soyadınız" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-semibold mb-2">E-posta Adresiniz *</label>
-                      <input type="email" name="email" required value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className={inputClass} placeholder="ornek@email.com" />
-                    </div>
-                  </div>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-semibold mb-2">Telefon</label>
-                      <input type="tel" name="phone" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className={inputClass} placeholder="0537 983 04 14" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-semibold mb-2">Konu *</label>
-                      <input type="text" name="subject" required value={formData.subject} onChange={(e) => setFormData({ ...formData, subject: e.target.value })} className={inputClass} placeholder="Proje başlığı" />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold mb-2">Mesajınız *</label>
-                    <textarea required name="message" rows={5} value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} className={`${inputClass} resize-none`} placeholder="Projeniz hakkında kısa bilgi verin..." />
-                  </div>
-                  <Button type="submit" loading={loading} className="w-full">
-                    {loading ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        Gönderiliyor...
-                      </>
-                    ) : (
-                      <>
-                        Mesajı Gönder
-                        <Send className="w-4 h-4" />
-                      </>
+    <section id="contact" className={styles.section}>
+      <div className={styles.container}>
+        <div className={styles.contactGrid}>
+          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className={styles.contactAside}>
+            <p className={styles.eyebrow}><T>{"Bir sonraki adım / İletişim"}</T></p>
+            <h3><T>{"İyi bir proje, iyi bir konuşmayla başlar."}</T></h3>
+            <p><T>{"Projenizi anlatın; teknik kapsam, süre ve bütçe için size net bir dönüş yapalım."}</T></p>
+            <div>
+              {contactInfo.map((info) => {
+                const content = <><T>{info.icon}</T><div><span><T>{info.label}</T></span><strong><T>{info.value}</T></strong></div></>
+                return (
+                  <div key={info.label} className={`${styles.contactRow} ${info.label === "E-posta" ? styles.emailRow : ""}`}>
+                    {info.href ? <a href={info.href} target="_blank" rel="noopener noreferrer" className={styles.contactItem}><T>{content}</T></a> : <div className={styles.contactItem}><T>{content}</T></div>}
+                    {info.label === "E-posta" && (
+                      <LocalizedElement as="button" type="button" className={styles.copy} aria-label="E-posta adresini kopyala" onClick={async () => {
+                        try {
+                          await navigator.clipboard.writeText(siteConfig.email)
+                          setCopied(true)
+                          setTimeout(() => setCopied(false), 2000)
+                        } catch {}
+                      }}><T>{copied ? "Kopyalandı" : "Kopyala"}</T></LocalizedElement>
                     )}
-                  </Button>
-                </form>
-              )}
-            </Card>
+                  </div>
+                )
+              })}
+            </div>
+            <a href={`https://wa.me/${siteConfig.whatsapp}`} target="_blank" rel="noopener noreferrer" className={`${styles.pill} ${styles.whatsapp}`}><MessageCircle /><T>{"WhatsApp'tan Yazın"}</T><ArrowUpRight /></a>
+          </motion.div>
+          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: .12 }} className={styles.formPanel}>
+            {submitted ? (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={styles.success}>
+                <Send /><h3><T>{"Mesajınız alındı."}</T></h3><p><T>{"En kısa sürede size dönüş yapacağız."}</T></p>
+              </motion.div>
+            ) : (
+              <><h3><T>{"Projenizden bahsedin."}</T></h3><p><T>{"Birkaç detay paylaşın, birlikte ilk adımı atalım."}</T></p>
+              <form ref={form} onSubmit={handleSubmit} className={styles.form}>
+                <div className={styles.fieldGrid}>
+                  <div className={styles.field}><label htmlFor="contact-name"><T>{"Adınız Soyadınız *"}</T></label><LocalizedElement as="input" id="contact-name" type="text" name="name" required autoComplete="name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className={styles.input} placeholder="Adınız Soyadınız" /></div>
+                  <div className={styles.field}><label htmlFor="contact-email"><T>{"E-posta Adresiniz *"}</T></label><LocalizedElement as="input" id="contact-email" type="email" name="email" required autoComplete="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className={styles.input} placeholder="ornek@email.com" /></div>
+                </div>
+                <div className={styles.fieldGrid}>
+                  <div className={styles.field}><label htmlFor="contact-phone"><T>{"Telefon"}</T></label><LocalizedElement as="input" id="contact-phone" type="tel" name="phone" autoComplete="tel" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className={styles.input} placeholder="0537 983 04 14" /></div>
+                  <div className={styles.field}><label htmlFor="contact-subject"><T>{"Konu *"}</T></label><LocalizedElement as="input" id="contact-subject" type="text" name="subject" required value={formData.subject} onChange={(e) => setFormData({ ...formData, subject: e.target.value })} className={styles.input} placeholder="Proje başlığı" /></div>
+                </div>
+                <div className={styles.field}><label htmlFor="contact-message"><T>{"Mesajınız *"}</T></label><LocalizedElement as="textarea" id="contact-message" name="message" required rows={5} value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} className={styles.input} placeholder="Projeniz hakkında kısa bilgi verin..." /></div>
+                <Button type="submit" loading={loading} className={styles.submit}>{loading ? <><Loader2 className="w-4 h-4 animate-spin" /><T>{"Gönderiliyor..."}</T></> : <><T>{"Mesajı Gönder"}</T><ArrowUpRight className="w-4 h-4" /></>}</Button>
+              </form></>
+            )}
           </motion.div>
         </div>
       </div>

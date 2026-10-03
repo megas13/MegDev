@@ -1,68 +1,40 @@
 "use client"
 
+import { T } from "@/components/i18n/text"
 import { motion } from "framer-motion"
-import Link from "next/link"
-import { ArrowUpRight } from "lucide-react"
-import { Brain, Code, Globe, ShoppingCart, Smartphone, Users } from "lucide-react"
-import { Card } from "@/components/ui/card"
+import Link from "@/components/i18n/link"
+import { ArrowUpRight, Brain, Code, Globe, ShoppingCart, Smartphone, Users } from "lucide-react"
 import { SectionHeading } from "@/components/ui/section-heading"
 import { services } from "@/constants"
+import styles from "./marketing-sections.module.css"
 
 const iconMap: Record<string, React.ReactNode> = {
-  Globe: <Globe className="w-7 h-7" />,
-  ShoppingCart: <ShoppingCart className="w-7 h-7" />,
-  Users: <Users className="w-7 h-7" />,
-  Smartphone: <Smartphone className="w-7 h-7" />,
-  Brain: <Brain className="w-7 h-7" />,
-  Code: <Code className="w-7 h-7" />,
+  Globe: <Globe size={24} />, ShoppingCart: <ShoppingCart size={24} />,
+  Users: <Users size={24} />, Smartphone: <Smartphone size={24} />,
+  Brain: <Brain size={24} />, Code: <Code size={24} />,
 }
 
 export function ServicesSection() {
   return (
-    <section id="services" className="relative py-24 lg:py-32">
-      <div className="absolute inset-0 grid-pattern opacity-15" />
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          title="Hizmetlerimiz"
-          subtitle="İhtiyaca göre tasarlanan, ölçülebilir ve sürdürülebilir yazılım çözümleri."
-        />
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px border border-foreground/10 bg-foreground/10">
+    <section id="services" className={styles.section}>
+      <div className={styles.shell}>
+        <SectionHeading align="left" title="Doğru fikir. Doğru çözüm." subtitle="İhtiyaca göre tasarlanan, ölçülebilir ve sürdürülebilir yazılım çözümleri." />
+        <div className={styles.rows}>
           {services.map((service, index) => (
-            <motion.div
-              key={service.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: index * 0.08 }}
-            >
-              <Card className="group relative h-full overflow-hidden rounded-none border-0 bg-card p-7">
-                <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${service.gradient}`} />
-                <div className="mb-8 flex items-center justify-between">
-                  <span className="font-mono text-sm text-muted-foreground">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <div className={`flex h-12 w-12 items-center justify-center bg-gradient-to-br ${service.gradient} text-background transition-transform duration-300 group-hover:scale-105`}>
-                    {iconMap[service.icon]}
-                  </div>
-                </div>
-                <h3 className="text-xl font-black mb-3">{service.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-5">
-                  {service.description}
-                </p>
-                <ul className="space-y-2">
-                  {service.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <div className="w-1.5 h-1.5 bg-primary shrink-0" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                <Link href={`/services/${service.slug}`} className="mt-7 inline-flex items-center gap-2 text-sm font-black text-primary">
-                  Hizmeti detaylandır <ArrowUpRight className="h-4 w-4" />
-                </Link>
-              </Card>
-            </motion.div>
+            <motion.article key={service.id} className={styles.serviceRow}
+              initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }} transition={{ duration: .5, delay: index * .035 }}>
+              <span className={styles.number}><T>{String(index + 1).padStart(2, "0")}</T></span>
+              <div className={styles.serviceTitle}>
+                <span className={styles.icon}><T>{iconMap[service.icon]}</T></span>
+                <h3><T>{service.title}</T></h3>
+              </div>
+              <div className={styles.serviceBody}>
+                <p><T>{service.description}</T></p>
+                <ul className={styles.features}>{service.features.map(feature => <li key={feature}><T>{feature}</T></li>)}</ul>
+              </div>
+              <Link href={"/services/" + service.slug} className={styles.circleLink} aria-label={service.title + " hizmetini incele"}><ArrowUpRight size={19} /></Link>
+            </motion.article>
           ))}
         </div>
       </div>

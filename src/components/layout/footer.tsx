@@ -1,8 +1,16 @@
-import Link from "next/link"
+"use client"
+
+import { basePath } from "@/lib/i18n/config"
+
+
+import { T, LocalizedElement } from "@/components/i18n/text"
+import { usePathname } from "next/navigation"
+import styles from "./footer.module.css"
+import Link from "@/components/i18n/link"
 import { siteConfig, navigation, services } from "@/constants"
 import { ArrowUpRight, Clock, Mail, MapPin, Phone } from "lucide-react"
 
-export function Footer() {
+function LegacyFooter() {
   const socialLinks = [
     {
       url: siteConfig.linkedin,
@@ -54,15 +62,14 @@ export function Footer() {
           <div>
             <Link href="/" className="flex items-center gap-3 mb-6">
               <span className="text-xl font-black tracking-tight text-gradient">
-                Meg Dev
-              </span>
+                <T>{"Meg Dev"}</T></span>
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed mb-6">
-              {siteConfig.description}
+              <T>{siteConfig.description}</T>
             </p>
             <div className="flex gap-2.5">
               {socialLinks.map((social) => (
-                <a
+                <LocalizedElement as="a"
                   key={social.name}
                   href={social.url}
                   target="_blank"
@@ -75,20 +82,20 @@ export function Footer() {
                   
                   {/* Spinning Icon */}
                   <span className="relative z-10 transition-transform duration-500 group-hover:rotate-[360deg]">
-                    {social.icon}
+                    <T>{social.icon}</T>
                   </span>
-                </a>
+                </LocalizedElement>
               ))}
             </div>
           </div>
 
           <div>
-            <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4">Hızlı Linkler</h3>
+            <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4"><T>{"Hızlı Linkler"}</T></h3>
             <ul className="space-y-3">
               {navigation.map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className="group flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-primary">
-                    {item.name}
+                    <T>{item.name}</T>
                     <ArrowUpRight className="w-3 h-3 opacity-0 -translate-y-1 transition-all group-hover:opacity-100 group-hover:translate-y-0" />
                   </Link>
                 </li>
@@ -97,12 +104,12 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4">Hizmetler</h3>
+            <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4"><T>{"Hizmetler"}</T></h3>
             <ul className="space-y-3">
               {services.slice(0, 5).map((service) => (
                 <li key={service.id}>
                   <Link href="/services" className="text-sm text-muted-foreground transition-colors hover:text-primary">
-                    {service.title}
+                    <T>{service.title}</T>
                   </Link>
                 </li>
               ))}
@@ -110,27 +117,27 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4">İletişim</h3>
+            <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4"><T>{"İletişim"}</T></h3>
             <ul className="space-y-4">
               <li>
                 <a href={`tel:${siteConfig.phone}`} className="flex items-start gap-3 text-sm text-muted-foreground transition-colors hover:text-primary">
                   <Phone className="w-4 h-4 mt-0.5 shrink-0" />
-                  <span>{siteConfig.phone}</span>
+                  <span><T>{siteConfig.phone}</T></span>
                 </a>
               </li>
               <li>
                 <a href={`mailto:${siteConfig.email}`} className="flex items-start gap-3 text-sm text-muted-foreground transition-colors hover:text-primary">
                   <Mail className="w-4 h-4 mt-0.5 shrink-0" />
-                  <span>{siteConfig.email}</span>
+                  <span><T>{siteConfig.email}</T></span>
                 </a>
               </li>
               <li className="flex items-start gap-3 text-sm text-muted-foreground">
                 <MapPin className="w-4 h-4 mt-0.5 shrink-0" />
-                <span>{siteConfig.address}</span>
+                <span><T>{siteConfig.address}</T></span>
               </li>
               <li className="flex items-start gap-3 text-sm text-muted-foreground">
                 <Clock className="w-4 h-4 mt-0.5 shrink-0" />
-                <span>{siteConfig.workingHours}</span>
+                <span><T>{siteConfig.workingHours}</T></span>
               </li>
             </ul>
           </div>
@@ -138,16 +145,69 @@ export function Footer() {
 
         <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-foreground/10 pt-8">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} {siteConfig.name}. Tüm hakları saklıdır.
-          </p>
+            <T>{"©"}</T><T>{new Date().getFullYear()}</T> <T>{siteConfig.name}</T><T>{". Tüm hakları saklıdır."}</T></p>
           <div className="flex gap-6">
             <Link href="/kvkk" className="text-sm text-muted-foreground transition-colors hover:text-primary">
-              Gizlilik Politikası
-            </Link>
+              <T>{"Gizlilik Politikası"}</T></Link>
             <Link href="/kosullar" className="text-sm text-muted-foreground transition-colors hover:text-primary">
-              Kullanım Koşulları
-            </Link>
+              <T>{"Kullanım Koşulları"}</T></Link>
           </div>
+        </div>
+      </div>
+    </footer>
+  )
+}
+
+export function Footer() {
+  const pathname = basePath(usePathname())
+  if (pathname === "/admin" || pathname.startsWith("/admin/")) return <LegacyFooter />
+  const socials = [
+    { name: "LinkedIn", href: siteConfig.linkedin },
+    { name: "Instagram", href: siteConfig.instagram },
+    { name: "X", href: siteConfig.twitter },
+    { name: "Facebook", href: siteConfig.facebook },
+  ]
+  return (
+    <footer className={styles.footer}>
+      <div className={styles.inner}>
+        <div className={styles.invitation}>
+          <div className={styles.eyebrow}><span className={styles.statusDot} /> <T>{" MEGDEV / BİR SONRAKİ ADIM"}</T></div>
+          <Link href="/contact" className={styles.projectLink}>
+            <h2><T>{"Bir fikriniz mi var?"}</T><br /><span><T>{"Birlikte üretelim."}</T></span></h2>
+            <span className={styles.projectArrow}><ArrowUpRight strokeWidth={1} /></span>
+          </Link>
+          <div className={styles.invitationBottom}><p><T>{"İyi bir yazılım, iyi bir konuşmayla başlar."}</T></p><a href={`mailto:${siteConfig.email}`}><T>{siteConfig.email}</T><ArrowUpRight size={15} /></a></div>
+        </div>
+        <div className={styles.columns}>
+          <div className={styles.intro}>
+            <Link href="/" className={styles.wordmark} aria-label="MegDev ana sayfa"><T>{"MegDev"}</T><span><T>{"."}</T></span></Link>
+            <p><T>{siteConfig.description}</T></p>
+            <LocalizedElement as="div" className={styles.socials} aria-label="Sosyal medya bağlantıları">
+              {socials.map((social) => <a key={social.name} href={social.href} target="_blank" rel="noopener noreferrer"><T>{social.name}</T><ArrowUpRight size={12} /></a>)}
+            </LocalizedElement>
+          </div>
+          <div className={styles.column}>
+            <h3><T>{"KEŞFEDİN"}</T></h3>
+            <ul>{navigation.map((item) => <li key={item.href}><Link href={item.href}><T>{item.name}</T></Link></li>)}</ul>
+          </div>
+          <div className={styles.column}>
+            <h3><T>{"UZMANLIK"}</T></h3>
+            <ul>{services.slice(0, 5).map((service) => <li key={service.id}><Link href={`/services/${service.slug}`}><T>{service.title}</T></Link></li>)}</ul>
+          </div>
+          <div className={styles.column}>
+            <h3><T>{"BİZE ULAŞIN"}</T></h3>
+            <ul className={styles.contactList}>
+              <li><a href={`tel:${siteConfig.phone}`}><Phone size={14} /><T>{siteConfig.phone}</T></a></li>
+              <li><a href={`mailto:${siteConfig.email}`}><Mail size={14} /><T>{siteConfig.email}</T></a></li>
+              <li><span><MapPin size={14} /><T>{siteConfig.address}</T></span></li>
+              <li><span><Clock size={14} /><T>{siteConfig.workingHours}</T></span></li>
+            </ul>
+          </div>
+        </div>
+        <div className={styles.bottom}>
+          <p><T>{"© "}</T><T>{new Date().getFullYear()}</T> <T>{siteConfig.name}</T><T>{". Tüm hakları saklıdır."}</T></p>
+          <div><Link href="/kvkk"><T>{"Gizlilik Politikası"}</T></Link><Link href="/kosullar"><T>{"Kullanım Koşulları"}</T></Link></div>
+          <span className={styles.signature}><T>{"FİKİRDEN ÜRÜNE."}</T></span>
         </div>
       </div>
     </footer>
