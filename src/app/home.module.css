@@ -1,4 +1,4 @@
-.home { color: var(--site-foreground); background: var(--site-background); }
+.home { color: var(--site-foreground); background: transparent; }
 .shell { width: min(1180px,calc(100% - 96px)); margin: 0 auto; }
 .section { padding: 100px 0; border-top: 1px solid var(--site-border); scroll-margin-top: 82px; }
 .label { margin-bottom: 24px; color: var(--primary); font: 500 10px/1.5 ui-monospace,monospace; letter-spacing: .15em; }

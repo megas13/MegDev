@@ -1,4 +1,4 @@
-.hero { padding: 148px 0 0; background: var(--site-background); color: var(--site-foreground); }
+.hero { padding: 148px 0 0; background: transparent; color: var(--site-foreground); }
 .shell { width: min(1180px,calc(100% - 96px)); margin: 0 auto; }
 .heroGrid { display: grid; grid-template-columns: 1.12fr 1fr; gap: 64px; align-items: center; padding-bottom: 64px; }
 .copy { min-width: 0; }

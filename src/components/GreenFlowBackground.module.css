@@ -1,0 +1,55 @@
+.background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #02110d;
+  contain: strict;
+}
+
+.ambient {
+  position: absolute;
+  inset: -15%;
+  background:
+    radial-gradient(ellipse at 80% 30%, #0f63393d 0%, transparent 54%),
+    radial-gradient(ellipse at 12% 90%, #15976b24 0%, transparent 50%),
+    linear-gradient(140deg, #020c09, #041f16 70%, #020f0b);
+  animation: green-flow-ambient 24s ease-in-out infinite alternate;
+}
+
+.canvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  display: block;
+  opacity: 0;
+  transition: opacity 1.4s ease;
+}
+
+.canvas[data-ready="true"] {
+  opacity: 1;
+}
+
+.background[data-paused="true"] .ambient {
+  animation-play-state: paused;
+}
+
+.shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, #020d0a73 0%, #020d0a26 36%, transparent 65%),
+    linear-gradient(0deg, #020d0a80 0%, transparent 32%, transparent 85%, #020d0a40);
+}
+
+@keyframes green-flow-ambient {
+  from { transform: translate3d(-2%, 1%, 0) scale(1); }
+  to { transform: translate3d(2%, -2%, 0) scale(1.07); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient { animation: none; }
+  .canvas { transition: none; }
+}
