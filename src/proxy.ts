@@ -11,8 +11,11 @@ export async function proxy(req: NextRequest) {
     const subdomain = host.slice(0, -suffix.length)
     if (subdomain && !subdomain.includes(".") && subdomain !== "www") {
       const url = req.nextUrl.clone()
-      url.pathname = `/api/demo-pages/render/${encodeURIComponent(subdomain)}`
-      return NextResponse.rewrite(url)
+      const rest = req.nextUrl.pathname === "/" ? "" : req.nextUrl.pathname
+      url.pathname = `/api/demo-pages/render/${encodeURIComponent(subdomain)}${rest}`
+      const requestHeaders = new Headers(req.headers)
+      requestHeaders.set("x-megdev-demo-host", subdomain)
+      return NextResponse.rewrite(url, { request: { headers: requestHeaders } })
     }
   }
 

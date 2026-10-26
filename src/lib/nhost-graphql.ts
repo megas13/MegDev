@@ -244,6 +244,12 @@ export const GET_DEMO_PAGE_BY_SUBDOMAIN = `query GetDemoPageBySubdomain($subdoma
   }
 }`
 
+export const GET_DEMO_PAGE_BY_ID = `query GetDemoPageById($id: uuid!) {
+  demo_pages_by_pk(id: $id) {
+    id subdomain html_content original_filename
+  }
+}`
+
 export const CREATE_DEMO_PAGE = `mutation CreateDemoPage($object: demo_pages_insert_input!) {
   insert_demo_pages_one(object: $object) {
     id name subdomain original_filename html_size published created_at updated_at

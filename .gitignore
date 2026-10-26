@@ -25,6 +25,10 @@
 .DS_Store
 *.pem
 
+# local recovery backups
+/_recover/
+/_recover.git/
+
 # debug
 npm-debug.log*
 yarn-debug.log*
