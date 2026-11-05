@@ -1,5 +1,7 @@
 import { T } from "@/components/i18n/text"
-import { localizeMetadata } from "@/lib/i18n/server"
+import { getLanguage, localizeMetadata } from "@/lib/i18n/server"
+import { breadcrumbJsonLd, serviceJsonLd } from "@/lib/seo"
+import { JsonLd } from "@/components/seo/json-ld"
 import type { Metadata } from "next"
 import Link from "@/components/i18n/link"
 import { notFound } from "next/navigation"
@@ -24,10 +26,27 @@ export default async function ServiceDetailPage({ params }: Props) {
   const { slug } = await params
   const service = services.find((item) => item.slug === slug)
   if (!service) notFound()
+  const { locale, t } = await getLanguage()
   const currentIndex = services.findIndex((item) => item.slug === slug)
   const nextService = services[(currentIndex + 1) % services.length]
 
   return <div>
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@graph": [
+          serviceJsonLd(service, locale, t),
+          breadcrumbJsonLd(
+            [
+              { name: t("Ana Sayfa"), path: "/" },
+              { name: t("Hizmetlerimiz"), path: "/services" },
+              { name: t(service.title), path: `/services/${service.slug}` },
+            ],
+            locale,
+          ),
+        ],
+      }}
+    />
     <PageIntro index={String(currentIndex + 1).padStart(2, "0")} eyebrow="YETKİNLİK" title={service.title} description={service.description}>
       <Link href="/services" className={styles.back}><ArrowLeft size={15} /> <T>{" Tüm hizmetler"}</T></Link>
     </PageIntro>

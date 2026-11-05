@@ -9,7 +9,9 @@ import { SiteFrame } from "@/components/layout/site-frame"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { LanguageProvider } from "@/components/i18n/provider"
+import { JsonLd } from "@/components/seo/json-ld"
 import { getLanguage, localizeMetadata } from "@/lib/i18n/server"
+import { organizationJsonLd, websiteJsonLd } from "@/lib/seo"
 
 const sourceMetadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://megdev.com.tr"),
@@ -19,6 +21,8 @@ const sourceMetadata: Metadata = {
   },
   description:
     "Web siteleri, mobil uygulamalar, yapay zeka çözümleri ve özel yazılım projeleri geliştiriyoruz. İşletmenizi geleceğe taşıyan yenilikçi yazılım çözümleri.",
+  applicationName: "Meg Dev",
+  category: "technology",
   keywords: [
     "yazılım şirketi",
     "web geliştirme",
@@ -29,11 +33,16 @@ const sourceMetadata: Metadata = {
     "crm yazılımı",
     "özel yazılım",
     "kurumsal yazılım",
-    "seo uyumlu web sitesi"
+    "seo uyumlu web sitesi",
+    "Kayseri yazılım şirketi",
+    "Kayseri web tasarım",
+    "mobil uygulama geliştirme",
+    "yapay zeka danışmanlığı"
   ],
-  authors: [{ name: "Meg Dev" }],
+  authors: [{ name: "Meg Dev", url: "https://megdev.com.tr" }],
   creator: "Meg Dev",
   publisher: "Meg Dev",
+  manifest: "/manifest.webmanifest",
   formatDetection: {
     email: false,
     address: false,
@@ -49,13 +58,6 @@ const sourceMetadata: Metadata = {
       "Web siteleri, mobil uygulamalar, yapay zeka çözümleri ve özel yazılım projeleri geliştiriyoruz. İşletmenizi geleceğe taşıyan yenilikçi yazılım çözümleri.",
     url: "https://megdev.com.tr",
     siteName: "Meg Dev",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-      },
-    ],
     locale: "tr_TR",
     type: "website",
   },
@@ -63,7 +65,6 @@ const sourceMetadata: Metadata = {
     card: "summary_large_image",
     title: "Meg Dev | Yazılım Geliştirme ve Dijital Çözümler",
     description: "Web siteleri, mobil uygulamalar ve özel yazılım projeleri.",
-    images: ["/megdevicon.png"],
     creator: "@megdev",
   },
   robots: {
@@ -95,44 +96,10 @@ export default async function RootLayout({
       <head>
         <meta name="theme-color" content="#10130e" />
         <meta name="google-site-verification" content="21Co6j1h-UaDjB7Jrj-Y2509q5285ToFPx7VkHAe8H4" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              name: "Meg Dev",
-              url: process.env.NEXT_PUBLIC_APP_URL || "https://megdev.com.tr",
-              logo: "/megdevicon.png",
-              email: "destek@megdev.info",
-              telephone: "+905379830414",
-              address: {
-                "@type": "PostalAddress",
-                streetAddress: "Demokrasi Mah 2233. Sk",
-                addressLocality: "Melikgazi",
-                addressRegion: "Kayseri",
-                addressCountry: "TR",
-              },
-              sameAs: [
-                "https://facebook.com/megdev",
-                "https://twitter.com/megdev",
-                "https://linkedin.com/company/megdev",
-                "https://instagram.com/megdev",
-              ],
-            }),
-          }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "WebSite",
-              name: "Meg Dev",
-              url: process.env.NEXT_PUBLIC_APP_URL || "https://megdev.com.tr",
-              description: t("Web siteleri, mobil uygulamalar, yapay zeka çözümleri ve özel yazılım projeleri geliştiriyoruz."),
-              inLanguage: locale,
-            }),
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@graph": [organizationJsonLd(locale, t), websiteJsonLd(locale, t)],
           }}
         />
       </head>

@@ -1,35 +1,51 @@
-import { MetadataRoute } from 'next'
-import { services } from '@/constants'
-import { locales, localizedHref } from '@/lib/i18n/config'
+import type { MetadataRoute } from "next"
+import { services } from "@/constants"
+import { locales, localizedHref, type Locale } from "@/lib/i18n/config"
+import { SITE_URL } from "@/lib/seo"
+
+function pageUrl(path: string, locale: Locale) {
+  const href = localizedHref(path, locale)
+  return href === "/" ? SITE_URL : `${SITE_URL}${href}`
+}
+
+const lastModified = new Date()
+
+const pages: Array<{
+  path: string
+  changeFrequency: NonNullable<MetadataRoute.Sitemap[number]["changeFrequency"]>
+  priority: number
+}> = [
+  { path: "/", changeFrequency: "weekly", priority: 1 },
+  { path: "/about", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/services", changeFrequency: "monthly", priority: 0.9 },
+  ...services.map((service) => ({
+    path: `/services/${service.slug}`,
+    changeFrequency: "monthly" as const,
+    priority: 0.85,
+  })),
+  { path: "/portfolio", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/processes", changeFrequency: "monthly", priority: 0.7 },
+  { path: "/blog", changeFrequency: "weekly", priority: 0.7 },
+  { path: "/contact", changeFrequency: "yearly", priority: 0.7 },
+  { path: "/downloads", changeFrequency: "monthly", priority: 0.5 },
+  { path: "/subtrack", changeFrequency: "monthly", priority: 0.5 },
+  { path: "/kvkk", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/kosullar", changeFrequency: "yearly", priority: 0.3 },
+]
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://megdev.com.tr').replace(/\/$/, '')
+  return pages.flatMap((page) => {
+    const languages = Object.fromEntries([
+      ...locales.map((locale) => [locale, pageUrl(page.path, locale)]),
+      ["x-default", pageUrl(page.path, "tr")],
+    ])
 
-  const routes: MetadataRoute.Sitemap = [
-    { url: `${baseUrl}`, lastModified: new Date(), changeFrequency: 'yearly', priority: 1 },
-    { url: `${baseUrl}/about`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${baseUrl}/services`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${baseUrl}/portfolio`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${baseUrl}/processes`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${baseUrl}/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${baseUrl}/contact`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.6 },
-    { url: `${baseUrl}/odeme`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
-    { url: `${baseUrl}/kvkk`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
-    { url: `${baseUrl}/kosullar`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.3 },
-  ]
-
-  const pages = [
-    ...routes,
-    ...services.map((service) => ({
-      url: `${baseUrl}/services/${service.slug}`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.75,
-    })),
-  ]
-  return pages.flatMap(page => {
-    const pathname = new URL(page.url).pathname
-    const languages = Object.fromEntries(locales.map(locale => [locale, `${baseUrl}${localizedHref(pathname,locale)}`]))
-    return locales.map(locale => ({...page, url: `${baseUrl}${localizedHref(pathname,locale)}`, alternates: { languages }}))
+    return locales.map((locale) => ({
+      url: pageUrl(page.path, locale),
+      lastModified,
+      changeFrequency: page.changeFrequency,
+      priority: page.priority,
+      alternates: { languages },
+    }))
   })
 }

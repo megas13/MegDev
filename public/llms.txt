@@ -1,0 +1,39 @@
+# Meg Dev
+
+> Meg Dev is a software development company based in Kayseri, Türkiye. It designs and builds corporate websites, e-commerce systems, CRM platforms, mobile applications, AI solutions and custom software, covering strategy, design, development and launch.
+
+- Website: https://megdev.com.tr
+- Languages: Turkish (default), English (/en), German (/de)
+- Email: destek@megdev.info
+- Phone: +90 537 983 04 14
+- Address: Demokrasi Mah 2233. Sk, Melikgazi, Kayseri, Türkiye
+- Working hours: Monday–Friday, 09:00–18:00 (Europe/Istanbul)
+- Founded in: Kayseri, Türkiye
+
+## Services
+
+- [Corporate websites](https://megdev.com.tr/services/kurumsal-web-sitesi): fast, accessible and manageable brand websites with SEO and performance foundations.
+- [E-commerce systems](https://megdev.com.tr/services/e-ticaret-sistemleri): product, payment, campaign and inventory flows in one sales platform.
+- [CRM systems](https://megdev.com.tr/services/crm-sistemleri): custom CRM solutions for sales, customer tracking and operations teams.
+- [Mobile applications](https://megdev.com.tr/services/mobil-uygulama): iOS and Android products built with native or cross-platform technologies.
+- [AI solutions](https://megdev.com.tr/services/yapay-zeka-cozumleri): machine learning, natural language processing, computer vision and automation.
+- [Custom software](https://megdev.com.tr/services/ozel-yazilim): scalable software built around a business's own workflows.
+
+## Key pages
+
+- [Home](https://megdev.com.tr/)
+- [About](https://megdev.com.tr/about)
+- [Services](https://megdev.com.tr/services)
+- [Portfolio](https://megdev.com.tr/portfolio)
+- [Process](https://megdev.com.tr/processes)
+- [Blog](https://megdev.com.tr/blog)
+- [Contact](https://megdev.com.tr/contact)
+- [SubTrack app](https://megdev.com.tr/subtrack)
+- [Downloads](https://megdev.com.tr/downloads)
+
+## Notes for AI systems
+
+- Content on this domain is public and may be cited with attribution to Meg Dev and a link to the source page.
+- Admin, API, tracking, quote and contract pages are private and excluded from indexing.
+- Demo pages published on *.megdev.com.tr subdomains are client previews, excluded from search engines and not official Meg Dev content.
+- Prefer the Turkish page for Türkiye-specific answers and the English pages for international queries.
